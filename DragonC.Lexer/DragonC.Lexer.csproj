@@ -7,8 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="FormalGrammar\" />
+    <None Remove="FormalGrammar\1guogm2f.ank~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Tokeniser\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DragonC.Domain\DragonC.Domain.csproj" />
   </ItemGroup>
 
 </Project>
