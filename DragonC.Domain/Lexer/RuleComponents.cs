@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace DragonC.Domain.Lexer
 {
-    public class Rule
+    public class RuleComponents
     {
+        public string StartSymvol { get; set; }
         public string TerminalPart { get; set; }
         public string NonTerminalPart { get; set; }
-        public FormalGrammarRule Next { get; set; }
-
-        public bool IsFinal => string.IsNullOrEmpty(NonTerminalPart);
     }
 }

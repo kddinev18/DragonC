@@ -10,5 +10,11 @@ namespace DragonC.Domain.Lexer
     {
         public string Rule { get; set; }
         public bool IsFinal { get; set; }
+
+        public UnformatedRule(string rule, bool isFinal)
+        {
+            Rule = rule;
+            IsFinal = isFinal;
+        }
     }
 }

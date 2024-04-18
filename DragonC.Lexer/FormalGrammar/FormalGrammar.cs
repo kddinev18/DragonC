@@ -12,24 +12,30 @@ namespace DragonC.Lexer.FormalGrammar
         private List<string> _terminalSybols = new List<string>();
         private List<string> _nonTerminalSymbols = new List<string>();
         private List<FormalGrammarRule> _formalGrammarRules = new List<FormalGrammarRule>();
-        private Func<UnformatedRule, FormalGrammarRule> _formatter;
+        private Func<UnformatedRule, RuleComponents> _converter;
+        private Func<string, string> _formatter;
         private string _startSymbol;
 
-        public string LiteralIndicator { get; set; } = "$value$";
-        public string CommandIndicator { get; set; } = "$cmd";
+        public string LiteralIndicator { get; set; } = "$";
+        public string CommandIndicator { get; set; } = "|";
+        public string NonTerminalIndicator { get; set; } = "%";
 
-        public FormalGrammar(Func<UnformatedRule, FormalGrammarRule> formatter)
+        public FormalGrammar(Func<UnformatedRule, RuleComponents> converter, Func<string, string> formatter)
         {
+            _converter = converter;
             _formatter = formatter;
         }
 
         public void SetRules(List<UnformatedRule> unformatedRules)
         {
-            List<FormalGrammarRule> rules = new List<FormalGrammarRule>();
-            foreach (var unformatedRule in unformatedRules)
+            foreach (UnformatedRule unformatedRule in unformatedRules)
             {
-                rules.Add(_formatter.Invoke(unformatedRule));
+                if (unformatedRule.IsFinal)
+                {
+
+                }
             }
+
             _startSymbol = rules.First().StartNonTerminalSymbol;
 
             _nonTerminalSymbols = rules
@@ -42,6 +48,41 @@ namespace DragonC.Lexer.FormalGrammar
                 .Select(x => x.TerminalPart)
                 .Distinct()
                 .ToList();
+        }
+
+        private void AddRule(UnformatedRule unformatedRule)
+        {
+            RuleComponents ruleComponents = _converter.Invoke(unformatedRule);
+
+            bool contains = false;
+            foreach (FormalGrammarRule rule in _formalGrammarRules)
+            {
+                if (rule.StartNonTerminalSymbol == ruleComponents.StartSymvol)
+                {
+                    rule.PossibleOutcomes.Add(new Rule()
+                    {
+                        TerminalPart = ruleComponents.TerminalPart,
+                        NonTerminalPart = ruleComponents.NonTerminalPart,
+                    });
+                    contains = true;
+                }
+            }
+
+            if (!contains)
+            {
+
+                _formalGrammarRules.Add(new FormalGrammarRule()
+                {
+                    StartNonTerminalSymbol = ruleComponents.StartSymvol,
+                    PossibleOutcomes = new List<Rule>() {
+                    new Rule()
+                    {
+                        TerminalPart = ruleComponents.TerminalPart,
+                        NonTerminalPart = ruleComponents.NonTerminalPart,
+                    }
+                }
+                });
+            }
         }
     }
 }

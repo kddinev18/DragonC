@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DragonC.Domain\DragonC.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
