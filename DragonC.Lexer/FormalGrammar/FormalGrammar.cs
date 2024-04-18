@@ -84,5 +84,22 @@ namespace DragonC.Lexer.FormalGrammar
                 });
             }
         }
+
+        public void LinkRules()
+        {
+            for (int i = 0; i < _formalGrammarRules.Count(); i++)
+            {
+                for (int j = 0; j < _formalGrammarRules[i].PossibleOutcomes.Count(); j++)
+                {
+                    for (int k = 0; k < _formalGrammarRules.Count(); k++)
+                    {
+                        if (_formalGrammarRules[i].PossibleOutcomes[j].NonTerminalPart == _formalGrammarRules[k].StartNonTerminalSymbol)
+                        {
+                            _formalGrammarRules[i].PossibleOutcomes[j].Next = _formalGrammarRules[k];
+                        }
+                    }
+                }
+            }
+        }
     }
 }
