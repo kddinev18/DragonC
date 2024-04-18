@@ -1,5 +1,6 @@
 ﻿using DragonC.Domain.Lexer;
 using DragonC.Lexer.FormalGrammar;
+using DragonC.Lexer.Tokeniser;
 
 namespace DragonC.CLI
 {
@@ -123,8 +124,10 @@ namespace DragonC.CLI
             };
 
             FormalGrammar formalGrammar = new FormalGrammar();
+            Tokeniser tokeniser = new Tokeniser(new List<string>() { ";", ":" });
+            List<string> tokens = tokeniser.GetTokens("cosnt test 3;\r\n\r\nlabel main:\r\n\tcomm1;\r\n\tcomm2;\r\njmp main;");
             formalGrammar.SetRules(rules);
-            Console.WriteLine(formalGrammar.CheckToken("|dynamicCondCommandName| |dynamicCondCommandParam|;"));
+            Console.WriteLine(formalGrammar.CheckTokens());
         }
     }
 }

@@ -98,6 +98,20 @@ namespace DragonC.Lexer.FormalGrammar
             }
         }
 
+        public bool CheckTokens(List<string> tokens)
+        {
+            bool flag = true;
+            foreach (string token in tokens)
+            {
+                flag = CheckToken(token);
+                if (!flag)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public bool CheckToken(string token)
         {
             foreach (var startFormalRule in _formalGrammarRules.Where(x => x.IsStart))

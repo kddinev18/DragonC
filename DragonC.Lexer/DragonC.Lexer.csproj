@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tokeniser\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DragonC.Domain\DragonC.Domain.csproj" />
   </ItemGroup>
 
