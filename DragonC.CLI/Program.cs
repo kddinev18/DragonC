@@ -1,4 +1,5 @@
 ﻿using DragonC.Domain.Lexer;
+using DragonC.Lexer.FormalGrammar;
 
 namespace DragonC.CLI
 {
@@ -9,16 +10,19 @@ namespace DragonC.CLI
             List<UnformatedRule> rules = new List<UnformatedRule>()
             {
                 new UnformatedRule("A->var", true),
-                new UnformatedRule("A->varB", false),
-                new UnformatedRule("B->==A", false),
-                new UnformatedRule("B->!=A", false),
-                new UnformatedRule("B-><A", false),
-                new UnformatedRule("B-><=A", false),
-                new UnformatedRule("B->>=A", false),
-                new UnformatedRule("B->>A", false),
-                new UnformatedRule("B->||A", false),
-                new UnformatedRule("B->&&A", false),
-            }
+                new UnformatedRule("A->var%B%", false),
+                new UnformatedRule("B->==%A%", false),
+                new UnformatedRule("B->!=%A%", false),
+                new UnformatedRule("B-><%A%", false),
+                new UnformatedRule("B-><=%A%", false),
+                new UnformatedRule("B->>=%A%", false),
+                new UnformatedRule("B->>%A%", false),
+                new UnformatedRule("B->||%A%", false),
+                new UnformatedRule("B->&&%A%", false)
+            };
+
+            FormalGrammar formalGrammar = new FormalGrammar();
+            formalGrammar.SetRules(rules);
 
 
             //std::cout << formalGrammar.checkWord("var") << std::endl;

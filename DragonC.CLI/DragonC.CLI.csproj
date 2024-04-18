@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DragonC.Domain\DragonC.Domain.csproj" />
+    <ProjectReference Include="..\DragonC.Lexer\DragonC.Lexer.csproj" />
   </ItemGroup>
 
 </Project>
