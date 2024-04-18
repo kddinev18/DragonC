@@ -9,7 +9,6 @@ namespace DragonC.Lexer.FormalGrammar
         private List<string> _terminalSybols = new List<string>();
         private List<string> _nonTerminalSymbols = new List<string>();
         private List<FormalGrammarRule> _formalGrammarRules = new List<FormalGrammarRule>();
-        private string _startSymbol;
         public string NonTerminalIndicator { get; set; } = "%";
 
         public void SetRules(List<UnformatedRule> unformatedRules)
@@ -19,7 +18,6 @@ namespace DragonC.Lexer.FormalGrammar
                 AddRule(unformatedRule);
             }
             LinkRules();
-            _startSymbol = _formalGrammarRules.First().StartNonTerminalSymbol;
 
             _nonTerminalSymbols = _formalGrammarRules
                 .SelectMany(x => x.PossibleOutcomes)
@@ -58,6 +56,7 @@ namespace DragonC.Lexer.FormalGrammar
                 _formalGrammarRules.Add(new FormalGrammarRule()
                 {
                     StartNonTerminalSymbol = ruleComponents.StartSymvol,
+                    IsStart = ruleComponents.IsStart,
                     PossibleOutcomes = new List<Rule>() {
                         new Rule()
                         {
@@ -77,7 +76,8 @@ namespace DragonC.Lexer.FormalGrammar
             {
                 StartSymvol = ruleComponents[0],
                 TerminalPart = ruleComponents[1].Split(NonTerminalIndicator)[0],
-                NonTerminalPart = unformatedRule.IsFinal ? "" : ruleComponents[1].Split(NonTerminalIndicator)[1]
+                NonTerminalPart = unformatedRule.IsFinal ? "" : ruleComponents[1].Split(NonTerminalIndicator)[1],
+                IsStart = unformatedRule.IsStart,
             };
         }
 
@@ -100,70 +100,75 @@ namespace DragonC.Lexer.FormalGrammar
 
         public bool CheckToken(string token)
         {
-            int possibelOutcomeIndex = 0;
-            FormalGrammarRule currentFormlRule = _formalGrammarRules[0];
-            Rule rule = currentFormlRule.PossibleOutcomes[0];
-            while (true)
+            foreach (var startFormalRule in _formalGrammarRules.Where(x => x.IsStart))
             {
-                if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex - 1)
+                int possibelOutcomeIndex = 0;
+                FormalGrammarRule currentFormlRule = startFormalRule;
+                Rule rule = currentFormlRule.PossibleOutcomes[0];
+                while (true)
                 {
-                    return false;
-                }
-                if (rule.Next == null)
-                {
-                    if (rule.TerminalPart == token)
+                    if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex - 1)
                     {
-                        return true;
+                        return false;
                     }
-                    else
+                    if (rule.Next == null)
                     {
-                        for (int i = 0; i < currentFormlRule.PossibleOutcomes.Count(); i++)
+                        if (rule.TerminalPart == token)
                         {
-                            if (currentFormlRule.PossibleOutcomes[i].Next != null)
+                            return true;
+                        }
+                        else
+                        {
+                            for (int i = 0; i < currentFormlRule.PossibleOutcomes.Count(); i++)
                             {
-                                rule = currentFormlRule.PossibleOutcomes[i];
+                                if (currentFormlRule.PossibleOutcomes[i].Next != null)
+                                {
+                                    rule = currentFormlRule.PossibleOutcomes[i];
+                                }
+                            }
+                            if (rule.Next == null)
+                            {
+                                return false;
                             }
                         }
-                        if (rule.Next == null)
-                        {
-                            return false;
-                        }
                     }
-                }
 
-                try
-                {
-                    if (rule.TerminalPart == token.Substring(0, rule.TerminalPart.Length))
+                    try
                     {
-                        string newWord = token.Substring(rule.TerminalPart.Length, token.Length - rule.TerminalPart.Length);
-                        if (string.IsNullOrEmpty(newWord))
+                        if (rule.TerminalPart == token.Substring(0, rule.TerminalPart.Length))
                         {
-                            if (rule.IsFinal)
+                            string newWord = token.Substring(rule.TerminalPart.Length, token.Length - rule.TerminalPart.Length);
+                            if (string.IsNullOrEmpty(newWord))
                             {
-                                return true;
+                                if (rule.IsFinal)
+                                {
+                                    return true;
+                                }
+                                return false;
                             }
-                            return false;
-                        }
 
-                        currentFormlRule = rule.Next;
-                        possibelOutcomeIndex = 0;
-                        rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
-                        token = newWord;
-                    }
-                    else
-                    {
-                        if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex)
-                        {
-                            return false;
+                            currentFormlRule = rule.Next;
+                            possibelOutcomeIndex = 0;
+                            rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                            token = newWord;
                         }
-                        rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                        else
+                        {
+                            if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex)
+                            {
+                                break;
+                            }
+                            rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                        }
                     }
-                }
-                catch(ArgumentOutOfRangeException)
-                {
-                    return false;
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        return false;
+                    }
                 }
             }
+
+            return false;
         }
     }
 }

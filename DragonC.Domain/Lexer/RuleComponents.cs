@@ -11,5 +11,6 @@ namespace DragonC.Domain.Lexer
         public string StartSymvol { get; set; }
         public string TerminalPart { get; set; }
         public string NonTerminalPart { get; set; }
+        public bool IsStart { get; set; }
     }
 }

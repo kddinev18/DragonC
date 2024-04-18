@@ -27,40 +27,104 @@ namespace DragonC.CLI
 
             List<UnformatedRule> rules = new List<UnformatedRule>()
             {
-                new UnformatedRule("constDecl->cosnt%space%", false),
-                new UnformatedRule("space-> |dynamicConstName|%2ndSpace%", false),
-                new UnformatedRule("2ndSpace-> |dynamicConstValue|%endConstDecl%", false),
-                new UnformatedRule("endConstDecl->;", true),
+                new UnformatedRule()
+                {
+                    Rule = "constDecl->cosnt%space%",
+                    IsFinal = false,
+                    IsStart = true
+                },
+                new UnformatedRule
+                {
+                    Rule = "space-> |dynamicConstName|%2ndSpace%",
+                    IsFinal = false,
+                    IsStart = false
+                },
+                new UnformatedRule
+                { 
+                    Rule = "2ndSpace-> |dynamicConstValue|%endConstDecl%", 
+                    IsFinal = false, 
+                    IsStart = false 
+                },
+                new UnformatedRule
+                { 
+                    Rule = "endConstDecl->;",
+                    IsFinal = true,
+                    IsStart = false
+                },
+                
 
 
-                new UnformatedRule("labelDecl->label%labelName%", false),
-                new UnformatedRule("labelName->|dynamicLabelName|%endLabelDecl%", false),
-                new UnformatedRule("endLabelDecl->:", true),
+                new UnformatedRule
+                { 
+                    Rule = "labelDecl->label%space%", 
+                    IsFinal = false, 
+                    IsStart = true 
+                },
+                new UnformatedRule
+                {
+                    Rule = "space-> %labelName%",
+                    IsFinal = false,
+                    IsStart = true
+                },
+                new UnformatedRule
+                { 
+                    Rule = "labelName->|dynamicLabelName|%endLabelDecl%", 
+                    IsFinal = false, 
+                    IsStart = false 
+                },
+                new UnformatedRule
+                { 
+                    Rule = "endLabelDecl->:", 
+                    IsFinal = true, 
+                    IsStart = false 
+                },
 
 
 
-                new UnformatedRule("commandExec->|dynamicCommandName|%endCommandExec%", false),
-                new UnformatedRule("endCommandExec->;", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
-                new UnformatedRule("", false),
+                new UnformatedRule
+                { 
+                    Rule = "commandExec->|dynamicCommandName|%endCommandExec%", 
+                    IsFinal = false, 
+                    IsStart = true 
+                },
+                new UnformatedRule
+                { 
+                    Rule = "endCommandExec->;", 
+                    IsFinal = true, 
+                    IsStart = false 
+                },
+
+
+
+                new UnformatedRule
+                { 
+                    Rule = "condCommandExec->|dynamicCondCommandName|%3rdSpace%", 
+                    IsFinal = false, 
+                    IsStart = true 
+                },
+                new UnformatedRule
+                { 
+                    Rule = "3rdSpace-> %condCommandParam%", 
+                    IsFinal = false, 
+                    IsStart = false 
+                },
+                new UnformatedRule
+                { 
+                    Rule = "condCommandParam->|dynamicCondCommandParam|%endCondCommandExec%", 
+                    IsFinal = false, 
+                    IsStart = false 
+                },
+                new UnformatedRule
+                { 
+                    Rule = "endCondCommandExec->;", 
+                    IsFinal = true, 
+                    IsStart = false 
+                },
             };
 
             FormalGrammar formalGrammar = new FormalGrammar();
             formalGrammar.SetRules(rules);
-            Console.WriteLine(formalGrammar.CheckToken("cosnt |dynamicConstName| |dynamicConstValue|;"));
+            Console.WriteLine(formalGrammar.CheckToken("|dynamicCondCommandName| |dynamicCondCommandParam|;"));
         }
     }
 }
