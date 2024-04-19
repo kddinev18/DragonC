@@ -79,7 +79,7 @@ namespace DragonC.Lexer.FormalGrammar
         private RuleComponents GetRuleComponents(UnformatedRule unformatedRule)
         {
             string[] ruleComponents = unformatedRule.Rule.Split("->");
-            bool isFinal = ruleComponents[1].Split(NonTerminalIndicator).Count() == 0;
+            bool isFinal = ruleComponents[1].Split(NonTerminalIndicator).Count() == 1;
             return new RuleComponents()
             {
                 StartSymvol = ruleComponents[0],
@@ -108,6 +108,7 @@ namespace DragonC.Lexer.FormalGrammar
 
         public List<TokenUnit> EvaluateTokens(List<TokenUnit> tokens)
         {
+            LoadLabels(tokens);
             for (int i = 0; i < tokens.Count(); i++)
             {
                 tokens[i] = EvaluateToken(tokens[i]);
@@ -116,7 +117,19 @@ namespace DragonC.Lexer.FormalGrammar
             return tokens;
         }
 
-        public TokenUnit EvaluateToken(TokenUnit tokenUnit)
+        private void LoadLabels(List<TokenUnit> tokens)
+        {
+            foreach(TokenUnit token in tokens)
+            {
+                string[] splits = token.Token.Split(' ');
+                if (splits[0] == "label")
+                {
+                    _labels.Add(splits[1]);
+                }
+            }
+        }
+
+        private TokenUnit EvaluateToken(TokenUnit tokenUnit)
         {
             tokenUnit = ReplceDyamicValues(tokenUnit);
             if(!tokenUnit.IsValid)
@@ -211,7 +224,7 @@ namespace DragonC.Lexer.FormalGrammar
             }
             else if (tokens.Length == 2)
             {
-                if (IsConditionalCommand(tokens[0]) && IsLiteral(tokens[1]))
+                if (IsConditionalCommand(tokens[0]) && IsLiteralOrLabel(tokens[1]))
                 {
                     tokens[1] = "|dynamicCondCommandParam|";
                 }
@@ -252,6 +265,11 @@ namespace DragonC.Lexer.FormalGrammar
         }
 
         private bool IsLiteral(string token)
+        {
+            return int.TryParse(token, out var value);
+        }
+
+        private bool IsLiteralOrLabel(string token)
         {
             return int.TryParse(token, out var value) || _labels.Contains(token);
         }

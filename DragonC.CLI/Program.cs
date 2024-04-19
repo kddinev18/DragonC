@@ -40,64 +40,48 @@ namespace DragonC.CLI
                 },
                 new UnformatedRule
                 { 
-                    Rule = "2ndSpace-> |dynamicConstValue|%endConstDecl%", 
-                },
-                new UnformatedRule
-                { 
-                    Rule = "endConstDecl->;",
+                    Rule = "2ndSpace->|dynamicConstValue|", 
                 },
                 
 
 
                 new UnformatedRule
                 { 
-                    Rule = "labelDecl->label%space%", 
+                    Rule = "labelDecl->label%spaceLbl%", 
                     IsStart = true 
                 },
                 new UnformatedRule
                 {
-                    Rule = "space-> %labelName%",
+                    Rule = "spaceLbl-> %labelName%",
                 },
                 new UnformatedRule
                 { 
-                    Rule = "labelName->|dynamicLabelName|%endLabelDecl%", 
-                },
-                new UnformatedRule
-                { 
-                    Rule = "endLabelDecl->:", 
+                    Rule = "labelName->|dynamicLabelName|", 
                 },
 
 
 
                 new UnformatedRule
                 { 
-                    Rule = "commandExec->|dynamicCommandName|%endCommandExec%", 
+                    Rule = "commandExec->|dynamicCommandName|", 
+                    IsStart = true 
+                },
+
+
+
+                new UnformatedRule
+                { 
+                    Rule = "condCommandExec->|dynamicCondCommandName|%spaceCmd%", 
                     IsStart = true 
                 },
                 new UnformatedRule
                 { 
-                    Rule = "endCommandExec->;", 
-                },
-
-
-
-                new UnformatedRule
-                { 
-                    Rule = "condCommandExec->|dynamicCondCommandName|%3rdSpace%", 
-                    IsStart = true 
+                    Rule = "spaceCmd-> %condCommandParam%", 
                 },
                 new UnformatedRule
                 { 
-                    Rule = "3rdSpace-> %condCommandParam%", 
-                },
-                new UnformatedRule
-                { 
-                    Rule = "condCommandParam->|dynamicCondCommandParam|%endCondCommandExec%", 
-                },
-                new UnformatedRule
-                { 
-                    Rule = "endCondCommandExec->;", 
-                },
+                    Rule = "condCommandParam->|dynamicCondCommandParam|", 
+                }
             };
 
             FormalGrammar formalGrammar = new FormalGrammar(new List<Command>()
@@ -105,12 +89,21 @@ namespace DragonC.CLI
                 new Command()
                 {
                     CommandName = "comm1",
-                }
+                },
+                new Command()
+                {
+                    CommandName = "comm2",
+                },
+                new Command()
+                {
+                    CommandName = "jmp",
+                    IsConditionalCommand = true
+                },
             });
             Tokeniser tokeniser = new Tokeniser(new List<string>() { ";", ":" });
-            List<string> tokens = tokeniser.GetTokens("cosnt test 3;\r\n\r\nlabel main:\r\n\tcomm1;\r\n\tcomm2;\r\njmp main;");
+            List<TokenUnit> tokens = tokeniser.GetTokens("const test 3;\r\n\r\nlabel main:\r\n\tcomm1;\r\n\tcomm2;\r\njmp main;");
             formalGrammar.SetRules(rules);
-            Console.WriteLine(formalGrammar.CheckTokens());
+            tokens = formalGrammar.EvaluateTokens(tokens);
         }
     }
 }

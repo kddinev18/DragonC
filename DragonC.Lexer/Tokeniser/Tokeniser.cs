@@ -18,8 +18,10 @@ namespace DragonC.Lexer.Tokeniser
         public List<TokenUnit> GetTokens(string text)
         {
             string formatedText = FormatText(text);
-            List<string> tokens = text.Split(_tokenSeparators.ToArray(), StringSplitOptions.None).ToList();
-            if(tokens.Last() != ";" || tokens.Last() != ":")
+            List<string> tokens = formatedText.Split(_tokenSeparators.ToArray(), StringSplitOptions.None)
+                .Select(x=> formatToken(x))
+                .ToList();
+            if(tokens.Last() != "")
             {
                 throw new SyntaxException($"Missing ; or :");
             }
@@ -36,6 +38,11 @@ namespace DragonC.Lexer.Tokeniser
                     EndCharacterPosition = tokenPosition.Item3,
                     IsValid = true
                 });
+            }
+
+            for (int i = 0; i < result.Count(); i++)
+            {
+                result[i].Token = formatToken(result[i].Token);
             }
 
             return result;
@@ -57,6 +64,19 @@ namespace DragonC.Lexer.Tokeniser
             }
 
             return Tuple.Create(-1, -1, -1);
+        }
+
+        private string formatToken(string token)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (char c in token)
+            {
+                if (c != '\n' && c != '\r' && c!= '\t')
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+            return stringBuilder.ToString();
         }
 
         private string FormatText(string text)
