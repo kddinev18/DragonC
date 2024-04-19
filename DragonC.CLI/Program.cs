@@ -1,7 +1,6 @@
 ﻿using DragonC.Domain.Compilator;
 using DragonC.Domain.Lexer;
-using DragonC.Lexer.FormalGrammar;
-using DragonC.Lexer.Tokeniser;
+using DragonC.Lexer;
 
 namespace DragonC.CLI
 {
@@ -9,24 +8,6 @@ namespace DragonC.CLI
     {
         static void Main(string[] args)
         {
-            //List<UnformatedRule> rules = new List<UnformatedRule>()
-            //{
-            //    new UnformatedRule("A->var", true),
-            //    new UnformatedRule("A->var%B%", false),
-            //    new UnformatedRule("B->==%A%", false),
-            //    new UnformatedRule("B->!=%A%", false),
-            //    new UnformatedRule("B-><%A%", false),
-            //    new UnformatedRule("B-><=%A%", false),
-            //    new UnformatedRule("B->>=%A%", false),
-            //    new UnformatedRule("B->>%A%", false),
-            //    new UnformatedRule("B->||%A%", false),
-            //    new UnformatedRule("B->&&%A%", false)
-            //};
-
-            //FormalGrammar formalGrammar = new FormalGrammar();
-            //formalGrammar.SetRules(rules);
-            //Console.WriteLine(formalGrammar.CheckToken("varvar"));
-
             List<UnformatedRule> rules = new List<UnformatedRule>()
             {
                 new UnformatedRule()

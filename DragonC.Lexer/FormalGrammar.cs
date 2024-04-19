@@ -4,7 +4,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 
-namespace DragonC.Lexer.FormalGrammar
+namespace DragonC.Lexer
 {
     public class FormalGrammar
     {
@@ -119,7 +119,7 @@ namespace DragonC.Lexer.FormalGrammar
 
         private void LoadLabels(List<TokenUnit> tokens)
         {
-            foreach(TokenUnit token in tokens)
+            foreach (TokenUnit token in tokens)
             {
                 string[] splits = token.Token.Split(' ');
                 if (splits[0] == "label")
@@ -132,7 +132,7 @@ namespace DragonC.Lexer.FormalGrammar
         private TokenUnit EvaluateToken(TokenUnit tokenUnit)
         {
             tokenUnit = ReplceDyamicValues(tokenUnit);
-            if(!tokenUnit.IsValid)
+            if (!tokenUnit.IsValid)
             {
                 return tokenUnit;
             }
@@ -211,7 +211,7 @@ namespace DragonC.Lexer.FormalGrammar
         {
             string[] tokens = token.Token.Split(' ');
 
-            if(tokens.Length == 1)
+            if (tokens.Length == 1)
             {
                 if (IsCommand(tokens[0]))
                 {
@@ -228,7 +228,7 @@ namespace DragonC.Lexer.FormalGrammar
                 {
                     tokens[1] = "|dynamicCondCommandParam|";
                 }
-                else if(tokens[0] == "label" && !IsDynamicValueKeyWord(tokens[1]))
+                else if (tokens[0] == "label" && !IsDynamicValueKeyWord(tokens[1]))
                 {
                     tokens[1] = "|dynamicLabelName|";
                 }

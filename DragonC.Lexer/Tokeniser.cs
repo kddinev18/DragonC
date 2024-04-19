@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DragonC.Lexer.Tokeniser
+namespace DragonC.Lexer
 {
     public class Tokeniser
     {
@@ -19,9 +19,9 @@ namespace DragonC.Lexer.Tokeniser
         {
             string formatedText = FormatText(text);
             List<string> tokens = formatedText.Split(_tokenSeparators.ToArray(), StringSplitOptions.None)
-                .Select(x=> formatToken(x))
+                .Select(x => formatToken(x))
                 .ToList();
-            if(tokens.Last() != "")
+            if (tokens.Last() != "")
             {
                 throw new SyntaxException($"Missing ; or :");
             }
@@ -71,7 +71,7 @@ namespace DragonC.Lexer.Tokeniser
             StringBuilder stringBuilder = new StringBuilder();
             foreach (char c in token)
             {
-                if (c != '\n' && c != '\r' && c!= '\t')
+                if (c != '\n' && c != '\r' && c != '\t')
                 {
                     stringBuilder.Append(c);
                 }
