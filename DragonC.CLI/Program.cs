@@ -1,4 +1,5 @@
-﻿using DragonC.Domain.Lexer;
+﻿using DragonC.Domain.Compilator;
+using DragonC.Domain.Lexer;
 using DragonC.Lexer.FormalGrammar;
 using DragonC.Lexer.Tokeniser;
 
@@ -31,26 +32,19 @@ namespace DragonC.CLI
                 new UnformatedRule()
                 {
                     Rule = "constDecl->cosnt%space%",
-                    IsFinal = false,
                     IsStart = true
                 },
                 new UnformatedRule
                 {
                     Rule = "space-> |dynamicConstName|%2ndSpace%",
-                    IsFinal = false,
-                    IsStart = false
                 },
                 new UnformatedRule
                 { 
                     Rule = "2ndSpace-> |dynamicConstValue|%endConstDecl%", 
-                    IsFinal = false, 
-                    IsStart = false 
                 },
                 new UnformatedRule
                 { 
                     Rule = "endConstDecl->;",
-                    IsFinal = true,
-                    IsStart = false
                 },
                 
 
@@ -58,26 +52,19 @@ namespace DragonC.CLI
                 new UnformatedRule
                 { 
                     Rule = "labelDecl->label%space%", 
-                    IsFinal = false, 
                     IsStart = true 
                 },
                 new UnformatedRule
                 {
                     Rule = "space-> %labelName%",
-                    IsFinal = false,
-                    IsStart = true
                 },
                 new UnformatedRule
                 { 
                     Rule = "labelName->|dynamicLabelName|%endLabelDecl%", 
-                    IsFinal = false, 
-                    IsStart = false 
                 },
                 new UnformatedRule
                 { 
                     Rule = "endLabelDecl->:", 
-                    IsFinal = true, 
-                    IsStart = false 
                 },
 
 
@@ -85,14 +72,11 @@ namespace DragonC.CLI
                 new UnformatedRule
                 { 
                     Rule = "commandExec->|dynamicCommandName|%endCommandExec%", 
-                    IsFinal = false, 
                     IsStart = true 
                 },
                 new UnformatedRule
                 { 
                     Rule = "endCommandExec->;", 
-                    IsFinal = true, 
-                    IsStart = false 
                 },
 
 
@@ -100,30 +84,29 @@ namespace DragonC.CLI
                 new UnformatedRule
                 { 
                     Rule = "condCommandExec->|dynamicCondCommandName|%3rdSpace%", 
-                    IsFinal = false, 
                     IsStart = true 
                 },
                 new UnformatedRule
                 { 
                     Rule = "3rdSpace-> %condCommandParam%", 
-                    IsFinal = false, 
-                    IsStart = false 
                 },
                 new UnformatedRule
                 { 
                     Rule = "condCommandParam->|dynamicCondCommandParam|%endCondCommandExec%", 
-                    IsFinal = false, 
-                    IsStart = false 
                 },
                 new UnformatedRule
                 { 
                     Rule = "endCondCommandExec->;", 
-                    IsFinal = true, 
-                    IsStart = false 
                 },
             };
 
-            FormalGrammar formalGrammar = new FormalGrammar();
+            FormalGrammar formalGrammar = new FormalGrammar(new List<Command>()
+            {
+                new Command()
+                {
+                    CommandName = "comm1",
+                }
+            });
             Tokeniser tokeniser = new Tokeniser(new List<string>() { ";", ":" });
             List<string> tokens = tokeniser.GetTokens("cosnt test 3;\r\n\r\nlabel main:\r\n\tcomm1;\r\n\tcomm2;\r\njmp main;");
             formalGrammar.SetRules(rules);

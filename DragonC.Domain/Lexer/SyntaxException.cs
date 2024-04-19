@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace DragonC.Domain.Lexer
 {
-    public class UnformatedRule
+    public class SyntaxException : Exception
     {
-        public string Rule { get; set; }
-        public bool IsStart { get; set; } = false;
+        public SyntaxException(string message) : base(message)
+        {
+            
+        }
     }
 }
