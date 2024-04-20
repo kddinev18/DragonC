@@ -15,41 +15,55 @@ namespace DragonC.Compilator
         public string DynamicValuesIndicator { get; set; } = "@";
         public string DynamicCommandIndicator { get; set; } = "#";
         public string CommandJoinSeparator { get; set; } = "^";
+        public string CommandArgumentIndicator { get; set; } = "!";
 
-        private List<string> _tokenSeparators = new List<string>() { ";", ":" };
-        private List<Command> _commands = new List<Command>()
+        private List<HighLevelCommand> _highLevelCommands = new List<HighLevelCommand>()
         {
-            new Command()
+            new HighLevelCommand()
+            {
+                CommandDefinition = $"!_! + !_!",
+                CommandIndentificatror = " + ",
+                IsCommandValid = (string command) =>
+                {
+
+                    return false;
+                }
+            }
+        }
+        private List<string> _tokenSeparators = new List<string>() { ";", ":" };
+        private List<LowLevelCommand> _lowLevelCommands = new List<LowLevelCommand>()
+        {
+            new LowLevelCommand()
             {
                 CommandName = "IMM_TO_REGT",
                 MachineCode = "01000101"
             },
-            new Command()
+            new LowLevelCommand()
             {
                 CommandName = "REGT_TO_REG1",
                 MachineCode = "01110000"
             },
-            new Command()
+            new LowLevelCommand()
             {
                 CommandName = "ADD",
                 MachineCode = "10000100"
             },
-            new Command()
+            new LowLevelCommand()
             {
                 CommandName = "REG3_TO_OUT",
                 MachineCode = "01011110"
             },
-            new Command()
+            new LowLevelCommand()
             {
                 CommandName = "REG3_TO_REGT",
                 MachineCode = "01011101"
             },
-            new Command()
+            new LowLevelCommand()
             {
                 CommandName = "REGT_TO_REG2",
                 MachineCode = "01110001"
             },
-            new Command()
+            new LowLevelCommand()
             {
                 CommandName = "GO_TO",
                 MachineCode = "11000100",

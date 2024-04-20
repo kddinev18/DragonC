@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DragonC.Domain.Compilator
 {
-    public class Command
+    public class LowLevelCommand
     {
         public string CommandName { get; set; }
         public bool IsConditionalCommand { get; set; } = false;

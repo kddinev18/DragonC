@@ -16,8 +16,13 @@ namespace DragonC.Compilator
         private Tokeniser _tokeniser;
         public Compilator()
         {
-            _formalGrammar = new FormalGrammar(_commands);
+            _formalGrammar = new FormalGrammar(_lowLevelCommands);
+            _formalGrammar.DynamicNamesIndicator = DynamicNamesIndicator;
+            _formalGrammar.DynamicValuesIndicator = DynamicValuesIndicator;
+            _formalGrammar.DynamicCommandIndicator = DynamicCommandIndicator;
+            _formalGrammar.NonTerminalIndicator = NonTerminalIndicator;
             _formalGrammar.SetRules(_formalRules);
+
             _tokeniser = new Tokeniser(_tokenSeparators);
         }
         public CompiledCode Compile(string text)
@@ -94,7 +99,7 @@ namespace DragonC.Compilator
                 string[] splits = token.Token.Split(DynamicCommandIndicator);
                 if (splits.Length == 3)
                 {
-                    Command command = _commands
+                    LowLevelCommand command = _lowLevelCommands
                     .Where(x => splits[1] == x.CommandName)
                     .First();
 

@@ -22,9 +22,9 @@ namespace DragonC.Lexer
 
         private List<string> _dynamicIndicators = new List<string>();
 
-        public List<Command> Commands { get; set; }
+        public List<LowLevelCommand> Commands { get; set; }
 
-        public FormalGrammar(List<Command> commands)
+        public FormalGrammar(List<LowLevelCommand> commands)
         {
             Commands = commands;
             _dynamicIndicators.Add(DynamicNamesIndicator);

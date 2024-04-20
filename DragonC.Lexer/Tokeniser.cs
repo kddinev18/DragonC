@@ -22,6 +22,7 @@ namespace DragonC.Lexer
                 .Select(x => formatToken(x).Trim())
                 .Where(x => !x.StartsWith("//"))
                 .ToList();
+
             if (tokens.Last() != "")
             {
                 throw new SyntaxException($"Missing ; or :");
@@ -47,6 +48,11 @@ namespace DragonC.Lexer
             }
 
             return result;
+        }
+
+        private void CompileForHighLevelCommands(List<string> tokens)
+        {
+            throw new NotImplementedException();
         }
 
         public static Tuple<int, int, int> FindSubstringLocation(string unformattedText, string token)
