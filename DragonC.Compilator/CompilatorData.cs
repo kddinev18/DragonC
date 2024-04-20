@@ -10,6 +10,11 @@ namespace DragonC.Compilator
 {
     public partial class Compilator
     {
+        public string NonTerminalIndicator { get; set; } = "%";
+        public string DynamicNamesIndicator { get; set; } = "|";
+        public string DynamicValuesIndicator { get; set; } = "@";
+        public string DynamicCommandIndicator { get; set; } = "#";
+
         private List<string> _tokenSeparators = new List<string>() { ";", ":" };
         private List<Command> _commands = new List<Command>()
         {
@@ -31,16 +36,24 @@ namespace DragonC.Compilator
         {
             new UnformatedRule()
             {
-                Rule = "constDecl->cosnt%space%",
+                Rule = "constDecl->const%space%",
                 IsStart = true
             },
             new UnformatedRule
             {
-                Rule = "space-> |dynamicConstName|%2ndSpace%",
+                Rule = "space-> %cnastName%",
             },
             new UnformatedRule
             {
-                Rule = "2ndSpace->|dynamicConstValue|",
+                Rule = "cnastName->|_|%2ndSpace%"
+            },
+            new UnformatedRule
+            {
+                Rule = "2ndSpace-> %constValue%",
+            },
+            new UnformatedRule
+            {
+                Rule = "constValue->@_@",
             },
 
 
@@ -56,14 +69,14 @@ namespace DragonC.Compilator
             },
             new UnformatedRule
             {
-                Rule = "labelName->|dynamicLabelName|",
+                Rule = "labelName->|_|",
             },
 
 
 
             new UnformatedRule
             {
-                Rule = "commandExec->|dynamicCommandName|",
+                Rule = "commandExec->#_#",
                 IsStart = true
             },
 
@@ -71,7 +84,7 @@ namespace DragonC.Compilator
 
             new UnformatedRule
             {
-                Rule = "condCommandExec->|dynamicCondCommandName|%spaceCmd%",
+                Rule = "condCommandExec->#_#%spaceCmd%",
                 IsStart = true
             },
             new UnformatedRule
@@ -80,7 +93,7 @@ namespace DragonC.Compilator
             },
             new UnformatedRule
             {
-                Rule = "condCommandParam->|dynamicCondCommandParam|",
+                Rule = "condCommandParam->@_@",
             }
         };
     }

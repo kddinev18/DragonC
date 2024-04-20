@@ -9,6 +9,7 @@ namespace DragonC.Domain.Lexer
     public class TokenUnit
     {
         public string Token { get; set; }
+        public int TextLine { get; set; }
         public int CodeLine { get; set; }
         public int StartCharaterPosition { get; set; }
         public int EndCharacterPosition { get; set; }

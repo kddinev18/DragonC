@@ -8,16 +8,27 @@ namespace DragonC.Lexer
 {
     public class FormalGrammar
     {
-        private List<string> _terminalSybols = new List<string>();
+        private List<string> _terminalSymbols = new List<string>();
+        private List<string> _dyanicTerminalSymblos = new List<string>();
+        private List<string> _staticTerminalSymblos = new List<string>();
         private List<string> _nonTerminalSymbols = new List<string>();
         private List<FormalGrammarRule> _formalGrammarRules = new List<FormalGrammarRule>();
         private List<string> _labels = new List<string>();
         public string NonTerminalIndicator { get; set; } = "%";
+        public string DynamicNamesIndicator { get; set; } = "|";
+        public string DynamicValuesIndicator { get; set; } = "@";
+        public string DynamicCommandIndicator { get; set; } = "#";
+
+        private List<string> _dynamicIndicators = new List<string>();
+
         public List<Command> Commands { get; set; }
 
         public FormalGrammar(List<Command> commands)
         {
             Commands = commands;
+            _dynamicIndicators.Add(DynamicNamesIndicator);
+            _dynamicIndicators.Add(DynamicValuesIndicator);
+            _dynamicIndicators.Add(DynamicCommandIndicator);
         }
 
         public void SetRules(List<UnformatedRule> unformatedRules)
@@ -34,11 +45,21 @@ namespace DragonC.Lexer
                 .Where(x => !string.IsNullOrEmpty(x))
                 .Distinct()
                 .ToList();
-            _terminalSybols = _formalGrammarRules
+            _terminalSymbols = _formalGrammarRules
                 .SelectMany(x => x.PossibleOutcomes)
                 .Select(x => x.TerminalPart)
                 .Distinct()
                 .ToList();
+
+            foreach (string indicator in _dynamicIndicators)
+            {
+                _dyanicTerminalSymblos.AddRange(_terminalSymbols
+                    .Where(x => x.StartsWith(indicator) && x.EndsWith(indicator))
+                );
+                _staticTerminalSymblos.AddRange(_terminalSymbols
+                    .Where(x => !x.StartsWith(indicator) && !x.EndsWith(indicator))
+                );
+            }
         }
 
         private void AddRule(UnformatedRule unformatedRule)
@@ -78,15 +99,22 @@ namespace DragonC.Lexer
 
         private RuleComponents GetRuleComponents(UnformatedRule unformatedRule)
         {
-            string[] ruleComponents = unformatedRule.Rule.Split("->");
-            bool isFinal = ruleComponents[1].Split(NonTerminalIndicator).Count() == 1;
-            return new RuleComponents()
+            try
             {
-                StartSymvol = ruleComponents[0],
-                TerminalPart = ruleComponents[1].Split(NonTerminalIndicator)[0],
-                NonTerminalPart = isFinal ? "" : ruleComponents[1].Split(NonTerminalIndicator)[1],
-                IsStart = unformatedRule.IsStart,
-            };
+                string[] ruleComponents = unformatedRule.Rule.Split("->");
+                bool isFinal = ruleComponents[1].Split(NonTerminalIndicator).Count() == 1;
+                return new RuleComponents()
+                {
+                    StartSymvol = ruleComponents[0],
+                    TerminalPart = ruleComponents[1].Split(NonTerminalIndicator)[0],
+                    NonTerminalPart = isFinal ? "" : ruleComponents[1].Split(NonTerminalIndicator)[1],
+                    IsStart = unformatedRule.IsStart,
+                };
+            }
+            catch (Exception)
+            {
+                throw new IvalidFormalRuleExcepetion();
+            }
         }
 
         public void LinkRules()
@@ -136,9 +164,10 @@ namespace DragonC.Lexer
             {
                 return tokenUnit;
             }
-            string token = tokenUnit.Token;
+            string token = "";
             foreach (var startFormalRule in _formalGrammarRules.Where(x => x.IsStart))
             {
+                token = tokenUnit.Token;
                 int possibelOutcomeIndex = 0;
                 FormalGrammarRule currentFormlRule = startFormalRule;
                 Rule rule = currentFormlRule.PossibleOutcomes[0];
@@ -150,7 +179,31 @@ namespace DragonC.Lexer
                     }
                     if (rule.Next == null)
                     {
-                        if (rule.TerminalPart == token)
+                        if (_dyanicTerminalSymblos.Contains(rule.TerminalPart))
+                        {
+                            bool flag = false;
+                            foreach (string separator in _dynamicIndicators)
+                            {
+                                if (token.StartsWith(separator) && token.Split(separator).Count() == 3)
+                                {
+                                    token = ValidateDynamicValue(token, separator);
+                                    
+                                    if(string.IsNullOrEmpty(token))
+                                    {
+                                        return tokenUnit;
+                                    }
+                                    else
+                                    {
+                                        flag = true;
+                                    }
+                                }
+                            }
+                            if(flag)
+                            {
+                                break;
+                            }
+                        }
+                        else if (rule.TerminalPart == token)
                         {
                             return tokenUnit;
                         }
@@ -172,7 +225,22 @@ namespace DragonC.Lexer
 
                     try
                     {
-                        if (rule.TerminalPart == token.Substring(0, rule.TerminalPart.Length))
+                        if(_dyanicTerminalSymblos.Contains(rule.TerminalPart))
+                        {
+                            foreach (string separator in _dynamicIndicators)
+                            {
+                                if(token.StartsWith(separator) && token.Split(separator).Count() == 3)
+                                {
+                                    token = ValidateDynamicValue(token, separator);
+
+                                    currentFormlRule = rule.Next;
+                                    possibelOutcomeIndex = 0;
+                                    rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                                    break;
+                                }
+                            }
+                        }
+                        else if (rule.TerminalPart == token.Substring(0, rule.TerminalPart.Length))
                         {
                             string newWord = token.Substring(rule.TerminalPart.Length, token.Length - rule.TerminalPart.Length);
                             if (string.IsNullOrEmpty(newWord))
@@ -207,6 +275,14 @@ namespace DragonC.Lexer
             return GetError(token, tokenUnit);
         }
 
+        private string ValidateDynamicValue(string token, string separator)
+        {
+            token = token.Substring(1, token.Length-1);
+            int indexOfSeparator = token.IndexOf(separator) + 1;
+            token = token.Substring(indexOfSeparator, token.Length - indexOfSeparator);
+            return token;
+        }
+
         private TokenUnit ReplceDyamicValues(TokenUnit token)
         {
             string[] tokens = token.Token.Split(' ');
@@ -215,7 +291,7 @@ namespace DragonC.Lexer
             {
                 if (IsCommand(tokens[0]))
                 {
-                    tokens[0] = "|dynamicCommandName|";
+                    tokens[0] = $"{DynamicCommandIndicator}{tokens[0]}{DynamicCommandIndicator}";
                 }
                 else
                 {
@@ -226,11 +302,12 @@ namespace DragonC.Lexer
             {
                 if (IsConditionalCommand(tokens[0]) && IsLiteralOrLabel(tokens[1]))
                 {
-                    tokens[1] = "|dynamicCondCommandParam|";
+                    tokens[0] = $"{DynamicCommandIndicator}{tokens[0]}{DynamicCommandIndicator}";
+                    tokens[1] = $"{DynamicValuesIndicator}{tokens[1]}{DynamicValuesIndicator}";
                 }
                 else if (tokens[0] == "label" && !IsDynamicValueKeyWord(tokens[1]))
                 {
-                    tokens[1] = "|dynamicLabelName|";
+                    tokens[1] = $"{DynamicNamesIndicator}{tokens[1]}{DynamicNamesIndicator}";
                 }
                 else
                 {
@@ -241,8 +318,8 @@ namespace DragonC.Lexer
             {
                 if (tokens[0] == "const" && !IsDynamicValueKeyWord(tokens[1]) && IsLiteral(tokens[2]))
                 {
-                    tokens[1] = "|dynamicConstName|";
-                    tokens[2] = "|dynamicConstValue|";
+                    tokens[1] = $"{DynamicNamesIndicator}{tokens[1]}{DynamicNamesIndicator}";
+                    tokens[2] = $"{DynamicValuesIndicator}{tokens[2]}{DynamicValuesIndicator}";
                 }
                 else
                 {
@@ -276,7 +353,7 @@ namespace DragonC.Lexer
 
         private bool IsDynamicValueKeyWord(string token)
         {
-            return _terminalSybols.Contains(token);
+            return _terminalSymbols.Contains(token);
         }
 
         private TokenUnit GetError(string token, TokenUnit tokenUnit)

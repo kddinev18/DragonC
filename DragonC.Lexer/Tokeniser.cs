@@ -33,7 +33,7 @@ namespace DragonC.Lexer
                 result.Add(new TokenUnit()
                 {
                     Token = token,
-                    CodeLine = tokenPosition.Item1,
+                    TextLine = tokenPosition.Item1,
                     StartCharaterPosition = tokenPosition.Item2,
                     EndCharacterPosition = tokenPosition.Item3,
                     IsValid = true
