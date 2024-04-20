@@ -19,7 +19,7 @@ namespace DragonC.Domain.Lexer
 
         public string GetErrors()
         {
-            return string.Join(' ', ErrorMessaes) + $"Line of error: {TextLine}, character: {StartCharaterPosition + StartCharacterOfErrorPosition}";
+            return string.Join(' ', ErrorMessaes) + $" Line of error: {TextLine}, character: {StartCharaterPosition + StartCharacterOfErrorPosition}";
         }
     }
 }

@@ -48,7 +48,9 @@ namespace DragonC.Compilator
             return new CompiledCode()
             {
                 IsBuildSuccessfully = true,
-                CompiledCommands = commandTokens.Select(x=> Convert.ToString(Convert.ToInt32(x.Token, 2), 16).ToUpper()).ToList(),
+                CompiledCommands = commandTokens
+                    .Select(x=> Convert.ToString(Convert.ToInt32(x.Token, 2), 16).PadLeft(2, '0').ToUpper())
+                    .ToList(),
             };
         }
 
@@ -62,7 +64,7 @@ namespace DragonC.Compilator
                 {
                     result.Add(new TokenUnit()
                     {
-                        Token = Convert.ToString(int.Parse(splits[1]), 2).PadLeft(8, '0'),
+                        Token = splits[1],
                         TextLine = token.TextLine,
                         CodeLine = token.CodeLine,
                         StartCharaterPosition = token.StartCharaterPosition,

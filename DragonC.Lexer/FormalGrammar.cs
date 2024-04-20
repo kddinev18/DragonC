@@ -313,7 +313,7 @@ namespace DragonC.Lexer
                 }
                 else
                 {
-                    token = GetError(token.Token, token);
+                    token = GetError(tokens[0], token);
                 }
             }
             else if (tokens.Length == 2)
@@ -329,7 +329,7 @@ namespace DragonC.Lexer
                 }
                 else
                 {
-                    token = GetError(token.Token, token);
+                    token = GetError(tokens[1], token);
                 }
             }
             else if (tokens.Length == 3)
@@ -341,7 +341,7 @@ namespace DragonC.Lexer
                 }
                 else
                 {
-                    token = GetError(token.Token, token);
+                    token = GetError(tokens[1], token);
                 }
             }
             token.Token = string.Join(' ', tokens);
@@ -382,8 +382,33 @@ namespace DragonC.Lexer
         private TokenUnit GetError(string token, TokenUnit tokenUnit)
         {
             tokenUnit.IsValid = false;
-            tokenUnit.ErrorMessaes = new List<string>() { $"\"{token.Split(' ')[0]}\" is not a recognised command or keyword. " };
+            string error = $"\"{token.Split(' ')[0]}\" is not a recognised command, keyword or const name.";
+
+            if(tokenUnit.ErrorMessaes != null)
+            {
+                tokenUnit.ErrorMessaes.Add(error);
+            }
+            else
+            {
+                tokenUnit.ErrorMessaes = new List<string>() { error };
+            }
             tokenUnit.StartCharacterOfErrorPosition = tokenUnit.Token.IndexOf(token + 1);
+
+            return tokenUnit;
+        }
+
+        private TokenUnit SetError(string error, TokenUnit tokenUnit)
+        {
+            tokenUnit.IsValid = false;
+            if (tokenUnit.ErrorMessaes != null)
+            {
+                tokenUnit.ErrorMessaes.Add(error);
+            }
+            else
+            {
+                tokenUnit.ErrorMessaes = new List<string>() { error };
+            }
+            tokenUnit.StartCharacterOfErrorPosition = 0;
 
             return tokenUnit;
         }
