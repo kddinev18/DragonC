@@ -28,7 +28,7 @@ namespace DragonC.Compilator
                 return new CompiledCode()
                 {
                     IsBuildSuccessfully = false,
-                    ErrorMessages = tokenUnits.Where(x=>!x.IsValid).SelectMany(x=>x.ErrorMessaes).ToList()
+                    ErrorMessages = tokenUnits.Where(x=>!x.IsValid).Select(x=>x.GetErrors()).ToList()
                 };
             }
             int codeLines = LoadCodeLines(tokenUnits);
@@ -43,17 +43,50 @@ namespace DragonC.Compilator
 
             ReplaceDybamicValuesWithCorrespodingValue(literalTokens, commandTokens);
             ReplaceCommadsWithCorespondingValue(commandTokens);
+            CompileConditionalCommands(commandTokens.Where(x=>x.Token.Contains(' ')).ToList());
 
-            return null;
+            commandTokens = commandTokens.OrderBy(x => x.CodeLine).ToList();
+            return new CompiledCode()
+            {
+                IsBuildSuccessfully = true,
+                CompiledCommands = commandTokens.Select(x=>x.Token).ToList(),
+            };
+        }
+
+        private void CompileConditionalCommands(List<TokenUnit> commandTokens)
+        {
+            foreach (TokenUnit token in commandTokens)
+            {
+                string[] splits = token.Token.Split(' ');
+                token.Token = splits[0];
+
+                commandTokens.Add(new TokenUnit()
+                {
+                    Token = splits[1],
+                    TextLine = token.TextLine,
+                    CodeLine = token.CodeLine - 1,
+                    StartCharaterPosition = token.StartCharaterPosition,
+                    EndCharacterPosition = token.EndCharacterPosition,
+                    IsValid = token.IsValid,
+                    ErrorMessaes = token.ErrorMessaes,
+                    StartCharacterOfErrorPosition = token.StartCharacterOfErrorPosition,
+                });
+            }
         }
 
         private void ReplaceCommadsWithCorespondingValue(List<TokenUnit> commandTokens)
         {
             foreach (TokenUnit token in commandTokens)
             {
-                if(token.Token.Split(DynamicCommandIndicator).Count() == 3 &&)
+                string[] splits = token.Token.Split(DynamicCommandIndicator);
+                if (splits.Length == 3)
                 {
+                    Command command = _commands
+                    .Where(x => splits[1] == x.CommandName)
+                    .First();
 
+                    token.Token = token.Token.Replace($"{DynamicCommandIndicator}{splits[1]}{DynamicCommandIndicator}",
+                        command.MachineCode.ToString());
                 }
             }
         }
@@ -89,7 +122,18 @@ namespace DragonC.Compilator
             int codeLines = 0;
             foreach (TokenUnit token in tokenUnits)
             {
-                if(token.Token.StartsWith("label"))
+                string[] splits = token.Token.Split(' ');
+
+                if (splits.Length == 2 && 
+                    splits[0].StartsWith(DynamicCommandIndicator) && 
+                    splits[0].EndsWith(DynamicCommandIndicator) &&
+                    splits[1].StartsWith(DynamicValuesIndicator) &&
+                    splits[1].EndsWith(DynamicValuesIndicator))
+                {
+                    token.CodeLine = ++codeLines;
+                    codeLines++;
+                }
+                else if (token.Token.StartsWith("label"))
                 {
                     token.CodeLine = codeLines;
                 }

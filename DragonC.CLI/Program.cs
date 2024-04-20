@@ -8,7 +8,7 @@ namespace DragonC.CLI
         {
             Compilator.Compilator compilator = new Compilator.Compilator();
 
-            CompiledCode code = compilator.Compile("const test 3;\r\n\r\nlabel main:\r\n\ttest;\ncomm1;comm2;\r\njmp main;");
+            CompiledCode code = compilator.Compile("const test 3; comm1;comm2; \r\n\r\nlabel main:\r\n\ttest;\ncomm1;comm2;\r\njmp main;\ntest;comm1; ".TrimEnd());
         }
     }
 }

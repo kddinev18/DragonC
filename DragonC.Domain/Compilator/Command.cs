@@ -10,7 +10,7 @@ namespace DragonC.Domain.Compilator
     {
         public string CommandName { get; set; }
         public bool IsConditionalCommand { get; set; } = false;
-        public string MachineCode { get; set; }
+        public int MachineCode { get; set; }
         public string MachineCode16 { get; set; }
     }
 }

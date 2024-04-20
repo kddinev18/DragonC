@@ -22,14 +22,17 @@ namespace DragonC.Compilator
             new Command()
             {
                 CommandName = "comm1",
+                MachineCode = 11
             },
             new Command()
             {
                 CommandName = "comm2",
+                MachineCode = 12
             },
             new Command()
             {
                 CommandName = "jmp",
+                MachineCode = 13,
                 IsConditionalCommand = true
             },
         };

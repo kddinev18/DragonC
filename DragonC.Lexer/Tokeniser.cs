@@ -19,7 +19,7 @@ namespace DragonC.Lexer
         {
             string formatedText = FormatText(text);
             List<string> tokens = formatedText.Split(_tokenSeparators.ToArray(), StringSplitOptions.None)
-                .Select(x => formatToken(x))
+                .Select(x => formatToken(x).Trim())
                 .ToList();
             if (tokens.Last() != "")
             {

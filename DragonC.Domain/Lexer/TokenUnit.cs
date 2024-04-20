@@ -16,5 +16,10 @@ namespace DragonC.Domain.Lexer
         public bool IsValid { get; set; }
         public List<string>? ErrorMessaes { get; set; }
         public int? StartCharacterOfErrorPosition { get; set; }
+
+        public string GetErrors()
+        {
+            return string.Join(' ', ErrorMessaes) + $"Line of error: {TextLine}, character: {StartCharaterPosition + StartCharacterOfErrorPosition}";
+        }
     }
 }
