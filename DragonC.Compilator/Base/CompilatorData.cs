@@ -29,7 +29,7 @@ namespace DragonC.Compilator
                     return false;
                 }
             }
-        }
+        };
         private List<string> _tokenSeparators = new List<string>() { ";", ":" };
         private List<LowLevelCommand> _lowLevelCommands = new List<LowLevelCommand>()
         {

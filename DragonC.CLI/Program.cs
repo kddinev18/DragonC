@@ -21,7 +21,7 @@ namespace DragonC.CLI
                 REG3_TO_OUT;
                 REG3_TO_REGT;
                 REGT_TO_REG2;
-            GO_TO main;
+            GO_TO imm;
 
             //label main2:
             //    imm;

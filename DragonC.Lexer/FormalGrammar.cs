@@ -32,6 +32,14 @@ namespace DragonC.Lexer
             _dynamicIndicators.Add(DynamicCommandIndicator);
         }
 
+        public FormalGrammar()
+        {
+            Commands = new List<LowLevelCommand>();
+            _dynamicIndicators.Add(DynamicNamesIndicator);
+            _dynamicIndicators.Add(DynamicValuesIndicator);
+            _dynamicIndicators.Add(DynamicCommandIndicator);
+        }
+
         public void SetRules(List<UnformatedRule> unformatedRules)
         {
             foreach (UnformatedRule unformatedRule in unformatedRules)
@@ -318,7 +326,7 @@ namespace DragonC.Lexer
             }
             else if (tokens.Length == 2)
             {
-                if (IsConditionalCommand(tokens[0]) && IsLiteralOrLabel(tokens[1]))
+                if (IsConditionalCommand(tokens[0]) && IsLiteralOrLabelOrConstName(tokens[1]))
                 {
                     tokens[0] = $"{DynamicCommandIndicator}{tokens[0]}{DynamicCommandIndicator}";
                     tokens[1] = $"{DynamicValuesIndicator}{tokens[1]}{DynamicValuesIndicator}";
@@ -369,9 +377,9 @@ namespace DragonC.Lexer
             return int.TryParse(token, out var value);
         }
 
-        private bool IsLiteralOrLabel(string token)
+        private bool IsLiteralOrLabelOrConstName(string token)
         {
-            return int.TryParse(token, out var value) || _labels.Contains(token);
+            return int.TryParse(token, out var value) || _labels.Contains(token) || _consts.Contains(token);
         }
 
         private bool IsDynamicValueKeyWord(string token)

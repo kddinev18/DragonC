@@ -11,8 +11,4 @@
     <ProjectReference Include="..\DragonC.Lexer\DragonC.Lexer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="HighLevelComandsCompiler\" />
-  </ItemGroup>
-
 </Project>
