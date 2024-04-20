@@ -15,6 +15,10 @@ namespace DragonC.Lexer
         private List<FormalGrammarRule> _formalGrammarRules = new List<FormalGrammarRule>();
         private List<string> _labels = new List<string>();
         private List<string> _consts = new List<string>();
+
+        public List<string> AllowedValuesForHighLevelCommands { get; set; } = new List<string>();
+        public bool AllowLiteralsForHighLevelCommands { get; set; } = false;
+
         public string NonTerminalIndicator { get; set; } = "%";
         public string DynamicNamesIndicator { get; set; } = "|";
         public string DynamicValuesIndicator { get; set; } = "@";
@@ -326,7 +330,7 @@ namespace DragonC.Lexer
             }
             else if (tokens.Length == 2)
             {
-                if (IsConditionalCommand(tokens[0]) && IsLiteralOrLabelOrConstName(tokens[1]))
+                if (IsConditionalCommand(tokens[0]) && IsLiteralOrLabel(tokens[1]) || IsConstName(tokens[1]))
                 {
                     tokens[0] = $"{DynamicCommandIndicator}{tokens[0]}{DynamicCommandIndicator}";
                     tokens[1] = $"{DynamicValuesIndicator}{tokens[1]}{DynamicValuesIndicator}";
@@ -359,7 +363,7 @@ namespace DragonC.Lexer
 
         private bool IsConstName(string token)
         {
-            return _consts.Contains(token);
+            return _consts.Contains(token) || EvaluateAllowedValues(token);
         }
 
         private bool IsConditionalCommand(string token)
@@ -377,14 +381,19 @@ namespace DragonC.Lexer
             return int.TryParse(token, out var value);
         }
 
-        private bool IsLiteralOrLabelOrConstName(string token)
+        private bool IsLiteralOrLabel(string token)
         {
-            return int.TryParse(token, out var value) || _labels.Contains(token) || _consts.Contains(token);
+            return int.TryParse(token, out var value) || _labels.Contains(token);
         }
 
         private bool IsDynamicValueKeyWord(string token)
         {
-            return _terminalSymbols.Contains(token);
+            return _terminalSymbols.Contains(token) || EvaluateAllowedValues(token);
+        }
+
+        private bool EvaluateAllowedValues(string token)
+        {
+            return AllowedValuesForHighLevelCommands.Contains(token) || AllowLiteralsForHighLevelCommands ? int.TryParse(token, out var value) : false;
         }
 
         private TokenUnit GetError(string token, TokenUnit tokenUnit)

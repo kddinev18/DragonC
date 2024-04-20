@@ -27,10 +27,22 @@ namespace DragonC.Compilator.HighLevelComandsCompiler
             }
         };
 
+        public static List<string> registers = new List<string>()
+        {
+            "REG0",
+            "REG1",
+            "REG2",
+            "REG3",
+            "REG4",
+            "REG5",
+        };
+
         public static List<TokenUnit> IsCommandValid(TokenUnit command)
         {
             FormalGrammar formalGrammar = new FormalGrammar();
             formalGrammar.SetRules(formalRules);
+            formalGrammar.AllowLiteralsForHighLevelCommands = true;
+            formalGrammar.AllowedValuesForHighLevelCommands = registers;
 
             return formalGrammar.EvaluateTokens(new List<TokenUnit>() { command });
         }
