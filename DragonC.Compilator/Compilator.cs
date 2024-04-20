@@ -36,42 +36,53 @@ namespace DragonC.Compilator
             List<TokenUnit> literalTokens = tokenUnits
                 .Where(x => x.Token.StartsWith("const") || x.Token.StartsWith("label"))
                 .ToList();
-            // make all instaces of labels and const to be surounded by other smbols to make it safer for replacement
             List<TokenUnit> commandTokens = tokenUnits
                 .Where(x => !x.Token.StartsWith("const") && !x.Token.StartsWith("label"))
                 .ToList();
 
             ReplaceDybamicValuesWithCorrespodingValue(literalTokens, commandTokens);
             ReplaceCommadsWithCorespondingValue(commandTokens);
-            CompileConditionalCommands(commandTokens.Where(x=>x.Token.Contains(' ')).ToList());
+            commandTokens = CompileConditionalCommands(commandTokens);
 
             commandTokens = commandTokens.OrderBy(x => x.CodeLine).ToList();
             return new CompiledCode()
             {
                 IsBuildSuccessfully = true,
-                CompiledCommands = commandTokens.Select(x=>x.Token).ToList(),
+                CompiledCommands = commandTokens.Select(x=> Convert.ToString(Convert.ToInt32(x.Token, 2), 16).ToUpper()).ToList(),
             };
         }
 
-        private void CompileConditionalCommands(List<TokenUnit> commandTokens)
+        private List<TokenUnit> CompileConditionalCommands(List<TokenUnit> commandTokens)
         {
+            List<TokenUnit> result = new List<TokenUnit>();
             foreach (TokenUnit token in commandTokens)
             {
                 string[] splits = token.Token.Split(' ');
-                token.Token = splits[0];
-
-                commandTokens.Add(new TokenUnit()
+                if(splits.Length == 2)
                 {
-                    Token = splits[1],
-                    TextLine = token.TextLine,
-                    CodeLine = token.CodeLine - 1,
-                    StartCharaterPosition = token.StartCharaterPosition,
-                    EndCharacterPosition = token.EndCharacterPosition,
-                    IsValid = token.IsValid,
-                    ErrorMessaes = token.ErrorMessaes,
-                    StartCharacterOfErrorPosition = token.StartCharacterOfErrorPosition,
-                });
+                    result.Add(new TokenUnit()
+                    {
+                        Token = Convert.ToString(int.Parse(splits[1]), 2).PadLeft(8, '0'),
+                        TextLine = token.TextLine,
+                        CodeLine = token.CodeLine,
+                        StartCharaterPosition = token.StartCharaterPosition,
+                        EndCharacterPosition = token.EndCharacterPosition,
+                        IsValid = token.IsValid,
+                        ErrorMessaes = token.ErrorMessaes,
+                        StartCharacterOfErrorPosition = token.StartCharacterOfErrorPosition,
+                    });
+
+                    token.Token = splits[0];
+                    token.CodeLine++;
+                    result.Add(token);
+                }
+                else
+                {
+                    result.Add(token);
+                }
             }
+
+            return result;
         }
 
         private void ReplaceCommadsWithCorespondingValue(List<TokenUnit> commandTokens)
@@ -86,7 +97,7 @@ namespace DragonC.Compilator
                     .First();
 
                     token.Token = token.Token.Replace($"{DynamicCommandIndicator}{splits[1]}{DynamicCommandIndicator}",
-                        command.MachineCode.ToString());
+                        command.MachineCode);
                 }
             }
         }
@@ -100,18 +111,19 @@ namespace DragonC.Compilator
                 {
                     foreach (TokenUnit command in commandTokens)
                     {
-                        command.Token = command.Token.Replace(splits[1], literalToken.CodeLine.ToString());
+                        command.Token = command.Token.Replace(splits[1], Convert.ToString(literalToken.CodeLine, 2).PadLeft(8, '0'));
                         command.Token = command.Token.Replace(splits[1].Replace(DynamicNamesIndicator, DynamicValuesIndicator),
-                            literalToken.CodeLine.ToString());
+                            Convert.ToString(literalToken.CodeLine, 2).PadLeft(8, '0'));
                     }
                 }
                 else if (splits.Length == 3 && splits[0] == "const")
                 {
                     foreach (TokenUnit command in commandTokens)
                     {
-                        command.Token = command.Token.Replace(splits[1], splits[2].Replace(DynamicValuesIndicator, ""));
+                        command.Token = command.Token.Replace(splits[1],
+                            Convert.ToString(int.Parse(splits[2].Replace(DynamicValuesIndicator, "")),2)).PadLeft(8, '0');
                         command.Token = command.Token.Replace(splits[1].Replace(DynamicNamesIndicator, DynamicValuesIndicator),
-                            splits[2].Replace(DynamicValuesIndicator, ""));
+                            Convert.ToString(int.Parse(splits[2].Replace(DynamicValuesIndicator, "")), 2)).PadLeft(8, '0');
                     }
                 }
             }

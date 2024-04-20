@@ -21,18 +21,38 @@ namespace DragonC.Compilator
         {
             new Command()
             {
-                CommandName = "comm1",
-                MachineCode = 11
+                CommandName = "IMM_TO_REGT",
+                MachineCode = "01000101"
             },
             new Command()
             {
-                CommandName = "comm2",
-                MachineCode = 12
+                CommandName = "REGT_TO_REG1",
+                MachineCode = "01110000"
             },
             new Command()
             {
-                CommandName = "jmp",
-                MachineCode = 13,
+                CommandName = "ADD",
+                MachineCode = "10000100"
+            },
+            new Command()
+            {
+                CommandName = "REG3_TO_OUT",
+                MachineCode = "01011110"
+            },
+            new Command()
+            {
+                CommandName = "REG3_TO_REGT",
+                MachineCode = "01011101"
+            },
+            new Command()
+            {
+                CommandName = "REGT_TO_REG2",
+                MachineCode = "01110001"
+            },
+            new Command()
+            {
+                CommandName = "GO_TO",
+                MachineCode = "11000100",
                 IsConditionalCommand = true
             },
         };

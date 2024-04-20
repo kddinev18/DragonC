@@ -382,7 +382,7 @@ namespace DragonC.Lexer
         private TokenUnit GetError(string token, TokenUnit tokenUnit)
         {
             tokenUnit.IsValid = false;
-            tokenUnit.ErrorMessaes = new List<string>() { $"{token.Split(' ')[0]} is not a recognised command or keyword" };
+            tokenUnit.ErrorMessaes = new List<string>() { $"\"{token.Split(' ')[0]}\" is not a recognised command or keyword. " };
             tokenUnit.StartCharacterOfErrorPosition = tokenUnit.Token.IndexOf(token + 1);
 
             return tokenUnit;

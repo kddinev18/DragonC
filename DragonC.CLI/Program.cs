@@ -8,7 +8,28 @@ namespace DragonC.CLI
         {
             Compilator.Compilator compilator = new Compilator.Compilator();
 
-            CompiledCode code = compilator.Compile("const test 3; comm1;comm2; \r\n\r\nlabel main:\r\n\ttest;\ncomm1;comm2;\r\njmp main;\ntest;comm1; ".TrimEnd());
+            CompiledCode code = compilator.Compile(
+@"
+const imm 1;
+
+imm;
+IMM_TO_REGT;
+REGT_TO_REG1;
+
+label main:
+    ADD;
+    REG3_TO_OUT;
+    REG3_TO_REGT;
+    REGT_TO_REG2;
+GO_TO main;
+
+//label main2:
+//    imm;
+//    IMM_TO_REGT;
+//    REGT_TO_REG1;
+//GO_TO main;
+"
+.Trim());
         }
     }
 }
