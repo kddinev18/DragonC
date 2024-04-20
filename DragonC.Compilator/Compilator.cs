@@ -42,17 +42,44 @@ namespace DragonC.Compilator
                 .ToList();
 
             ReplaceDybamicValuesWithCorrespodingValue(literalTokens, commandTokens);
+            ReplaceCommadsWithCorespondingValue(commandTokens);
 
             return null;
         }
 
-        private void ReplaceDybamicValuesWithCorrespodingValue(List<TokenUnit> literalTokens, List<TokenUnit> commandTokens)
+        private void ReplaceCommadsWithCorespondingValue(List<TokenUnit> commandTokens)
         {
-            foreach (TokenUnit commandToken in commandTokens)
+            foreach (TokenUnit token in commandTokens)
             {
-                if(literalTokens.Where(x => commandToken.Token.Contains(x.Token)).Any())
+                if(token.Token.Split(DynamicCommandIndicator).Count() == 3 &&)
                 {
 
+                }
+            }
+        }
+
+        private void ReplaceDybamicValuesWithCorrespodingValue(List<TokenUnit> literalTokens, List<TokenUnit> commandTokens)
+        {
+            foreach (TokenUnit literalToken in literalTokens)
+            {
+                string[] splits = literalToken.Token.Split(' ');
+                if (splits.Length == 2 && splits[0] == "label")
+                {
+                    foreach (TokenUnit command in commandTokens)
+                    {
+                        command.Token = command.Token.Replace(splits[1], literalToken.CodeLine.ToString());
+                        command.Token = command.Token.Replace(splits[1].Replace(DynamicNamesIndicator, DynamicValuesIndicator),
+                            literalToken.CodeLine.ToString());
+                    }
+                }
+                else if (splits.Length == 3 && splits[0] == "const")
+                {
+                    foreach (TokenUnit command in commandTokens)
+                    {
+                        command.Token = command.Token.Replace(splits[1], splits[2].Replace(DynamicValuesIndicator, ""));
+                        command.Token = command.Token.Replace(splits[1].Replace(DynamicNamesIndicator, DynamicValuesIndicator),
+                            splits[2].Replace(DynamicValuesIndicator, ""));
+                    }
                 }
             }
         }
@@ -62,7 +89,11 @@ namespace DragonC.Compilator
             int codeLines = 0;
             foreach (TokenUnit token in tokenUnits)
             {
-                if(!token.Token.StartsWith("const") && !token.Token.StartsWith("label"))
+                if(token.Token.StartsWith("label"))
+                {
+                    token.CodeLine = codeLines;
+                }
+                else if (!token.Token.StartsWith("const"))
                 {
                     token.CodeLine = ++codeLines;
                 }

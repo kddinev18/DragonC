@@ -14,6 +14,7 @@ namespace DragonC.Compilator
         public string DynamicNamesIndicator { get; set; } = "|";
         public string DynamicValuesIndicator { get; set; } = "@";
         public string DynamicCommandIndicator { get; set; } = "#";
+        public string CommandJoinSeparator { get; set; } = "^";
 
         private List<string> _tokenSeparators = new List<string>() { ";", ":" };
         private List<Command> _commands = new List<Command>()
@@ -77,6 +78,14 @@ namespace DragonC.Compilator
             new UnformatedRule
             {
                 Rule = "commandExec->#_#",
+                IsStart = true
+            },
+
+
+
+            new UnformatedRule
+            {
+                Rule = "immValue->|_|",
                 IsStart = true
             },
 

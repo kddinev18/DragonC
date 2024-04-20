@@ -14,6 +14,7 @@ namespace DragonC.Lexer
         private List<string> _nonTerminalSymbols = new List<string>();
         private List<FormalGrammarRule> _formalGrammarRules = new List<FormalGrammarRule>();
         private List<string> _labels = new List<string>();
+        private List<string> _consts = new List<string>();
         public string NonTerminalIndicator { get; set; } = "%";
         public string DynamicNamesIndicator { get; set; } = "|";
         public string DynamicValuesIndicator { get; set; } = "@";
@@ -137,12 +138,25 @@ namespace DragonC.Lexer
         public List<TokenUnit> EvaluateTokens(List<TokenUnit> tokens)
         {
             LoadLabels(tokens);
+            LoadConsts(tokens);
             for (int i = 0; i < tokens.Count(); i++)
             {
                 tokens[i] = EvaluateToken(tokens[i]);
             }
 
             return tokens;
+        }
+
+        private void LoadConsts(List<TokenUnit> tokens)
+        {
+            foreach (TokenUnit token in tokens)
+            {
+                string[] splits = token.Token.Split(' ');
+                if (splits[0] == "const")
+                {
+                    _consts.Add(splits[1]);
+                }
+            }
         }
 
         private void LoadLabels(List<TokenUnit> tokens)
@@ -293,6 +307,10 @@ namespace DragonC.Lexer
                 {
                     tokens[0] = $"{DynamicCommandIndicator}{tokens[0]}{DynamicCommandIndicator}";
                 }
+                else if (IsConstName(tokens[0]))
+                {
+                    tokens[0] = $"{DynamicNamesIndicator}{tokens[0]}{DynamicNamesIndicator}";
+                }
                 else
                 {
                     token = GetError(token.Token, token);
@@ -329,6 +347,11 @@ namespace DragonC.Lexer
             token.Token = string.Join(' ', tokens);
 
             return token;
+        }
+
+        private bool IsConstName(string token)
+        {
+            return _consts.Contains(token);
         }
 
         private bool IsConditionalCommand(string token)
