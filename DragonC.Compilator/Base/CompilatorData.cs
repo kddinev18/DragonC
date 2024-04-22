@@ -1,37 +1,18 @@
 ﻿using DragonC.Domain.Compilator;
 using DragonC.Domain.Lexer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DragonC.Compilator
 {
     public partial class Compilator
     {
-        public string NonTerminalIndicator { get; set; } = "%";
-        public string DynamicNamesIndicator { get; set; } = "|";
-        public string DynamicValuesIndicator { get; set; } = "@";
-        public string DynamicCommandIndicator { get; set; } = "#";
-        public string CommandJoinSeparator { get; set; } = "^";
-        public string CommandArgumentIndicator { get; set; } = "!";
-
-        private List<HighLevelCommand> _highLevelCommands = new List<HighLevelCommand>()
-        {
-            new HighLevelCommand()
-            {
-                CommandDefinition = $"!_! + !_!",
-                CommandIndentificatror = " + ",
-                IsCommandValid = (string command) =>
-                {
-
-                    return false;
-                }
-            }
-        };
-        private List<string> _tokenSeparators = new List<string>() { ";", ":" };
-        private List<LowLevelCommand> _lowLevelCommands = new List<LowLevelCommand>()
+        public static string NonTerminalIndicator { get; set; } = "%";
+        public static string DynamicNamesIndicator { get; set; } = "|";
+        public static string DynamicValuesIndicator { get; set; } = "@";
+        public static string DynamicCommandIndicator { get; set; } = "#";
+        public static string CommandJoinSeparator { get; set; } = "^";
+        public static string CommandArgumentIndicator { get; set; } = "!";
+        public static List<string> TokenSeparators { get; set; } = new List<string>() { ";", ":" };
+        public static List<LowLevelCommand> LowLevelCommands { get; set; } = new List<LowLevelCommand>()
         {
             new LowLevelCommand()
             {
@@ -70,7 +51,7 @@ namespace DragonC.Compilator
                 IsConditionalCommand = true
             },
         };
-        private List<UnformatedRule> _formalRules = new List<UnformatedRule>()
+        public static List<UnformatedRule> FormalRules { get; set; } = new List<UnformatedRule>()
         {
             new UnformatedRule()
             {

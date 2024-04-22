@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DragonC.Domain.Lexer;
 
 namespace DragonC.Domain.Compilator
 {
@@ -10,8 +6,13 @@ namespace DragonC.Domain.Compilator
     {
         public string CommandDefinition { get; set; }
         public string CommandIndentificatror { get; set; }
-        public Func<string, bool> IsCommandValid { get; set; }
-        public Func<string, List<string>> CompileCommand { get; set; }
+        public string CommandSeparator { get; set; }
+        public List<string> Arguments { get; set; }
+        public List<string> AllowedValuesForArguments { get; set; }
+        public bool AllowLiteralsForArguments { get; set; }
+        public List<UnformatedRule> FormalRules { get; set; }
 
+        public Func<TokenUnit, TokenUnit> ValidateCommand { get; set; }
+        public Func<TokenUnit, List<LowLevelCommand>> CompileCommand { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace DragonC.CLI
             "
             .Trim());
 
-            if(code.IsBuildSuccessfully)
+            if (code.IsBuildSuccessfully)
             {
                 for (int i = 0; i < code.CompiledCommands.Count(); i++)
                 {
