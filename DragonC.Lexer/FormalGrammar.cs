@@ -20,6 +20,7 @@ namespace DragonC.Lexer
         public string NonTerminalIndicator { get; set; } = "%";
         public string DynamicNamesIndicator { get; set; } = "|";
         public string DynamicValuesIndicator { get; set; } = "@";
+        public string DynamicLiteralIndicator { get; set; } = "&";
         public string DynamicCommandIndicator { get; set; } = "#";
 
         private List<string> _dynamicIndicators = new List<string>();
@@ -32,6 +33,7 @@ namespace DragonC.Lexer
             _dynamicIndicators.Add(DynamicNamesIndicator);
             _dynamicIndicators.Add(DynamicValuesIndicator);
             _dynamicIndicators.Add(DynamicCommandIndicator);
+            _dynamicIndicators.Add(DynamicLiteralIndicator);
         }
 
         public FormalGrammar()
@@ -40,6 +42,7 @@ namespace DragonC.Lexer
             _dynamicIndicators.Add(DynamicNamesIndicator);
             _dynamicIndicators.Add(DynamicValuesIndicator);
             _dynamicIndicators.Add(DynamicCommandIndicator);
+            _dynamicIndicators.Add(DynamicLiteralIndicator);
         }
 
         public void SetRules(List<UnformatedRule> unformatedRules)
@@ -365,6 +368,10 @@ namespace DragonC.Lexer
                 {
                     tokens[0] = $"{DynamicNamesIndicator}{tokens[0]}{DynamicNamesIndicator}";
                 }
+                else if (IsLiteral(tokens[0]))
+                {
+                    tokens[0] = $"{DynamicLiteralIndicator}{tokens[0]}{DynamicLiteralIndicator}";
+                }
                 else
                 {
                     token = GetError(tokens[0], token);
@@ -434,7 +441,7 @@ namespace DragonC.Lexer
 
         private bool EvaluateAllowedValues(string token)
         {
-            return AllowedValuesForHighLevelCommands.Contains(token) || (AllowLiteralsForHighLevelCommands ? int.TryParse(token, out var value) : false);
+            return (AllowedValuesForHighLevelCommands.Count() != 0 ? AllowedValuesForHighLevelCommands.Contains(token) : true) || (AllowLiteralsForHighLevelCommands ? int.TryParse(token, out var value) : false);
         }
 
         private TokenUnit GetError(string token, TokenUnit tokenUnit)

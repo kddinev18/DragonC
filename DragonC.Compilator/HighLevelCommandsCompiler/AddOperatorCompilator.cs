@@ -1,11 +1,13 @@
-﻿using DragonC.Domain.Compilator;
+﻿using DragonC.Compilator.HighLevelCommandsCompiler.Base;
+using DragonC.Domain.Compilator;
 using DragonC.Domain.Lexer;
 using DragonC.Lexer;
 
 namespace DragonC.Compilator.HighLevelCommandsCompiler
 {
-    public class AddOperatorCompilator : BaseHighLevelCommand
+    public class AddOperatorCompilator : BaseHighLevelCommand, IAllowConsts
     {
+        private List<string> _registers = new List<string>() { "REG1", "REG2", "REG3", "REG4", "REG5" };
         public override HighLevelCommand CommandDefintion { get; set; }
         public AddOperatorCompilator()
         {
@@ -15,7 +17,7 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
                 CommandIndentificatror = " + ",
                 CommandSeparator = " + ",
                 Arguments = new List<string>() { "arg1", "arg2" },
-                AllowedValuesForArguments = new List<string>() { "REG1", "REG2", "REG3", "REG4", "REG5" },
+                AllowedValuesForArguments = _registers,
                 AllowLiteralsForArguments = true,
                 FormalRules = new List<UnformatedRule>()
                 {
@@ -28,7 +30,7 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
                     {
                         Rule = "space-> %operator%"
                     },
-                     new UnformatedRule()
+                    new UnformatedRule()
                     {
                         Rule = "operator->+%2ndSpace%"
                     },
@@ -42,7 +44,9 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
                     }
                 },
                 ValidateCommand = ValidateCommand,
-                CompileCommand = CompileCommand
+                CompileCommand = CompileCommand,
+                GetClearCommand = GetClearCommand,
+                SetConsts = SetConsts
             };
         }
 
@@ -95,6 +99,18 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
             return lowLevelCommands;
         }
 
+        public void SetConsts(List<TokenUnit> tokens)
+        {
+            foreach (TokenUnit token in tokens)
+            {
+                string[] splits = token.Token.Split(" ");
+                if (splits.Length == 3 && splits[0] == "const")
+                {
+                    CommandDefintion.AllowedValuesForArguments.Add(splits[1]);
+                }
+            }
+        }
+
         private List<string> SetImmediateValue(Guid constName, int value, string register)
         {
             return new List<string>
@@ -113,6 +129,11 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
                 $"{register1}_TO_REGT".ToUpper(),
                 $"REGT_TO_{register2}".ToUpper(),
             };
+        }
+
+        public override string GetClearCommand(string command)
+        {
+            return command.Replace(CommandDefintion.AllowLiteralsForArguments ? Compilator.DynamicValuesIndicator : Compilator.DynamicNamesIndicator, "");
         }
     }
 }

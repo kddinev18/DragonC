@@ -9,6 +9,7 @@ namespace DragonC.Compilator
         public static string DynamicNamesIndicator { get; set; } = "|";
         public static string DynamicValuesIndicator { get; set; } = "@";
         public static string DynamicCommandIndicator { get; set; } = "#";
+        public static string DynamicLiteralIndicator { get; set; } = "&";
         public static string CommandJoinSeparator { get; set; } = "^";
         public static string CommandArgumentIndicator { get; set; } = "!";
         public static List<string> TokenSeparators { get; set; } = new List<string>() { ";", ":" };
@@ -24,6 +25,11 @@ namespace DragonC.Compilator
             {
                 CommandName = "REGT_TO_REG1",
                 MachineCode = "01110000"
+            },
+            new LowLevelCommand()
+            {
+                CommandName = "REG1_TO_REGT",
+                MachineCode = "01000110"
             },
             new LowLevelCommand()
             {
@@ -58,6 +64,24 @@ namespace DragonC.Compilator
         }
         public static List<UnformatedRule> BaseFormalRules { get; set; } = new List<UnformatedRule>()
         {
+            new UnformatedRule
+            {
+                Rule = "immValue->&_&",
+                IsStart = true
+            },
+            new UnformatedRule
+            {
+                Rule = "immValueConst->|_|",
+                IsStart = true
+            },
+            new UnformatedRule
+            {
+                Rule = "commandExec->#_#",
+                IsStart = true
+            },
+
+
+
             new UnformatedRule()
             {
                 Rule = "constDecl->const%space%",
@@ -94,22 +118,6 @@ namespace DragonC.Compilator
             new UnformatedRule
             {
                 Rule = "labelName->|_|",
-            },
-
-
-
-            new UnformatedRule
-            {
-                Rule = "commandExec->#_#",
-                IsStart = true
-            },
-
-
-
-            new UnformatedRule
-            {
-                Rule = "immValue->|_|",
-                IsStart = true
             },
 
 

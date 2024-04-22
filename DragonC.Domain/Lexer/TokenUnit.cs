@@ -16,9 +16,34 @@
             return string.Join(' ', ErrorMessaes) + $" Line of error: {TextLine}, character: {StartCharaterPosition + StartCharacterOfErrorPosition}";
         }
 
-        public static TokenUnit operator=(TokenUnit token1, TokenUnit token2)
+        public static bool operator ==(TokenUnit token1, TokenUnit token2)
         {
-            return Token;
+            if (token1 is null && token2 is null)
+            {
+                return true;
+            }
+            if (token1 is null || token2 is null)
+            {
+                return false;
+            }
+            return token1.Token == token2.Token &&
+                token1.TextLine == token2.TextLine &&
+                token1.StartCharaterPosition == token2.StartCharaterPosition;
+        }
+
+        public static bool operator !=(TokenUnit token1, TokenUnit token2)
+        {
+            if (token1 is null && token2 is null)
+            {
+                return false;
+            }
+            if (token1 is null || token2 is null)
+            {
+                return true;
+            }
+            return token1.Token != token2.Token ||
+                token1.TextLine != token2.TextLine ||
+                token1.StartCharaterPosition == token2.StartCharaterPosition;
         }
     }
 }

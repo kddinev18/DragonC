@@ -11,7 +11,7 @@ namespace DragonC.CLI
             CompiledCode code = compilator.Compile(
             @"
             const imm 1;
-            REG1 + 2;
+            1 + REG1;
 
             label main:
                 ADD;

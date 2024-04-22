@@ -1,4 +1,4 @@
-﻿using DragonC.Compilator.HighLevelCommandsCompiler;
+﻿using DragonC.Compilator.HighLevelCommandsCompiler.Base;
 using DragonC.Domain.Compilator;
 using DragonC.Domain.Lexer;
 using DragonC.Lexer;
@@ -43,10 +43,10 @@ namespace DragonC.Compilator
 
         public CompiledCode Compile(string text)
         {
-            List<TokenUnit> tokenUnits = _tokeniser.GetTokens(text);
+            List<TokenUnit> highLevelTokens = _tokeniser.GetTokens(text);
+            AddDependancies(highLevelTokens);
             text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text));
-            ReorderTokens(tokenUnits, _tokeniser.GetTokens(text))
-            List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(tokenUnits1);
+            List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(ReorderTokens(highLevelTokens, _tokeniser.GetTokens(text)));
             if (tokenUnits.Any(x => !x.IsValid))
             {
                 return new CompiledCode()
@@ -78,21 +78,39 @@ namespace DragonC.Compilator
             };
         }
 
-        private void ReorderTokens(List<TokenUnit> beforeTranspilation, List<TokenUnit> afterTranspilation)
+        private void AddDependancies(List<TokenUnit> tokens)
         {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            Type pluginType = typeof(IAllowConsts);
+            var pluginTypes = assembly.GetTypes()
+                              .Where(t => pluginType.IsAssignableFrom(t) && !t.IsAbstract && t.IsClass);
+
+            // Create an instance of each type and cast it to the interface
+            foreach (Type type in pluginTypes)
+            {
+                IAllowConsts pluginInstance = (IAllowConsts)Activator.CreateInstance(type);
+                pluginInstance.SetConsts(tokens);
+            }
+        }
+
+        private List<TokenUnit> ReorderTokens(List<TokenUnit> beforeTranspilation, List<TokenUnit> afterTranspilation)
+        {
+            List<TokenUnit> result = new List<TokenUnit>();
             foreach (TokenUnit token in afterTranspilation)
             {
-                if ()
+                TokenUnit tokenBeforeTranspilation = beforeTranspilation
+                    .Where(x => x == token)
+                    .FirstOrDefault();
+                if (tokenBeforeTranspilation != null)
                 {
-
+                    token.TextLine = tokenBeforeTranspilation.TextLine;
+                    token.StartCharaterPosition = tokenBeforeTranspilation.StartCharaterPosition;
+                    token.EndCharacterPosition = tokenBeforeTranspilation.EndCharacterPosition;
                 }
-                TokenUnit tokenAfterTranspilation = afterTranspilation
-                    .Where(x => x.StartCharaterPosition == token.StartCharaterPosition)
-                    .First();
-
-                tokenAfterTranspilation.CodeLine = token.CodeLine;
-                tokenAfterTranspilation.TextLine = token.TextLine;
+                result.Add(token);
             }
+            return result;
         }
 
         private string TranspileHighLevelCommands(string text, List<HighLevelCommandToken> HighLevelCommandTokens)
@@ -101,7 +119,7 @@ namespace DragonC.Compilator
             {
                 List<string> lowLevelCommands = highLevelCommandToken.HighLevelCommand.CompileCommand.Invoke(highLevelCommandToken.Token);
                 string lowLevelCommandsText = string.Join(";\n", lowLevelCommands);
-                text = text.Replace(highLevelCommandToken.Token.Token, lowLevelCommandsText);
+                text = text.Replace(highLevelCommandToken.HighLevelCommand.GetClearCommand.Invoke(highLevelCommandToken.Token.Token), lowLevelCommandsText);
             }
 
             return text;
@@ -166,6 +184,10 @@ namespace DragonC.Compilator
             foreach (TokenUnit token in commandTokens)
             {
                 string[] splits = token.Token.Split(DynamicCommandIndicator);
+                if (splits.Length == 1 && splits[0].StartsWith(DynamicLiteralIndicator) && splits[0].EndsWith(DynamicLiteralIndicator))
+                {
+                    token.Token = Convert.ToString(int.Parse(token.Token.Replace(DynamicLiteralIndicator, "")), 2).PadLeft(8, '0');
+                }
                 if (splits.Length == 3)
                 {
                     LowLevelCommand command = LowLevelCommands
@@ -196,6 +218,10 @@ namespace DragonC.Compilator
                 {
                     foreach (TokenUnit command in commandTokens)
                     {
+                        if (command.Token.StartsWith(DynamicLiteralIndicator) && command.Token.EndsWith(DynamicLiteralIndicator))
+                        {
+                            command.Token = command.Token.Replace(DynamicLiteralIndicator, "");
+                        }
                         command.Token = command.Token.Replace(splits[1],
                             Convert.ToString(int.Parse(splits[2].Replace(DynamicValuesIndicator, "")), 2)).PadLeft(8, '0');
                         command.Token = command.Token.Replace(splits[1].Replace(DynamicNamesIndicator, DynamicValuesIndicator),
