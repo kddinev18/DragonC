@@ -19,7 +19,7 @@ namespace DragonC.Compilator
             _formalGrammar.DynamicValuesIndicator = DynamicValuesIndicator;
             _formalGrammar.DynamicCommandIndicator = DynamicCommandIndicator;
             _formalGrammar.NonTerminalIndicator = NonTerminalIndicator;
-            _formalGrammar.SetRules(FormalRules);
+            _formalGrammar.SetRules(BaseFormalRules);
 
             _tokeniser = new Tokeniser(TokenSeparators);
         }
@@ -43,6 +43,8 @@ namespace DragonC.Compilator
 
         public CompiledCode Compile(string text)
         {
+            TranspileHighLevelCommands(text, CheckForHighLevelCommands(text));
+
             List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(_tokeniser.GetTokens(text));
             if (tokenUnits.Any(x => !x.IsValid))
             {
@@ -73,6 +75,37 @@ namespace DragonC.Compilator
                     .Select(x => Convert.ToString(Convert.ToInt32(x.Token, 2), 16).PadLeft(2, '0').ToUpper())
                     .ToList(),
             };
+        }
+
+        private void TranspileHighLevelCommands(string text, List<HighLevelCommandToken> HighLevelCommandTokens)
+        {
+            foreach (HighLevelCommandToken highLevelCommandToken in HighLevelCommandTokens)
+            {
+                List<LowLevelCommand> lowLevelCommands = highLevelCommandToken.HighLevelCommand.CompileCommand.Invoke(highLevelCommandToken.Token);
+                string lowLevelCommandsText = string.Join(";\n", lowLevelCommands.Select(x => x.CommandName));
+                text = text.Replace(highLevelCommandToken.Token.Token, lowLevelCommandsText);
+            }
+        }
+
+        private List<HighLevelCommandToken> CheckForHighLevelCommands(string text)
+        {
+            List<TokenUnit> tokenUnits = _tokeniser.GetTokens(text);
+            List<HighLevelCommandToken> result = new List<HighLevelCommandToken>();
+            foreach (TokenUnit tokenUnit in tokenUnits)
+            {
+                foreach (HighLevelCommand highLevelCommand in HighLevelCommands)
+                {
+                    if (highLevelCommand.ValidateCommand.Invoke(tokenUnit).IsValid == true)
+                    {
+                        result.Add(new HighLevelCommandToken()
+                        {
+                            HighLevelCommand = highLevelCommand,
+                            Token = tokenUnit
+                        });
+                    }
+                }
+            }
+            return result;
         }
 
         private List<TokenUnit> CompileConditionalCommands(List<TokenUnit> commandTokens)

@@ -1,8 +1,5 @@
 ﻿using DragonC.Domain.Compilator;
 using DragonC.Domain.Lexer;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
 
 namespace DragonC.Lexer
 {
@@ -213,8 +210,8 @@ namespace DragonC.Lexer
                                 if (token.StartsWith(separator) && token.Split(separator).Count() == 3)
                                 {
                                     token = ValidateDynamicValue(token, separator);
-                                    
-                                    if(string.IsNullOrEmpty(token))
+
+                                    if (string.IsNullOrEmpty(token))
                                     {
                                         return tokenUnit;
                                     }
@@ -224,7 +221,7 @@ namespace DragonC.Lexer
                                     }
                                 }
                             }
-                            if(flag)
+                            if (flag)
                             {
                                 break;
                             }
@@ -251,11 +248,11 @@ namespace DragonC.Lexer
 
                     try
                     {
-                        if(_dyanicTerminalSymblos.Contains(rule.TerminalPart))
+                        if (_dyanicTerminalSymblos.Contains(rule.TerminalPart))
                         {
                             foreach (string separator in _dynamicIndicators)
                             {
-                                if(token.StartsWith(separator) && token.Split(separator).Count() == 3)
+                                if (token.StartsWith(separator) && token.Split(separator).Count() == 3)
                                 {
                                     token = ValidateDynamicValue(token, separator);
 
@@ -265,6 +262,12 @@ namespace DragonC.Lexer
                                     break;
                                 }
                             }
+
+                            if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex)
+                            {
+                                break;
+                            }
+                            rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
                         }
                         else if (rule.TerminalPart == token.Substring(0, rule.TerminalPart.Length))
                         {
@@ -303,13 +306,41 @@ namespace DragonC.Lexer
 
         private string ValidateDynamicValue(string token, string separator)
         {
-            token = token.Substring(1, token.Length-1);
+            token = token.Substring(1, token.Length - 1);
             int indexOfSeparator = token.IndexOf(separator) + 1;
             token = token.Substring(indexOfSeparator, token.Length - indexOfSeparator);
             return token;
         }
 
-        private TokenUnit ReplceDyamicValues(TokenUnit token)
+        private TokenUnit ReplceDyamicValues(TokenUnit token, bool isHighLevelCommand = false)
+        {
+            if (isHighLevelCommand)
+            {
+                return ReplaveDyamicValuesForHighLevelCommands(token);
+            }
+            else
+            {
+                return ReplaveDyamicValuesForLowLevelCommands(token);
+            }
+        }
+
+        private TokenUnit ReplaveDyamicValuesForHighLevelCommands(TokenUnit token)
+        {
+            string[] tokens = token.Token.Split(' ');
+
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                if (EvaluateAllowedValues(tokens[i]))
+                {
+                    string separator = AllowLiteralsForHighLevelCommands ? DynamicNamesIndicator : DynamicValuesIndicator;
+                    tokens[i] = $"{separator}{tokens[i]}{separator}";
+                }
+            }
+            token.Token = string.Join(' ', tokens);
+            return token;
+        }
+
+        private TokenUnit ReplaveDyamicValuesForLowLevelCommands(TokenUnit token)
         {
             string[] tokens = token.Token.Split(' ');
 
@@ -357,13 +388,12 @@ namespace DragonC.Lexer
                 }
             }
             token.Token = string.Join(' ', tokens);
-
             return token;
         }
 
         private bool IsConstName(string token)
         {
-            return _consts.Contains(token) || EvaluateAllowedValues(token);
+            return _consts.Contains(token);
         }
 
         private bool IsConditionalCommand(string token)
@@ -388,7 +418,7 @@ namespace DragonC.Lexer
 
         private bool IsDynamicValueKeyWord(string token)
         {
-            return _terminalSymbols.Contains(token) || EvaluateAllowedValues(token);
+            return _terminalSymbols.Contains(token);
         }
 
         private bool EvaluateAllowedValues(string token)
@@ -401,7 +431,7 @@ namespace DragonC.Lexer
             tokenUnit.IsValid = false;
             string error = $"\"{token.Split(' ')[0]}\" is not a recognised command, keyword or const name.";
 
-            if(tokenUnit.ErrorMessaes != null)
+            if (tokenUnit.ErrorMessaes != null)
             {
                 tokenUnit.ErrorMessaes.Add(error);
             }

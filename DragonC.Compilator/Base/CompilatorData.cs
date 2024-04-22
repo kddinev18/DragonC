@@ -12,6 +12,7 @@ namespace DragonC.Compilator
         public static string CommandJoinSeparator { get; set; } = "^";
         public static string CommandArgumentIndicator { get; set; } = "!";
         public static List<string> TokenSeparators { get; set; } = new List<string>() { ";", ":" };
+        public static List<HighLevelCommand> HighLevelCommands { get; set; } = LoadHighLevelCommands();
         public static List<LowLevelCommand> LowLevelCommands { get; set; } = new List<LowLevelCommand>()
         {
             new LowLevelCommand()
@@ -51,7 +52,7 @@ namespace DragonC.Compilator
                 IsConditionalCommand = true
             },
         };
-        public static List<UnformatedRule> FormalRules { get; set; } = new List<UnformatedRule>()
+        public static List<UnformatedRule> BaseFormalRules { get; set; } = new List<UnformatedRule>()
         {
             new UnformatedRule()
             {

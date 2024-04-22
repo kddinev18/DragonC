@@ -21,16 +21,16 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
                 {
                     new UnformatedRule()
                     {
-                        Rule = "addCommandStart=>@_@%space%",
+                        Rule = "addCommandStart->@_@%space%",
                         IsStart = true,
                     },
                     new UnformatedRule()
                     {
-                        Rule = "space=> %secondParam%"
+                        Rule = "space-> %secondParam%"
                     },
                     new UnformatedRule()
                     {
-                        Rule = "secondParam=>@_@"
+                        Rule = "secondParam->@_@"
                     }
                 },
                 ValidateCommand = ValidateCommand,
