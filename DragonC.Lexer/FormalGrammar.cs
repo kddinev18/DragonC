@@ -330,7 +330,7 @@ namespace DragonC.Lexer
         {
             if (isHighLevelCommand)
             {
-                return ReplaveDyamicValuesForHighLevelCommands(token);
+                return ReplaceDynamicValuesForHighLevelCommands(token);
             }
             else
             {
@@ -338,7 +338,7 @@ namespace DragonC.Lexer
             }
         }
 
-        private TokenUnit ReplaveDyamicValuesForHighLevelCommands(TokenUnit token)
+        private TokenUnit ReplaceDynamicValuesForHighLevelCommands(TokenUnit token)
         {
             string[] tokens = token.Token.Split(' ');
 
@@ -402,7 +402,7 @@ namespace DragonC.Lexer
                 }
                 else
                 {
-                    token = GetError(tokens[1], token);
+                    token = GetError(string.Join(" ", tokens), token);
                 }
             }
             token.Token = string.Join(' ', tokens);

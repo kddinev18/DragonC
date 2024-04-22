@@ -48,6 +48,11 @@ namespace DragonC.Compilator
             },
             new LowLevelCommand()
             {
+                CommandName = "REG2_TO_REGT",
+                MachineCode = "01010101"
+            },
+            new LowLevelCommand()
+            {
                 CommandName = "REGT_TO_REG2",
                 MachineCode = "01110001"
             },

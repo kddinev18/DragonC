@@ -64,7 +64,7 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
                 .First();
         }
 
-        public override List<string> CompileCommand(TokenUnit command)
+        public override List<string> CompileCommand(TokenUnit command, List<TokenUnit> tokens)
         {
             List<string> lowLevelCommands = new List<string>();
             string[] splits = command.Token.Split(CommandDefintion.CommandSeparator);
@@ -82,15 +82,15 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
                     break;
                 case (true, false):
                     lowLevelCommands.AddRange(SetImmediateValue(Guid.NewGuid(), argValue1, "REG1"));
-                    lowLevelCommands.AddRange(OverrideRegister(arg2, "REG2"));
+                    lowLevelCommands.AddRange(OverrideRegister(arg2, "REG2", tokens));
                     break;
                 case (false, true):
-                    lowLevelCommands.AddRange(OverrideRegister(arg1, "REG1"));
+                    lowLevelCommands.AddRange(OverrideRegister(arg1, "REG1", tokens));
                     lowLevelCommands.AddRange(SetImmediateValue(Guid.NewGuid(), argValue2, "REG2"));
                     break;
                 case (false, false):
-                    lowLevelCommands.AddRange(SetImmediateValue(Guid.NewGuid(), argValue1, "REG1"));
-                    lowLevelCommands.AddRange(SetImmediateValue(Guid.NewGuid(), argValue2, "REG2"));
+                    lowLevelCommands.AddRange(OverrideRegister(arg1, "REG1", tokens));
+                    lowLevelCommands.AddRange(OverrideRegister(arg2, "REG2", tokens));
                     break;
 
             }
@@ -122,13 +122,51 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
             };
         }
 
-        private List<string> OverrideRegister(string register1, string register2)
+        private List<string> OverrideRegister(string register1, string register2, List<TokenUnit> tokenUnits)
         {
-            return new List<string>
+            bool isRegister1Const = !_registers.Contains(register1);
+            bool isRegister2Const = !_registers.Contains(register2);
+
+            switch ((isRegister1Const, isRegister2Const))
             {
-                $"{register1}_TO_REGT".ToUpper(),
-                $"REGT_TO_{register2}".ToUpper(),
-            };
+                case (true, true):
+                    List<string> commands = SetImmediateValue(Guid.NewGuid(), GetConstValue(register1, tokenUnits), "REG1");
+                    commands.AddRange(SetImmediateValue(Guid.NewGuid(), GetConstValue(register1, tokenUnits), "REG2"));
+                    return commands;
+                case (true, false):
+                    return new List<string>
+                    {
+                        $"{GetConstValue(register2, tokenUnits)}".ToUpper(),
+                        $"IMM_TO_REGT",
+                        $"REGT_TO_{register1}".ToUpper(),
+                    };
+                case (false, true):
+                    return new List<string>
+                    {
+                        $"{GetConstValue(register1, tokenUnits)}".ToUpper(),
+                        $"IMM_TO_REGT",
+                        $"REGT_TO_{register2}".ToUpper(),
+                    };
+                case (false, false):
+                    return new List<string>
+                    {
+                        $"{register1}_TO_REGT".ToUpper(),
+                        $"REGT_TO_{register2}".ToUpper(),
+                    };
+            }
+        }
+
+        public int GetConstValue(string constName, List<TokenUnit> tokens)
+        {
+            foreach (TokenUnit token in tokens)
+            {
+                string[] splits = token.Token.Split(" ");
+                if (splits.Length == 3 && splits[0] == "const" && splits[1] == constName)
+                {
+                    return int.Parse(splits[2]);
+                }
+            }
+            throw new SyntaxException($"{constName} is not a recognised const name");
         }
 
         public override string GetClearCommand(string command)

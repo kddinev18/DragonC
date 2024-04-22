@@ -45,7 +45,7 @@ namespace DragonC.Compilator
         {
             List<TokenUnit> highLevelTokens = _tokeniser.GetTokens(text);
             AddDependancies(highLevelTokens);
-            text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text));
+            text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text), highLevelTokens);
             List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(ReorderTokens(highLevelTokens, _tokeniser.GetTokens(text)));
             if (tokenUnits.Any(x => !x.IsValid))
             {
@@ -80,18 +80,10 @@ namespace DragonC.Compilator
 
         private void AddDependancies(List<TokenUnit> tokens)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-
-            Type pluginType = typeof(IAllowConsts);
-            var pluginTypes = assembly.GetTypes()
-                              .Where(t => pluginType.IsAssignableFrom(t) && !t.IsAbstract && t.IsClass);
-
-            // Create an instance of each type and cast it to the interface
-            foreach (Type type in pluginTypes)
-            {
-                IAllowConsts pluginInstance = (IAllowConsts)Activator.CreateInstance(type);
-                pluginInstance.SetConsts(tokens);
-            }
+            Compilator.HighLevelCommands
+                .Where(x => x.SetConsts != null)
+                .ToList()
+                .ForEach(x => x.SetConsts.Invoke(tokens));
         }
 
         private List<TokenUnit> ReorderTokens(List<TokenUnit> beforeTranspilation, List<TokenUnit> afterTranspilation)
@@ -113,11 +105,11 @@ namespace DragonC.Compilator
             return result;
         }
 
-        private string TranspileHighLevelCommands(string text, List<HighLevelCommandToken> HighLevelCommandTokens)
+        private string TranspileHighLevelCommands(string text, List<HighLevelCommandToken> HighLevelCommandTokens, List<TokenUnit> tokenUnits)
         {
             foreach (HighLevelCommandToken highLevelCommandToken in HighLevelCommandTokens)
             {
-                List<string> lowLevelCommands = highLevelCommandToken.HighLevelCommand.CompileCommand.Invoke(highLevelCommandToken.Token);
+                List<string> lowLevelCommands = highLevelCommandToken.HighLevelCommand.CompileCommand.Invoke(highLevelCommandToken.Token, tokenUnits);
                 string lowLevelCommandsText = string.Join(";\n", lowLevelCommands);
                 text = text.Replace(highLevelCommandToken.HighLevelCommand.GetClearCommand.Invoke(highLevelCommandToken.Token.Token), lowLevelCommandsText);
             }
