@@ -64,18 +64,22 @@ namespace DragonC.Compilator
                 .Where(x => !x.Token.StartsWith("const") && !x.Token.StartsWith("label"))
                 .ToList();
 
+            CompiledCode compiledCode = new CompiledCode();
+            compiledCode.InterMediateCommands = commandTokens
+                .Select(x => x.Token)
+                .ToList();
+
             ReplaceDybamicValuesWithCorrespodingValue(literalTokens, commandTokens);
             ReplaceCommadsWithCorespondingValue(commandTokens);
             commandTokens = CompileConditionalCommands(commandTokens);
 
             commandTokens = commandTokens.OrderBy(x => x.CodeLine).ToList();
-            return new CompiledCode()
-            {
-                IsBuildSuccessfully = true,
-                CompiledCommands = commandTokens
+
+            compiledCode.IsBuildSuccessfully = true;
+            compiledCode.CompiledCommands = commandTokens
                     .Select(x => Convert.ToString(Convert.ToInt32(x.Token, 2), 16).PadLeft(2, '0').ToUpper())
-                    .ToList(),
-            };
+                    .ToList();
+            return compiledCode;
         }
 
         private void AddDependancies(List<TokenUnit> tokens)
