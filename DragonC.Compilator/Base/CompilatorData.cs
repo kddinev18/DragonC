@@ -52,6 +52,10 @@ namespace DragonC.Compilator
                 IsConditionalCommand = true
             },
         };
+        public static LowLevelCommand GetCommand(string commandName)
+        {
+            return LowLevelCommands.First(x => x.CommandName == commandName);
+        }
         public static List<UnformatedRule> BaseFormalRules { get; set; } = new List<UnformatedRule>()
         {
             new UnformatedRule()

@@ -13,6 +13,6 @@ namespace DragonC.Domain.Compilator
         public List<UnformatedRule> FormalRules { get; set; }
 
         public Func<TokenUnit, TokenUnit> ValidateCommand { get; set; }
-        public Func<TokenUnit, List<LowLevelCommand>> CompileCommand { get; set; }
+        public Func<TokenUnit, List<string>> CompileCommand { get; set; }
     }
 }

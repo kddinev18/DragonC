@@ -43,9 +43,10 @@ namespace DragonC.Compilator
 
         public CompiledCode Compile(string text)
         {
-            TranspileHighLevelCommands(text, CheckForHighLevelCommands(text));
-
-            List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(_tokeniser.GetTokens(text));
+            List<TokenUnit> tokenUnits = _tokeniser.GetTokens(text);
+            text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text));
+            ReorderTokens(tokenUnits, _tokeniser.GetTokens(text))
+            List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(tokenUnits1);
             if (tokenUnits.Any(x => !x.IsValid))
             {
                 return new CompiledCode()
@@ -77,14 +78,33 @@ namespace DragonC.Compilator
             };
         }
 
-        private void TranspileHighLevelCommands(string text, List<HighLevelCommandToken> HighLevelCommandTokens)
+        private void ReorderTokens(List<TokenUnit> beforeTranspilation, List<TokenUnit> afterTranspilation)
+        {
+            foreach (TokenUnit token in afterTranspilation)
+            {
+                if ()
+                {
+
+                }
+                TokenUnit tokenAfterTranspilation = afterTranspilation
+                    .Where(x => x.StartCharaterPosition == token.StartCharaterPosition)
+                    .First();
+
+                tokenAfterTranspilation.CodeLine = token.CodeLine;
+                tokenAfterTranspilation.TextLine = token.TextLine;
+            }
+        }
+
+        private string TranspileHighLevelCommands(string text, List<HighLevelCommandToken> HighLevelCommandTokens)
         {
             foreach (HighLevelCommandToken highLevelCommandToken in HighLevelCommandTokens)
             {
-                List<LowLevelCommand> lowLevelCommands = highLevelCommandToken.HighLevelCommand.CompileCommand.Invoke(highLevelCommandToken.Token);
-                string lowLevelCommandsText = string.Join(";\n", lowLevelCommands.Select(x => x.CommandName));
+                List<string> lowLevelCommands = highLevelCommandToken.HighLevelCommand.CompileCommand.Invoke(highLevelCommandToken.Token);
+                string lowLevelCommandsText = string.Join(";\n", lowLevelCommands);
                 text = text.Replace(highLevelCommandToken.Token.Token, lowLevelCommandsText);
             }
+
+            return text;
         }
 
         private List<HighLevelCommandToken> CheckForHighLevelCommands(string text)

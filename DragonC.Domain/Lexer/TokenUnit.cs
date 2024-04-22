@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DragonC.Domain.Lexer
+﻿namespace DragonC.Domain.Lexer
 {
     public class TokenUnit
     {
@@ -20,6 +14,11 @@ namespace DragonC.Domain.Lexer
         public string GetErrors()
         {
             return string.Join(' ', ErrorMessaes) + $" Line of error: {TextLine}, character: {StartCharaterPosition + StartCharacterOfErrorPosition}";
+        }
+
+        public static TokenUnit operator=(TokenUnit token1, TokenUnit token2)
+        {
+            return Token;
         }
     }
 }

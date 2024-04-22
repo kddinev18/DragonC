@@ -9,6 +9,6 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
 
         public abstract TokenUnit ValidateCommand(TokenUnit command);
 
-        public abstract List<LowLevelCommand> ComplileCommand(TokenUnit command);
+        public abstract List<string> CompileCommand(TokenUnit command);
     }
 }

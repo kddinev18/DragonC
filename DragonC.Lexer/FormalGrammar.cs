@@ -15,6 +15,7 @@ namespace DragonC.Lexer
 
         public List<string> AllowedValuesForHighLevelCommands { get; set; } = new List<string>();
         public bool AllowLiteralsForHighLevelCommands { get; set; } = false;
+        public int NumberOfArguments { get; set; } = 0;
 
         public string NonTerminalIndicator { get; set; } = "%";
         public string DynamicNamesIndicator { get; set; } = "|";
@@ -144,13 +145,13 @@ namespace DragonC.Lexer
             }
         }
 
-        public List<TokenUnit> EvaluateTokens(List<TokenUnit> tokens)
+        public List<TokenUnit> EvaluateTokens(List<TokenUnit> tokens, bool isHighLevelCommand = false)
         {
             LoadLabels(tokens);
             LoadConsts(tokens);
             for (int i = 0; i < tokens.Count(); i++)
             {
-                tokens[i] = EvaluateToken(tokens[i]);
+                tokens[i] = EvaluateToken(tokens[i], isHighLevelCommand);
             }
 
             return tokens;
@@ -180,9 +181,9 @@ namespace DragonC.Lexer
             }
         }
 
-        private TokenUnit EvaluateToken(TokenUnit tokenUnit)
+        private TokenUnit EvaluateToken(TokenUnit tokenUnit, bool isHighLevelCommand = false)
         {
-            tokenUnit = ReplceDyamicValues(tokenUnit);
+            tokenUnit = ReplceDyamicValues(tokenUnit, isHighLevelCommand);
             if (!tokenUnit.IsValid)
             {
                 return tokenUnit;
@@ -250,24 +251,30 @@ namespace DragonC.Lexer
                     {
                         if (_dyanicTerminalSymblos.Contains(rule.TerminalPart))
                         {
+                            bool skip = false;
                             foreach (string separator in _dynamicIndicators)
                             {
-                                if (token.StartsWith(separator) && token.Split(separator).Count() == 3)
+                                string[] splts = token.Split(separator);
+                                if (token.StartsWith(separator) &&
+                                    (isHighLevelCommand ? CheckForNUmberOfArgumets(NumberOfArguments) == splts.Length : splts.Length == 3))
                                 {
                                     token = ValidateDynamicValue(token, separator);
 
                                     currentFormlRule = rule.Next;
                                     possibelOutcomeIndex = 0;
                                     rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                                    skip = true;
                                     break;
                                 }
                             }
-
-                            if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex)
+                            if (!skip)
                             {
-                                break;
+                                if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex)
+                                {
+                                    break;
+                                }
+                                rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
                             }
-                            rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
                         }
                         else if (rule.TerminalPart == token.Substring(0, rule.TerminalPart.Length))
                         {
@@ -303,6 +310,10 @@ namespace DragonC.Lexer
             }
             return GetError(token, tokenUnit);
         }
+        public static int CheckForNUmberOfArgumets(int numberOfArguments)
+        {
+            return 2 * numberOfArguments + 1;
+        }
 
         private string ValidateDynamicValue(string token, string separator)
         {
@@ -332,7 +343,7 @@ namespace DragonC.Lexer
             {
                 if (EvaluateAllowedValues(tokens[i]))
                 {
-                    string separator = AllowLiteralsForHighLevelCommands ? DynamicNamesIndicator : DynamicValuesIndicator;
+                    string separator = AllowLiteralsForHighLevelCommands ? DynamicValuesIndicator : DynamicNamesIndicator;
                     tokens[i] = $"{separator}{tokens[i]}{separator}";
                 }
             }
@@ -423,7 +434,7 @@ namespace DragonC.Lexer
 
         private bool EvaluateAllowedValues(string token)
         {
-            return AllowedValuesForHighLevelCommands.Contains(token) || AllowLiteralsForHighLevelCommands ? int.TryParse(token, out var value) : false;
+            return AllowedValuesForHighLevelCommands.Contains(token) || (AllowLiteralsForHighLevelCommands ? int.TryParse(token, out var value) : false);
         }
 
         private TokenUnit GetError(string token, TokenUnit tokenUnit)
