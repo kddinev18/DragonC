@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonC.Lexer", "DragonC.Le
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonC.Domain", "DragonC.Domain\DragonC.Domain.csproj", "{B3A8C741-3468-4B06-9518-8E2CBAFBC935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonC.Compilator", "DragonC.Compilator\DragonC.Compilator.csproj", "{00EBD1B7-2C9E-4D1D-92DE-A238DE8C3911}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragonC.Compilator", "DragonC.Compilator\DragonC.Compilator.csproj", "{00EBD1B7-2C9E-4D1D-92DE-A238DE8C3911}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compilator", "Compilator", "{30678262-C84C-4418-A22E-3F68F215FA56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editor", "Editor", "{DCDFBB72-0281-4C3E-9BEA-548653F9355C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +40,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{38FEA52F-7FA0-40BC-93D7-D52374C71BD6} = {30678262-C84C-4418-A22E-3F68F215FA56}
+		{7375BC70-97F1-4B79-9773-39A735EB93AC} = {30678262-C84C-4418-A22E-3F68F215FA56}
+		{B3A8C741-3468-4B06-9518-8E2CBAFBC935} = {30678262-C84C-4418-A22E-3F68F215FA56}
+		{00EBD1B7-2C9E-4D1D-92DE-A238DE8C3911} = {30678262-C84C-4418-A22E-3F68F215FA56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D68EBCFD-84F1-40EF-9F5B-57D93C368245}

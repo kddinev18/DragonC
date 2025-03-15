@@ -15,7 +15,7 @@ imm;
 IMM_TO_REGT;
 REGT_TO_REG1;
 
-label main:
+label main;
     ADD;
     REG3_TO_OUT;
     REG3_TO_REGT;
