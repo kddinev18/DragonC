@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:l="clr-namespace:DragonC.GUI.Components.HomePageComponent"
+             xmlns:code="clr-namespace:DragonC.GUI.Components.CodeEditorComponent"
+             xmlns:formalGrammar="clr-namespace:DragonC.GUI.Components.FormalGrammarEditorComponent"
+             x:Class="DragonC.GUI.Components.HomePageComponent.HomePage"
+             xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             x:DataType="l:HomePageModel">
+    <tabView:SfTabView x:Name="tabView">
+        <tabView:SfTabView.Items>
+            <tabView:SfTabItem Header="Rules" ImagePosition="Left" BackgroundColor="{AppThemeBinding Light={StaticResource EditorBackgroundLight}, Dark={StaticResource EditorBackgroundDark}}">
+                <tabView:SfTabItem.ImageSource>
+                    <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.Check}" />
+                </tabView:SfTabItem.ImageSource>
+                <tabView:SfTabItem.Content>
+                    <formalGrammar:FormalGrammarEditorView Padding="15"/>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem ImagePosition="Left" Header="Code" BackgroundColor="{AppThemeBinding Light={StaticResource EditorBackgroundLight}, Dark={StaticResource EditorBackgroundDark}}">
+                <tabView:SfTabItem.ImageSource>
+                    <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.Code}" />
+                </tabView:SfTabItem.ImageSource>
+                <tabView:SfTabItem.Content>
+                    <code:CodeEditorView Padding="15"/>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem IsVisible="False" Header="Contacts" BackgroundColor="{AppThemeBinding Light={StaticResource EditorBackgroundLight}, Dark={StaticResource EditorBackgroundDark}}">
+                <tabView:SfTabItem.ImageSource>
+                    <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.User}" />
+                </tabView:SfTabItem.ImageSource>
+            </tabView:SfTabItem>
+        </tabView:SfTabView.Items>
+    </tabView:SfTabView>
+</ContentPage>

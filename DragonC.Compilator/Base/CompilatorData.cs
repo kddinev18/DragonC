@@ -1,5 +1,5 @@
 ﻿using DragonC.Domain.Compilator;
-using DragonC.Domain.Lexer;
+using DragonC.Domain.Lexer.FormalGrammar;
 
 namespace DragonC.Compilator
 {

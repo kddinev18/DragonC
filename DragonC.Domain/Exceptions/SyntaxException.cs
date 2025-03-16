@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DragonC.Domain.Lexer
+namespace DragonC.Domain.Exceptions
 {
     [Serializable]
     public class SyntaxException : Exception

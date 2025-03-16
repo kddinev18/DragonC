@@ -1,4 +1,4 @@
-﻿namespace DragonC.Domain.Lexer
+﻿namespace DragonC.Domain.Lexer.FormalGrammar
 {
     public class FormalGrammarRule
     {

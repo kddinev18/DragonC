@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DragonC.Domain.Lexer
+namespace DragonC.Domain.Lexer.FormalGrammar
 {
     public class UnformatedRule
     {

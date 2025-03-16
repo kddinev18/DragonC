@@ -1,4 +1,4 @@
-﻿namespace DragonC.Domain.Lexer
+﻿namespace DragonC.Domain.Lexer.Tokeniser
 {
     public class TokenUnit
     {
@@ -13,7 +13,11 @@
 
         public string GetErrors()
         {
-            return string.Join(' ', ErrorMessaes) + $" Line of error: {TextLine}, character: {StartCharaterPosition + StartCharacterOfErrorPosition}";
+            if(!IsValid)
+            {
+                return string.Join(' ', ErrorMessaes!) + $" Line of error: {TextLine}, character: {StartCharaterPosition + StartCharacterOfErrorPosition}";
+            }
+            return "";
         }
 
         public static bool operator ==(TokenUnit token1, TokenUnit token2)

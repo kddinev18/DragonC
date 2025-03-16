@@ -1,4 +1,5 @@
-﻿using DragonC.Domain.Lexer;
+﻿using DragonC.Domain.Exceptions;
+using DragonC.Domain.Lexer.Tokeniser;
 using System;
 using System.Collections.Generic;
 using System.Linq;

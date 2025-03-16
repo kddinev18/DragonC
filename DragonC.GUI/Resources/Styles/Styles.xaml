@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Style TargetType="tabView:SfTabItem">
+        <Setter Property="TextColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource TextPrimaryLight}" Dark="{StaticResource TextPrimaryDark}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource EditorBackgroundLight}" Dark="{StaticResource EditorBackgroundDark}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor">
+            <Setter.Value>
+                <AppThemeBinding Light="{StaticResource BackgroundLight}" Dark="{StaticResource BackgroundDark}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

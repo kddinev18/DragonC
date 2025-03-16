@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DragonC.Domain.Lexer
+namespace DragonC.Domain.Exceptions
 {
     [Serializable]
     public class IvalidFormalRuleExcepetion : Exception

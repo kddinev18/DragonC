@@ -1,6 +1,6 @@
 ﻿using DragonC.Compilator.HighLevelCommandsCompiler.Base;
 using DragonC.Domain.Compilator;
-using DragonC.Domain.Lexer;
+using DragonC.Domain.Lexer.Tokeniser;
 using DragonC.Lexer;
 using System.Data;
 using System.Reflection;

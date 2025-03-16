@@ -1,5 +1,5 @@
 ﻿using DragonC.Domain.Compilator;
-using DragonC.Domain.Lexer;
+using DragonC.Domain.Lexer.Tokeniser;
 
 namespace DragonC.Compilator.HighLevelCommandsCompiler.Base
 {

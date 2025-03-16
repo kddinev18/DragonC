@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DragonC.Domain.Lexer
+namespace DragonC.Domain.Lexer.FormalGrammar
 {
-    public class Rule
+    public class RuleComponents
     {
+        public string StartSymvol { get; set; }
         public string TerminalPart { get; set; }
         public string NonTerminalPart { get; set; }
-        public FormalGrammarRule Next { get; set; }
-
-        public bool IsFinal => string.IsNullOrEmpty(NonTerminalPart);
+        public bool IsStart { get; set; }
     }
 }

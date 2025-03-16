@@ -1,5 +1,7 @@
 ﻿using DragonC.Domain.Compilator;
-using DragonC.Domain.Lexer;
+using DragonC.Domain.Exceptions;
+using DragonC.Domain.Lexer.FormalGrammar;
+using DragonC.Domain.Lexer.Tokeniser;
 
 namespace DragonC.Lexer
 {
