@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:l="clr-namespace:DragonC.GUI.Components.HomePageComponent"
              xmlns:code="clr-namespace:DragonC.GUI.Components.CodeEditorComponent"
-             xmlns:formalGrammar="clr-namespace:DragonC.GUI.Components.FormalGrammarEditorComponent"
              x:Class="DragonC.GUI.Components.HomePageComponent.HomePage"
              xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
              xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
@@ -15,9 +14,6 @@
                 <tabView:SfTabItem.ImageSource>
                     <FontImageSource FontFamily="FASolid" Glyph="{x:Static fa:Solid.Check}" />
                 </tabView:SfTabItem.ImageSource>
-                <tabView:SfTabItem.Content>
-                    <formalGrammar:FormalGrammarEditorView Padding="15"/>
-                </tabView:SfTabItem.Content>
             </tabView:SfTabItem>
 
             <tabView:SfTabItem ImagePosition="Left" Header="Code" BackgroundColor="{AppThemeBinding Light={StaticResource EditorBackgroundLight}, Dark={StaticResource EditorBackgroundDark}}">

@@ -1,4 +1,4 @@
-namespace DragonC.GUI.Components.FormalGrammarEditorComponent;
+namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent;
 
 public partial class FormalGrammarEditorView : ContentView
 {

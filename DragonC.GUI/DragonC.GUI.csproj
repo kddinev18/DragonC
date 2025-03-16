@@ -71,7 +71,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml.cs">
+	  <Compile Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml.cs">
 	    <DependentUpon>FormalGrammarEditorView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
@@ -80,12 +80,17 @@
 	  <MauiXaml Update="Components\CodeEditorComponent\CodeEditorView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml">
+	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Components\HomePageComponent\HomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Components\CompilatorSetupComponent\Components\CommandsComponent\" />
+	  <Folder Include="Components\CompilatorSetupComponent\Components\TokenSeparatorsComponent\" />
 	</ItemGroup>
 
 </Project>
