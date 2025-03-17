@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Syncfusion.Maui.DataGrid" Version="28.2.11" />
+  </ItemGroup>
+
 </Project>

@@ -21,10 +21,10 @@
     <Color x:Key="Tertiary">#9333EA</Color>
 
     <!-- Background Colors -->
-    <Color x:Key="BackgroundLight">#F8F9FA</Color>
+    <Color x:Key="BackgroundLight">#EAECEF</Color>
     <Color x:Key="BackgroundDark">#121212</Color>
 
-    <Color x:Key="PanelBackgroundLight">#EAECEF</Color>
+    <Color x:Key="PanelBackgroundLight">#F0F0F0</Color>
     <Color x:Key="PanelBackgroundDark">#1F1F1F</Color>
 
     <Color x:Key="EditorBackgroundLight">#FFFFFF</Color>

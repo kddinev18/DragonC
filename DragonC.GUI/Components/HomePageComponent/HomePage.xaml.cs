@@ -1,3 +1,5 @@
+using Syncfusion.Maui.Themes;
+
 namespace DragonC.GUI.Components.HomePageComponent;
 
 public partial class HomePage : ContentPage
@@ -6,5 +8,5 @@ public partial class HomePage : ContentPage
 	{
 		InitializeComponent();
         BindingContext = new HomePageModel();
-	}
+    }
 }
