@@ -25,6 +25,8 @@ namespace DragonC.Lexer
         public string DynamicLiteralIndicator { get; set; } = "&";
         public string DynamicCommandIndicator { get; set; } = "#";
 
+        public string DynamicNamesFormalGrammarStartRule { get; set; } = "allowedDynamicNamesStart";
+
         private List<string> _dynamicIndicators = new List<string>();
 
         public List<LowLevelCommand> Commands { get; set; }
@@ -290,6 +292,11 @@ namespace DragonC.Lexer
                                 {
                                     return tokenUnit;
                                 }
+                                var possibleOutComesForFinal = currentFormlRule.PossibleOutcomes.Where(x => x.TerminalPart == rule.TerminalPart);
+                                if (possibleOutComesForFinal.Where(x => x.IsFinal).Any())
+                                {
+                                    return tokenUnit;
+                                }
                                 return GetError(token, tokenUnit);
                             }
 
@@ -359,7 +366,7 @@ namespace DragonC.Lexer
         private TokenUnit ReplaveDyamicValuesForLowLevelCommands(TokenUnit token)
         {
             string[] tokens = token.Token.Split(' ');
-
+            TokenUnit? dynamicNametoken = null;
             if (tokens.Length == 1)
             {
                 if (IsCommand(tokens[0]))
@@ -368,6 +375,14 @@ namespace DragonC.Lexer
                 }
                 else if (IsConstName(tokens[0]))
                 {
+                    dynamicNametoken = CheckIfDynamicNameIsAllowed(new TokenUnit()
+                    {
+                        CodeLine = token.CodeLine,
+                        TextLine = token.TextLine,
+                        StartCharaterPosition = token.StartCharaterPosition,
+                        Token = token.Token,
+                        EndCharacterPosition = token.EndCharacterPosition,
+                    });
                     tokens[0] = $"{DynamicNamesIndicator}{tokens[0]}{DynamicNamesIndicator}";
                 }
                 else if (IsLiteral(tokens[0]))
@@ -408,7 +423,143 @@ namespace DragonC.Lexer
                 }
             }
             token.Token = string.Join(' ', tokens);
+
+            if(dynamicNametoken != null && dynamicNametoken.ErrorMessaes != null && dynamicNametoken.ErrorMessaes.Count() > 0)
+            {
+                token.IsValid = false;
+                token.ErrorMessaes = dynamicNametoken.ErrorMessaes;
+            }
             return token;
+        }
+
+        private TokenUnit? CheckIfDynamicNameIsAllowed(TokenUnit tokenUnit)
+        {
+            FormalGrammarRule currentFormlRule = _formalGrammarRules.Where(x => x.IsStart && x.StartNonTerminalSymbol == DynamicNamesFormalGrammarStartRule).FirstOrDefault();
+            if (currentFormlRule == null)
+            {
+                return null;
+            }
+            string token = tokenUnit.Token;
+            int possibelOutcomeIndex = 0;
+            Rule rule = currentFormlRule.PossibleOutcomes[0];
+            while (true)
+            {
+                if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex - 1)
+                {
+                    return GetError(token, tokenUnit);
+                }
+                if (rule.Next == null)
+                {
+                    if (_dyanicTerminalSymblos.Contains(rule.TerminalPart))
+                    {
+                        bool flag = false;
+                        foreach (string separator in _dynamicIndicators)
+                        {
+                            if (token.StartsWith(separator) && token.Split(separator).Count() == 3)
+                            {
+                                token = ValidateDynamicValue(token, separator);
+
+                                if (string.IsNullOrEmpty(token))
+                                {
+                                    return tokenUnit;
+                                }
+                                else
+                                {
+                                    flag = true;
+                                }
+                            }
+                        }
+                        if (flag)
+                        {
+                            break;
+                        }
+                    }
+                    else if (rule.TerminalPart == token)
+                    {
+                        return tokenUnit;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < currentFormlRule.PossibleOutcomes.Count(); i++)
+                        {
+                            if (currentFormlRule.PossibleOutcomes[i].Next != null)
+                            {
+                                rule = currentFormlRule.PossibleOutcomes[i];
+                            }
+                        }
+                        if (rule.Next == null)
+                        {
+                            return tokenUnit;
+                        }
+                    }
+                }
+
+                try
+                {
+                    if (_dyanicTerminalSymblos.Contains(rule.TerminalPart))
+                    {
+                        bool skip = false;
+                        foreach (string separator in _dynamicIndicators)
+                        {
+                            string[] splts = token.Split(separator);
+                            if (token.StartsWith(separator) &&
+                                (splts.Length == 3))
+                            {
+                                token = ValidateDynamicValue(token, separator);
+
+                                currentFormlRule = rule.Next;
+                                possibelOutcomeIndex = 0;
+                                rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                                skip = true;
+                                break;
+                            }
+                        }
+                        if (!skip)
+                        {
+                            if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex)
+                            {
+                                break;
+                            }
+                            rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                        }
+                    }
+                    else if (rule.TerminalPart == token.Substring(0, rule.TerminalPart.Length))
+                    {
+                        string newWord = token.Substring(rule.TerminalPart.Length, token.Length - rule.TerminalPart.Length);
+                        if (string.IsNullOrEmpty(newWord))
+                        {
+                            if (rule.IsFinal)
+                            {
+                                return tokenUnit;
+                            }
+                            var possibleOutComesForFinal = currentFormlRule.PossibleOutcomes.Where(x => x.TerminalPart == rule.TerminalPart);
+                            if(possibleOutComesForFinal.Where(x=>x.IsFinal).Any())
+                            {
+                                return tokenUnit;
+                            }
+                            return GetError(token, tokenUnit);
+                        }
+
+                        currentFormlRule = rule.Next;
+                        possibelOutcomeIndex = 0;
+                        rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                        token = newWord;
+                    }
+                    else
+                    {
+                        if (currentFormlRule.PossibleOutcomes.Count() == possibelOutcomeIndex)
+                        {
+                            break;
+                        }
+                        rule = currentFormlRule.PossibleOutcomes[possibelOutcomeIndex++];
+                    }
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return GetError(token, tokenUnit);
+                }
+            }
+            return GetError(token, tokenUnit);
         }
 
         private bool IsConstName(string token)

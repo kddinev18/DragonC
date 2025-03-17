@@ -8,102 +8,148 @@
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:l="clr-namespace:DragonC.GUI.Components.CompilatorSetupComponent"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:ts="clr-namespace:DragonC.GUI.Components.CompilatorSetupComponent.Components.TokenSeparatorsComponent"
     x:Name="view"
     x:DataType="l:CompilatorSetupViewModel">
-    <Grid Padding="16" ColumnDefinitions="*,*" ColumnSpacing="16">
-        <ScrollView Grid.Column="0">
-            <VerticalStackLayout>
-                <Border
-                    Padding="8"
-                    BackgroundColor="{StaticResource EditorBackgroundLight}"
-                    Stroke="{StaticResource EditorBackgroundLight}"
-                    StrokeShape="RoundRectangle 8,8,8,8">
-                    <expander:SfExpander
-                        AnimationDuration="100"
-                        HeaderIconColor="{StaticResource TextPrimaryLight}"
-                        IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
-                        <expander:SfExpander.Header>
-                            <Grid Margin="4" ColumnSpacing="8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="35" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image
-                                    HeightRequest="25"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center">
-                                    <Image.Source>
-                                        <FontImageSource
-                                            FontFamily="FASolid"
-                                            Glyph="{x:Static fa:Solid.Terminal}"
-                                            Color="{StaticResource TextPrimaryLight}" />
-                                    </Image.Source>
-                                </Image>
-                                <Label
-                                    Grid.Column="1"
-                                    CharacterSpacing="0.25"
-                                    FontFamily="Roboto-Regular"
-                                    FontSize="16"
-                                    Text="Instructions"
-                                    TextColor="{StaticResource TextPrimaryLight}"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                        </expander:SfExpander.Header>
-                        <expander:SfExpander.Content>
-                            <Grid Padding="18,8">
-                                <cp:CommandsView />
-                            </Grid>
-                        </expander:SfExpander.Content>
-                    </expander:SfExpander>
-                </Border>
-            </VerticalStackLayout>
-        </ScrollView>
-        <ScrollView Grid.Column="1">
-            <VerticalStackLayout>
-                <Border
-                    Padding="8"
-                    BackgroundColor="{StaticResource EditorBackgroundLight}"
-                    Stroke="{StaticResource EditorBackgroundLight}"
-                    StrokeShape="RoundRectangle 8,8,8,8">
-                    <expander:SfExpander
-                        AnimationDuration="100"
-                        HeaderIconColor="{StaticResource TextPrimaryLight}"
-                        IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
-                        <expander:SfExpander.Header>
-                            <Grid Margin="4" ColumnSpacing="8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="35" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image
-                                    HeightRequest="25"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center">
-                                    <Image.Source>
-                                        <FontImageSource
-                                            FontFamily="FASolid"
-                                            Glyph="{x:Static fa:Solid.Comment}"
-                                            Color="{StaticResource TextPrimaryLight}" />
-                                    </Image.Source>
-                                </Image>
-                                <Label
-                                    Grid.Column="1"
-                                    CharacterSpacing="0.25"
-                                    FontFamily="Roboto-Regular"
-                                    FontSize="16"
-                                    Text="Invoice Date"
-                                    TextColor="{StaticResource TextPrimaryLight}"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                        </expander:SfExpander.Header>
-                        <expander:SfExpander.Content>
-                            <Grid Padding="18,8">
-                                <cp:CommandsView />
-                            </Grid>
-                        </expander:SfExpander.Content>
-                    </expander:SfExpander>
-                </Border>
-            </VerticalStackLayout>
-        </ScrollView>
-    </Grid>
+    <VerticalStackLayout Padding="16" Spacing="16">
+
+        <Grid ColumnDefinitions="3*,*" ColumnSpacing="16">
+            <ScrollView Grid.Column="0">
+                <VerticalStackLayout>
+                    <Border
+                        Padding="8"
+                        BackgroundColor="{StaticResource EditorBackgroundLight}"
+                        Stroke="{StaticResource EditorBackgroundLight}"
+                        StrokeShape="RoundRectangle 8,8,8,8">
+                        <expander:SfExpander
+                            AnimationDuration="100"
+                            HeaderIconColor="{StaticResource TextPrimaryLight}"
+                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                            <expander:SfExpander.Header>
+                                <Grid Margin="4" ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="35" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        HeightRequest="21"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="FASolid"
+                                                Glyph="{x:Static fa:Solid.Terminal}"
+                                                Color="{StaticResource TextPrimaryLight}" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Label
+                                        Grid.Column="1"
+                                        CharacterSpacing="0.25"
+                                        FontFamily="Roboto-Regular"
+                                        FontSize="16"
+                                        Text="Instructions"
+                                        TextColor="{StaticResource TextPrimaryLight}"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </expander:SfExpander.Header>
+                            <expander:SfExpander.Content>
+                                <Grid Padding="18,8">
+                                    <cp:CommandsView />
+                                </Grid>
+                            </expander:SfExpander.Content>
+                        </expander:SfExpander>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+            <ScrollView Grid.Column="1">
+                <VerticalStackLayout>
+                    <Border
+                        Padding="8"
+                        BackgroundColor="{StaticResource EditorBackgroundLight}"
+                        Stroke="{StaticResource EditorBackgroundLight}"
+                        StrokeShape="RoundRectangle 8,8,8,8">
+                        <expander:SfExpander
+                            AnimationDuration="100"
+                            HeaderIconColor="{StaticResource TextPrimaryLight}"
+                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                            <expander:SfExpander.Header>
+                                <Grid Margin="4" ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="35" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        HeightRequest="23"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="FASolid"
+                                                Glyph="{x:Static fa:Solid.LinesLeaning}"
+                                                Color="{StaticResource TextPrimaryLight}" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Label
+                                        Grid.Column="1"
+                                        CharacterSpacing="0.25"
+                                        FontFamily="Roboto-Regular"
+                                        FontSize="16"
+                                        Text="Separators"
+                                        TextColor="{StaticResource TextPrimaryLight}"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </expander:SfExpander.Header>
+                            <expander:SfExpander.Content>
+                                <Grid Padding="18,8">
+                                    <ts:TokensView />
+                                </Grid>
+                            </expander:SfExpander.Content>
+                        </expander:SfExpander>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+        <VerticalStackLayout>
+            <Border
+                Padding="8"
+                BackgroundColor="{StaticResource EditorBackgroundLight}"
+                Stroke="{StaticResource EditorBackgroundLight}"
+                StrokeShape="RoundRectangle 8,8,8,8">
+                <expander:SfExpander AnimationDuration="100" HeaderIconColor="{StaticResource TextPrimaryLight}">
+                    <expander:SfExpander.Header>
+                        <Grid Margin="4" ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image
+                                HeightRequest="23"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="FASolid"
+                                        Glyph="{x:Static fa:Solid.LinesLeaning}"
+                                        Color="{StaticResource TextPrimaryLight}" />
+                                </Image.Source>
+                            </Image>
+                            <Label
+                                Grid.Column="1"
+                                CharacterSpacing="0.25"
+                                FontFamily="Roboto-Regular"
+                                FontSize="16"
+                                Text="Separators"
+                                TextColor="{StaticResource TextPrimaryLight}"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </expander:SfExpander.Header>
+                    <expander:SfExpander.Content>
+                        <Grid Padding="18,8">
+                            <ts:TokensView />
+                        </Grid>
+                    </expander:SfExpander.Content>
+                </expander:SfExpander>
+            </Border>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
 </ContentView>

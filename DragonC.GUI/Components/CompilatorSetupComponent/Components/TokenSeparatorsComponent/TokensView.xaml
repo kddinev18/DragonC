@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="DragonC.GUI.Components.CompilatorSetupComponent.Components.TokenSeparatorsComponent.TokensView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+    xmlns:dataGrid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+    xmlns:l="clr-namespace:DragonC.GUI.Components.CompilatorSetupComponent.Components.TokenSeparatorsComponent"
+    xmlns:m="clr-namespace:DragonC.GUI.Components.CompilatorSetupComponent.Components.TokenSeparatorsComponent.Models"
+    x:Name="view"
+    x:DataType="l:TokensViewModel">
+    <VerticalStackLayout Margin="0,0,0,12">
+        <Grid Margin="0,0,0,8" Padding="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                FontSize="24"
+                Text="Tokens"
+                TextColor="{StaticResource TextPrimaryLight}"
+                VerticalOptions="Center" />
+            <buttons:SfButton
+                Grid.Column="1"
+                Background="{StaticResource Primary}"
+                Command="{Binding AddCommand}"
+                ShowIcon="True"
+                Text="Add">
+                <buttons:SfButton.ImageSource>
+                    <FontImageSource
+                        FontFamily="FASolid"
+                        Glyph="{x:Static fa:Solid.Plus}"
+                        Color="{StaticResource TextPrimaryDark}" />
+                </buttons:SfButton.ImageSource>
+            </buttons:SfButton>
+        </Grid>
+        <Border
+            Padding="8"
+            HeightRequest="50"
+            Stroke="#000000"
+            StrokeThickness="0.15">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4,4,0,0" />
+            </Border.StrokeShape>
+            <Grid
+                Margin="4"
+                ColumnSpacing="12"
+                VerticalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="16"
+                    Text="Token"
+                    TextColor="{StaticResource TextPrimaryLight}" />
+            </Grid>
+        </Border>
+        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Tokens}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="m:TokenModel">
+                    <Border
+                        Padding="4"
+                        HeightRequest="50"
+                        Stroke="#000000"
+                        StrokeThickness="0.15">
+                        <Grid Margin="4" ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3.5*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <input:SfMaskedEntry
+                                Grid.Column="0"
+                                ClearButtonVisibility="WhileEditing"
+                                Value="{Binding Separator, Mode=TwoWay}" />
+                            <Border
+                                Grid.Column="1"
+                                BackgroundColor="{StaticResource Primary}"
+                                HeightRequest="32"
+                                StrokeShape="RoundRectangle 20"
+                                WidthRequest="32">
+                                <ImageButton Command="{Binding BindingContext.DeleteCommand, Source={Reference view}}" CommandParameter="{Binding}">
+                                    <ImageButton.Source>
+                                        <FontImageSource
+                                            FontFamily="FASolid"
+                                            Glyph="{x:Static fa:Solid.Trash}"
+                                            Size="16"
+                                            Color="{StaticResource EditorBackgroundLight}" />
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

@@ -12,6 +12,7 @@ namespace DragonC.Compilator
         public static string DynamicLiteralIndicator { get; set; } = "&";
         public static string CommandJoinSeparator { get; set; } = "^";
         public static string CommandArgumentIndicator { get; set; } = "!";
+        public static string DynamicNamesFormalGrammarStartRule { get; set; } = "allowedDynamicNamesStart";
         public static List<string> TokenSeparators { get; set; } = new List<string>() { ";", ":" };
         public static List<HighLevelCommand> HighLevelCommands { get; set; } = LoadHighLevelCommands();
         public static List<LowLevelCommand> LowLevelCommands { get; set; } = new List<LowLevelCommand>()
@@ -139,7 +140,31 @@ namespace DragonC.Compilator
             new UnformatedRule
             {
                 Rule = "condCommandParam->@_@",
-            }
+            },
+
+
+            new UnformatedRule
+            {
+                Rule = $"{DynamicNamesFormalGrammarStartRule}->i%allowedDynamicNamesNext%",
+                IsStart = true
+            },
+            new UnformatedRule
+            {
+                Rule = "allowedDynamicNamesStart->m%allowedDynamicNamesNext%",
+                IsStart = true
+            },
+            new UnformatedRule
+            {
+                Rule = "allowedDynamicNamesNext->m%allowedDynamicNamesNext%",
+            },
+            new UnformatedRule
+            {
+                Rule = "allowedDynamicNamesNext->i%allowedDynamicNamesNext%",
+            },
+            new UnformatedRule
+            {
+                Rule = "allowedDynamicNamesNext->m",
+            },
         };
     }
 }
