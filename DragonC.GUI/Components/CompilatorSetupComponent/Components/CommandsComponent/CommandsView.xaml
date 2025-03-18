@@ -7,6 +7,7 @@
     xmlns:dataGrid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
     xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+    xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
     xmlns:l="clr-namespace:DragonC.GUI.Components.CompilatorSetupComponent.Components.CommandsComponent"
     xmlns:m="clr-namespace:DragonC.GUI.Components.CompilatorSetupComponent.Components.CommandsComponent.Models"
     x:Name="view"
@@ -14,7 +15,7 @@
     <VerticalStackLayout Margin="0,0,0,12">
         <Grid Margin="0,0,0,8" Padding="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="6*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label
@@ -70,11 +71,10 @@
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="m:CommandModel">
                     <Border
-                        Padding="4"
-                        HeightRequest="50"
+                        Padding="8"
                         Stroke="#000000"
                         StrokeThickness="0.15">
-                        <Grid Margin="4" ColumnSpacing="12">
+                        <Grid ColumnSpacing="12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="7*" />
                                 <ColumnDefinition Width="5*" />

@@ -11,7 +11,7 @@
     xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
     x:DataType="l:HomePageModel"
     BackgroundColor="{StaticResource BackgroundLight}">
-    <tabView:SfTabView x:Name="tabView">
+    <tabView:SfTabView>
         <tabView:SfTabView.Items>
             <tabView:SfTabItem
                 BackgroundColor="{StaticResource EditorBackgroundLight}"

@@ -74,6 +74,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\Cmponents\FormalGrammarRuleView\FormalGrammarRuleView.xaml.cs">
+	    <DependentUpon>FormalGrammarRuleView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml.cs">
 	    <DependentUpon>FormalGrammarEditorView.xaml</DependentUpon>
 	  </Compile>
@@ -90,6 +93,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\CommandsComponent\CommandsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\Cmponents\FormalGrammarRuleView\FormalGrammarRuleView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml">
