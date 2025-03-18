@@ -32,12 +32,13 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
         [ObservableProperty]
         private bool isLast;
 
-        partial void OnTerminalPartTypeChanged(NomenclatureModel oldValue, NomenclatureModel newValue)
+        [ObservableProperty]
+        private GridLength gridLength = new GridLength(0);
+
+        partial void OnTerminalPartTypeChanged(NomenclatureModel value)
         {
-            if (oldValue?.Id != newValue?.Id)
-            {
-                CustomRuleInputVisible = newValue?.Id == 8;
-            }
+            CustomRuleInputVisible = value?.Id == 8;
+            GridLength = value?.Id == 8 ? GridLength.Star : new GridLength(0);
         }
 
         [RelayCommand]

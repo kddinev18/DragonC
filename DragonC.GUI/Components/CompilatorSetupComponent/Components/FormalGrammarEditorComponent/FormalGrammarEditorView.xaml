@@ -81,7 +81,6 @@
                                     <ColumnDefinition Width="0.3*" />
                                     <ColumnDefinition Width="8*" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <input:SfMaskedEntry Grid.Column="0" ClearButtonVisibility="WhileEditing" />
                                 <Image Grid.Column="1" HeightRequest="20">
@@ -98,16 +97,26 @@
                                     Spacing="16">
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate x:DataType="m:FormalRuleVariantModel">
-                                            <HorizontalStackLayout Spacing="8">
-                                                <input:SfAutocomplete
-                                                    DisplayMemberPath="DisplayName"
-                                                    ItemsSource="{Binding BindableContext.TerminalPartTypes, Source={Reference view}}"
-                                                    SelectedValue="{Binding TerminalPartType, Mode=TwoWay}"
-                                                    TextMemberPath="DisplayName" />
-                                                <input:SfMaskedEntry ClearButtonVisibility="WhileEditing" IsVisible="{Binding CustomRuleInputVisible}" />
-                                                <input:SfMaskedEntry Grid.Column="3" ClearButtonVisibility="WhileEditing" />
+                                            <Grid ColumnDefinitions="7*,5*,*,*" ColumnSpacing="8">
+                                                <Grid Grid.Column="0" ColumnSpacing="8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="0.5*" />
+                                                        <ColumnDefinition Width="{Binding GridLength}" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <input:SfAutocomplete
+                                                        Grid.Column="0"
+                                                        DisplayMemberPath="DisplayName"
+                                                        ItemsSource="{Binding BindingContext.TerminalPartTypes, Source={Reference view}}"
+                                                        SelectedValue="{Binding TerminalPartType}"
+                                                        TextMemberPath="DisplayName" />
+                                                    <input:SfMaskedEntry
+                                                        Grid.Column="1"
+                                                        ClearButtonVisibility="WhileEditing"
+                                                        IsVisible="{Binding CustomRuleInputVisible}" />
+                                                </Grid>
+                                                <input:SfMaskedEntry Grid.Column="1" ClearButtonVisibility="WhileEditing" />
                                                 <Border
-                                                    Grid.Column="4"
+                                                    Grid.Column="2"
                                                     BackgroundColor="{StaticResource Primary}"
                                                     HeightRequest="32"
                                                     StrokeShape="RoundRectangle 20"
@@ -139,7 +148,7 @@
                                                         </ImageButton.Source>
                                                     </ImageButton>
                                                 </Border>
-                                            </HorizontalStackLayout>
+                                            </Grid>
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
                                 </VerticalStackLayout>

@@ -3,6 +3,7 @@
     x:Class="DragonC.GUI.Components.CompilatorSetupComponent.CompilatorSetupView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:cp="clr-namespace:DragonC.GUI.Components.CompilatorSetupComponent.Components.CommandsComponent"
     xmlns:expander="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
     xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
@@ -102,6 +103,38 @@
                     </expander:SfExpander.Content>
                 </expander:SfExpander>
             </Border>
+            <Grid ColumnDefinitions="*,*">
+                <buttons:SfButton
+                    Grid.Column="0"
+                    Background="{StaticResource BackgroundDark}"
+                    Command="{Binding ResetComand}"
+                    HorizontalOptions="Start"
+                    ShowIcon="True"
+                    Text="Reset"
+                    WidthRequest="180">
+                    <buttons:SfButton.ImageSource>
+                        <FontImageSource
+                            FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.Rotate}"
+                            Color="{StaticResource TextPrimaryDark}" />
+                    </buttons:SfButton.ImageSource>
+                </buttons:SfButton>
+                <buttons:SfButton
+                    Grid.Column="1"
+                    Background="{StaticResource Primary}"
+                    Command="{Binding SaveComand}"
+                    HorizontalOptions="End"
+                    ShowIcon="True"
+                    Text="Save"
+                    WidthRequest="180">
+                    <buttons:SfButton.ImageSource>
+                        <FontImageSource
+                            FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.FloppyDisk}"
+                            Color="{StaticResource TextPrimaryDark}" />
+                    </buttons:SfButton.ImageSource>
+                </buttons:SfButton>
+            </Grid>
         </VerticalStackLayout>
     </ScrollView>
 </ContentView>
