@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net9.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -74,9 +74,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\Cmponents\FormalGrammarRuleView\FormalGrammarRuleView.xaml.cs">
-	    <DependentUpon>FormalGrammarRuleView.xaml</DependentUpon>
-	  </Compile>
+	  <ProjectReference Include="..\DragonC.Domain\DragonC.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml.cs">
 	    <DependentUpon>FormalGrammarEditorView.xaml</DependentUpon>
 	  </Compile>
@@ -95,7 +96,7 @@
 	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\CommandsComponent\CommandsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\Cmponents\FormalGrammarRuleView\FormalGrammarRuleView.xaml">
+	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\Cmponents\TerminalsView\TerminalsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Components\CompilatorSetupComponent\Components\FormalGrammarEditorComponent\FormalGrammarEditorView.xaml">

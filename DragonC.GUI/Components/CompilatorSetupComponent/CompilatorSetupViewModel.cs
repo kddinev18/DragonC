@@ -10,7 +10,5 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
 {
     public partial class CompilatorSetupViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private bool isExpanded = true;
     }
 }

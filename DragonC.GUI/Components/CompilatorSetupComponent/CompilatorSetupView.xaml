@@ -19,10 +19,7 @@
                 BackgroundColor="{StaticResource EditorBackgroundLight}"
                 Stroke="{StaticResource EditorBackgroundLight}"
                 StrokeShape="RoundRectangle 8,8,8,8">
-                <expander:SfExpander
-                    AnimationDuration="100"
-                    HeaderIconColor="{StaticResource TextPrimaryLight}"
-                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                <expander:SfExpander AnimationDuration="100" HeaderIconColor="{StaticResource TextPrimaryLight}">
                     <expander:SfExpander.Header>
                         <Grid Margin="4" ColumnSpacing="8">
                             <Grid.ColumnDefinitions>
@@ -66,7 +63,10 @@
                 BackgroundColor="{StaticResource EditorBackgroundLight}"
                 Stroke="{StaticResource EditorBackgroundLight}"
                 StrokeShape="RoundRectangle 8,8,8,8">
-                <expander:SfExpander AnimationDuration="100" HeaderIconColor="{StaticResource TextPrimaryLight}">
+                <expander:SfExpander
+                    AnimationDuration="100"
+                    HeaderIconColor="{StaticResource TextPrimaryLight}"
+                    IsExpanded="True">
                     <expander:SfExpander.Header>
                         <Grid Margin="4" ColumnSpacing="8">
                             <Grid.ColumnDefinitions>
@@ -96,6 +96,7 @@
                     </expander:SfExpander.Header>
                     <expander:SfExpander.Content>
                         <Grid Padding="18,8">
+
                             <fgv:FormalGrammarEditorView />
                         </Grid>
                     </expander:SfExpander.Content>
