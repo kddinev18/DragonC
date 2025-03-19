@@ -5,6 +5,6 @@ public partial class CommandsView : ContentView
 	public CommandsView()
 	{
 		InitializeComponent();
-		BindingContext = new CommandsViewModel();
+		//BindingContext = new CommandsViewModel();
 	}
 }

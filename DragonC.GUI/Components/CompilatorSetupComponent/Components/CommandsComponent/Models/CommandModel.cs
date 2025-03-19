@@ -11,5 +11,6 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.CommandsCom
     {
         public string Name { get; set; }
         public string MachineCode { get; set; }
+        public bool IsConditional { get; set; }
     }
 }

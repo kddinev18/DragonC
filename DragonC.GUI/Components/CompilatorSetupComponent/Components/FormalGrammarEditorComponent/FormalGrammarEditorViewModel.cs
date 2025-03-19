@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent.Cmponents.NonTerminalsView;
 using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent.Models;
 using DragonC.GUI.Models;
 using System;
@@ -61,6 +62,8 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
         {
             new FormalRuleModel()
         };
+
+        public NonTerminalsViewModel NonTerminals { get; set; } = new NonTerminalsViewModel();
 
         [RelayCommand]
         private void Add()

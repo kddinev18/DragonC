@@ -53,8 +53,8 @@
                             Padding="18,8"
                             ColumnDefinitions="3*,*"
                             ColumnSpacing="32">
-                            <cp:CommandsView />
-                            <ts:TokensView Grid.Column="1" />
+                            <cp:CommandsView BindingContext="{Binding Commands}" />
+                            <ts:TokensView Grid.Column="1" BindingContext="{Binding Separators}" />
                         </Grid>
                     </expander:SfExpander.Content>
                 </expander:SfExpander>
@@ -97,8 +97,7 @@
                     </expander:SfExpander.Header>
                     <expander:SfExpander.Content>
                         <Grid Padding="18,8">
-
-                            <fgv:FormalGrammarEditorView />
+                            <fgv:FormalGrammarEditorView BindingContext="{Binding FormalGrammar}" />
                         </Grid>
                     </expander:SfExpander.Content>
                 </expander:SfExpander>

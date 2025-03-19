@@ -12,7 +12,7 @@
     x:Name="view"
     x:DataType="l:FormalGrammarEditorViewModel">
     <Grid ColumnDefinitions="*,3*" ColumnSpacing="32">
-        <tv:NonTerminalsView />
+        <tv:NonTerminalsView BindingContext="{Binding NonTerminals}" />
         <VerticalStackLayout Grid.Column="1" Margin="0,0,0,12">
             <Grid Margin="0,0,0,8" Padding="2">
                 <Grid.ColumnDefinitions>
@@ -49,8 +49,10 @@
                 </Border.StrokeShape>
                 <Grid ColumnSpacing="12">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3.4*" />
-                        <ColumnDefinition Width="10.15*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="0.3*" />
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Label
                         Grid.Column="0"
@@ -60,12 +62,23 @@
                         TextColor="{StaticResource TextPrimaryLight}"
                         VerticalOptions="Center" />
                     <Label
-                        Grid.Column="1"
+                        Grid.Column="2"
                         Margin="4"
                         FontSize="16"
                         Text="Rule"
                         TextColor="{StaticResource TextPrimaryLight}"
                         VerticalOptions="Center" />
+                    <Grid Grid.Column="2" ColumnDefinitions="6*,5*,*,*,1*">
+                        <Label
+                            Grid.Column="4"
+                            Margin="4"
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Text="Start rule"
+                            TextColor="{StaticResource TextPrimaryLight}"
+                            VerticalOptions="Center" />
+                    </Grid>
+
                 </Grid>
             </Border>
             <VerticalStackLayout BindableLayout.ItemsSource="{Binding FormalRules}">
@@ -97,7 +110,7 @@
                                     Spacing="16">
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate x:DataType="m:FormalRuleVariantModel">
-                                            <Grid ColumnDefinitions="7*,5*,*,*" ColumnSpacing="8">
+                                            <Grid ColumnDefinitions="6*,5*,*,*,*" ColumnSpacing="8">
                                                 <Grid Grid.Column="0" ColumnSpacing="8">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="0.5*" />
@@ -148,6 +161,12 @@
                                                         </ImageButton.Source>
                                                     </ImageButton>
                                                 </Border>
+                                                <buttons:SfCheckBox
+                                                    Grid.Column="4"
+                                                    HeightRequest="30"
+                                                    HorizontalOptions="Center"
+                                                    IsChecked="{Binding IsEntryRule, Mode=TwoWay}"
+                                                    VerticalOptions="Center" />
                                             </Grid>
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>

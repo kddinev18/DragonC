@@ -35,6 +35,9 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
         [ObservableProperty]
         private GridLength gridLength = new GridLength(0);
 
+        [ObservableProperty]
+        private bool isEntryRule = false;
+
         partial void OnTerminalPartTypeChanged(NomenclatureModel value)
         {
             CustomRuleInputVisible = value?.Id == 8;

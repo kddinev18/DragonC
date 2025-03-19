@@ -5,6 +5,6 @@ public partial class FormalGrammarEditorView : ContentView
 	public FormalGrammarEditorView()
 	{
 		InitializeComponent();
-		BindingContext = new FormalGrammarEditorViewModel();
+		//BindingContext = new FormalGrammarEditorViewModel();
 	}
 }

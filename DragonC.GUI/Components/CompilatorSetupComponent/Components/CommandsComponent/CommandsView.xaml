@@ -51,8 +51,9 @@
                 ColumnSpacing="12"
                 VerticalOptions="Center">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*" />
-                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="5.15*" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="1.1*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label
@@ -65,6 +66,12 @@
                     FontSize="16"
                     Text="Code"
                     TextColor="{StaticResource TextPrimaryLight}" />
+                <Label
+                    Grid.Column="2"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Conditional"
+                    TextColor="{StaticResource TextPrimaryLight}" />
             </Grid>
         </Border>
         <VerticalStackLayout BindableLayout.ItemsSource="{Binding Commands}">
@@ -73,11 +80,13 @@
                     <Border
                         Padding="8"
                         Stroke="#000000"
+                        HeightRequest="50"
                         StrokeThickness="0.15">
                         <Grid ColumnSpacing="12">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="7*" />
                                 <ColumnDefinition Width="5*" />
+                                <ColumnDefinition Width="6*" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <input:SfMaskedEntry
@@ -88,6 +97,10 @@
                                 Grid.Column="1"
                                 ClearButtonVisibility="WhileEditing"
                                 Value="{Binding MachineCode, Mode=TwoWay}" />
+                            <buttons:SfCheckBox
+                                Grid.Column="2"
+                                HorizontalOptions="Center"
+                                IsChecked="{Binding IsConditional, Mode=TwoWay}" />
                             <Border
                                 Grid.Column="3"
                                 BackgroundColor="{StaticResource Primary}"

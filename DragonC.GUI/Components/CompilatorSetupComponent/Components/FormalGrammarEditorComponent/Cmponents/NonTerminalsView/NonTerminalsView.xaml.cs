@@ -5,6 +5,6 @@ public partial class NonTerminalsView : ContentView
 	public NonTerminalsView()
 	{
 		InitializeComponent();
-		BindingContext = new NonTerminalsViewModel();
+		//BindingContext = new NonTerminalsViewModel();
 	}
 }

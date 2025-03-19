@@ -5,6 +5,6 @@ public partial class TokensView : ContentView
 	public TokensView()
 	{
 		InitializeComponent();
-		BindingContext = new TokensViewModel();
+		//BindingContext = new TokensViewModel();
 	}
 }

@@ -57,6 +57,7 @@
                 <DataTemplate x:DataType="m:TokenModel">
                     <Border
                         Padding="8"
+                        HeightRequest="50"
                         Stroke="#000000"
                         StrokeThickness="0.15">
                         <Grid ColumnSpacing="12">

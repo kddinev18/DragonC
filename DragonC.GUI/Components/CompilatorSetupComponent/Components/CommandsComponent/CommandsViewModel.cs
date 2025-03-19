@@ -27,6 +27,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.CommandsCom
             {
                 MachineCode = "03",
                 Name = "Delete",
+                IsConditional = true
             },
         ];
 
