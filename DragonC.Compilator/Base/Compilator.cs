@@ -1,5 +1,6 @@
 ﻿using DragonC.Compilator.HighLevelCommandsCompiler.Base;
 using DragonC.Domain.Compilator;
+using DragonC.Domain.Data;
 using DragonC.Domain.Lexer.Tokeniser;
 using DragonC.Lexer;
 using System.Data;
@@ -11,20 +12,22 @@ namespace DragonC.Compilator
     {
         private FormalGrammar _formalGrammar;
         private Tokeniser _tokeniser;
-
-        public Compilator()
+        private CompilatorData _data;
+        private List<HighLevelCommand> _highLevelCommands = new List<HighLevelCommand>();
+        public Compilator(CompilatorData compilatorData)
         {
-            _formalGrammar = new FormalGrammar(LowLevelCommands);
-            _formalGrammar.DynamicNamesIndicator = DynamicNamesIndicator;
-            _formalGrammar.DynamicValuesIndicator = DynamicValuesIndicator;
-            _formalGrammar.DynamicCommandIndicator = DynamicCommandIndicator;
-            _formalGrammar.NonTerminalIndicator = NonTerminalIndicator;
-            _formalGrammar.SetRules(BaseFormalRules);
+            _data = compilatorData;
+            _formalGrammar = new FormalGrammar(compilatorData.LowLevelCommands);
+            _formalGrammar.DynamicNamesIndicator = compilatorData.DynamicNamesIndicator;
+            _formalGrammar.DynamicValuesIndicator = compilatorData.DynamicValuesIndicator;
+            _formalGrammar.DynamicCommandIndicator = compilatorData.DynamicCommandIndicator;
+            _formalGrammar.NonTerminalIndicator = compilatorData.NonTerminalIndicator;
+            _formalGrammar.SetRules(compilatorData.BaseFormalRules);
 
-            _tokeniser = new Tokeniser(TokenSeparators);
+            _tokeniser = new Tokeniser(compilatorData.TokenSeparators);
         }
 
-        private static List<HighLevelCommand> LoadHighLevelCommands()
+        private List<HighLevelCommand> LoadHighLevelCommands()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
 
@@ -34,7 +37,7 @@ namespace DragonC.Compilator
             List<HighLevelCommand> highLevelCommands = new List<HighLevelCommand>();
             foreach (Type type in derivedTypes)
             {
-                BaseHighLevelCommand instance = (BaseHighLevelCommand)Activator.CreateInstance(type);
+                BaseHighLevelCommand instance = (BaseHighLevelCommand)Activator.CreateInstance(type, _data);
                 highLevelCommands.Add(instance.CommandDefintion);
             }
 
@@ -84,7 +87,8 @@ namespace DragonC.Compilator
 
         private void AddDependancies(List<TokenUnit> tokens)
         {
-            Compilator.HighLevelCommands
+            _highLevelCommands.AddRange(LoadHighLevelCommands());
+            _highLevelCommands
                 .Where(x => x.SetConsts != null)
                 .ToList()
                 .ForEach(x => x.SetConsts.Invoke(tokens));
@@ -127,7 +131,7 @@ namespace DragonC.Compilator
             List<HighLevelCommandToken> result = new List<HighLevelCommandToken>();
             foreach (TokenUnit tokenUnit in tokenUnits)
             {
-                foreach (HighLevelCommand highLevelCommand in HighLevelCommands)
+                foreach (HighLevelCommand highLevelCommand in _highLevelCommands)
                 {
                     if (highLevelCommand.ValidateCommand.Invoke(tokenUnit).IsValid == true)
                     {
@@ -179,18 +183,18 @@ namespace DragonC.Compilator
         {
             foreach (TokenUnit token in commandTokens)
             {
-                string[] splits = token.Token.Split(DynamicCommandIndicator);
-                if (splits.Length == 1 && splits[0].StartsWith(DynamicLiteralIndicator) && splits[0].EndsWith(DynamicLiteralIndicator))
+                string[] splits = token.Token.Split(_data.DynamicCommandIndicator);
+                if (splits.Length == 1 && splits[0].StartsWith(_data.DynamicLiteralIndicator) && splits[0].EndsWith(_data.DynamicLiteralIndicator))
                 {
-                    token.Token = Convert.ToString(int.Parse(token.Token.Replace(DynamicLiteralIndicator, "")), 2).PadLeft(8, '0');
+                    token.Token = Convert.ToString(int.Parse(token.Token.Replace(_data.DynamicLiteralIndicator, "")), 2).PadLeft(8, '0');
                 }
                 if (splits.Length == 3)
                 {
-                    LowLevelCommand command = LowLevelCommands
+                    LowLevelCommand command = _data.LowLevelCommands
                     .Where(x => splits[1] == x.CommandName)
                     .First();
 
-                    token.Token = token.Token.Replace($"{DynamicCommandIndicator}{splits[1]}{DynamicCommandIndicator}",
+                    token.Token = token.Token.Replace($"{_data.DynamicCommandIndicator}{splits[1]}{_data.DynamicCommandIndicator}",
                         command.MachineCode);
                 }
             }
@@ -206,7 +210,7 @@ namespace DragonC.Compilator
                     foreach (TokenUnit command in commandTokens)
                     {
                         command.Token = command.Token.Replace(splits[1], Convert.ToString(literalToken.CodeLine, 2).PadLeft(8, '0'));
-                        command.Token = command.Token.Replace(splits[1].Replace(DynamicNamesIndicator, DynamicValuesIndicator),
+                        command.Token = command.Token.Replace(splits[1].Replace(_data.DynamicNamesIndicator, _data.DynamicValuesIndicator),
                             Convert.ToString(literalToken.CodeLine, 2).PadLeft(8, '0'));
                     }
                 }
@@ -214,14 +218,14 @@ namespace DragonC.Compilator
                 {
                     foreach (TokenUnit command in commandTokens)
                     {
-                        if (command.Token.StartsWith(DynamicLiteralIndicator) && command.Token.EndsWith(DynamicLiteralIndicator))
+                        if (command.Token.StartsWith(_data.DynamicLiteralIndicator) && command.Token.EndsWith(_data.DynamicLiteralIndicator))
                         {
-                            command.Token = command.Token.Replace(DynamicLiteralIndicator, "");
+                            command.Token = command.Token.Replace(_data.DynamicLiteralIndicator, "");
                         }
                         command.Token = command.Token.Replace(splits[1],
-                            Convert.ToString(int.Parse(splits[2].Replace(DynamicValuesIndicator, "")), 2)).PadLeft(8, '0');
-                        command.Token = command.Token.Replace(splits[1].Replace(DynamicNamesIndicator, DynamicValuesIndicator),
-                            Convert.ToString(int.Parse(splits[2].Replace(DynamicValuesIndicator, "")), 2)).PadLeft(8, '0');
+                            Convert.ToString(int.Parse(splits[2].Replace(_data.DynamicValuesIndicator, "")), 2)).PadLeft(8, '0');
+                        command.Token = command.Token.Replace(splits[1].Replace(_data.DynamicNamesIndicator, _data.DynamicValuesIndicator),
+                            Convert.ToString(int.Parse(splits[2].Replace(_data.DynamicValuesIndicator, "")), 2)).PadLeft(8, '0');
                     }
                 }
             }
@@ -235,10 +239,10 @@ namespace DragonC.Compilator
                 string[] splits = token.Token.Split(' ');
 
                 if (splits.Length == 2 &&
-                    splits[0].StartsWith(DynamicCommandIndicator) &&
-                    splits[0].EndsWith(DynamicCommandIndicator) &&
-                    splits[1].StartsWith(DynamicValuesIndicator) &&
-                    splits[1].EndsWith(DynamicValuesIndicator))
+                    splits[0].StartsWith(_data.DynamicCommandIndicator) &&
+                    splits[0].EndsWith(_data.DynamicCommandIndicator) &&
+                    splits[1].StartsWith(_data.DynamicValuesIndicator) &&
+                    splits[1].EndsWith(_data.DynamicValuesIndicator))
                 {
                     token.CodeLine = ++codeLines;
                     codeLines++;

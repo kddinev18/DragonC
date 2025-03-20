@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Maui;
 using DragonC.GUI.Components.HomePageComponent;
+using DragonC.GUI.Services;
+using DragonC.GUI.Services.Contracts;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
+using Telerik.Maui.Controls.Compatibility;
 using UraniumUI;
 
 namespace DragonC.GUI
@@ -13,6 +16,7 @@ namespace DragonC.GUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseTelerik()
                 .UseMauiCommunityToolkit()
                 .ConfigureSyncfusionCore()
                 .UseUraniumUI()
@@ -25,6 +29,7 @@ namespace DragonC.GUI
                     fonts.AddFontAwesomeIconFonts();
                 });
 
+            builder.Services.AddSingleton<ICompilatorService, CompilatorService>();
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif

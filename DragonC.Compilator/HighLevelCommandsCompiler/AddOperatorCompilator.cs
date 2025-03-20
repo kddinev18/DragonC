@@ -1,5 +1,6 @@
 ﻿using DragonC.Compilator.HighLevelCommandsCompiler.Base;
 using DragonC.Domain.Compilator;
+using DragonC.Domain.Data;
 using DragonC.Domain.Exceptions;
 using DragonC.Domain.Lexer.FormalGrammar;
 using DragonC.Domain.Lexer.Tokeniser;
@@ -11,7 +12,7 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
     {
         private List<string> _registers = new List<string>() { "REG1", "REG2", "REG3", "REG4", "REG5" };
         public override HighLevelCommand CommandDefintion { get; set; }
-        public AddOperatorCompilator()
+        public AddOperatorCompilator(CompilatorData data) : base(data)
         {
             CommandDefintion = new HighLevelCommand()
             {
@@ -70,8 +71,8 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
         {
             List<string> lowLevelCommands = new List<string>();
             string[] splits = command.Token.Split(CommandDefintion.CommandSeparator);
-            string arg1 = splits[0].Replace(Compilator.DynamicValuesIndicator, "");
-            string arg2 = splits[1].Replace(Compilator.DynamicValuesIndicator, "");
+            string arg1 = splits[0].Replace(_data.DynamicValuesIndicator, "");
+            string arg2 = splits[1].Replace(_data.DynamicValuesIndicator, "");
 
             bool isArg1Literal = int.TryParse(arg1, out int argValue1);
             bool isArg2Literal = int.TryParse(arg2, out int argValue2);
@@ -173,7 +174,7 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
 
         public override string GetClearCommand(string command)
         {
-            return command.Replace(CommandDefintion.AllowLiteralsForArguments ? Compilator.DynamicValuesIndicator : Compilator.DynamicNamesIndicator, "");
+            return command.Replace(CommandDefintion.AllowLiteralsForArguments ? _data.DynamicValuesIndicator : _data.DynamicNamesIndicator, "");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DragonC.Domain.Compilator;
+using DragonC.Domain.Lexer.FormalGrammar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +8,22 @@ using System.Threading.Tasks;
 
 namespace DragonC.Domain.Data
 {
-    public static class CompilatorData
+    public class CompilatorData
     {
-        public static string NonTerminalIndicator { get; set; } = "%";
-        public static string DynamicNamesIndicator { get; set; } = "|";
-        public static string DynamicValuesIndicator { get; set; } = "@";
-        public static string DynamicCommandIndicator { get; set; } = "#";
-        public static string DynamicLiteralIndicator { get; set; } = "&";
-        public static string CommandJoinSeparator { get; set; } = "^";
-        public static string CommandArgumentIndicator { get; set; } = "!";
+        public string NonTerminalIndicator { get; set; } = "%";
+        public string DynamicNamesIndicator { get; set; } = "|";
+        public string DynamicValuesIndicator { get; set; } = "@";
+        public string DynamicCommandIndicator { get; set; } = "#";
+        public string DynamicLiteralIndicator { get; set; } = "&";
+        public string CommandJoinSeparator { get; set; } = "^";
+        public string CommandArgumentIndicator { get; set; } = "!";
         public static string DynamicNamesFormalGrammarStartRule { get; set; } = "allowedDynamicNamesStart";
-        public static List<string> TokenSeparators { get; set; } = new List<string>() { ";", ":" };
-        public static List<LowLevelCommand> LowLevelCommands { get; set; } = new List<LowLevelCommand>();
+        public List<string> TokenSeparators { get; set; } = new List<string>();
+        public List<LowLevelCommand> LowLevelCommands { get; set; } = new List<LowLevelCommand>();
+        public List<UnformatedRule> BaseFormalRules { get; set; } = new List<UnformatedRule>();
+        public LowLevelCommand GetCommand(string commandName)
+        {
+            return LowLevelCommands.First(x => x.CommandName == commandName);
+        }
     }
 }

@@ -69,11 +69,13 @@
 		<PackageReference Include="Syncfusion.Maui.Expander" Version="28.2.11" />
 		<PackageReference Include="Syncfusion.Maui.Inputs" Version="28.2.11" />
 		<PackageReference Include="Syncfusion.Maui.TabView" Version="28.2.11" />
+		<PackageReference Include="Telerik.UI.for.Maui" Version="10.0.0" />
 		<PackageReference Include="UraniumUI.Icons.FontAwesome" Version="2.11.0" />
 		<PackageReference Include="UraniumUI.Material" Version="2.11.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\DragonC.Compilator\DragonC.Compilator.csproj" />
 	  <ProjectReference Include="..\DragonC.Domain\DragonC.Domain.csproj" />
 	</ItemGroup>
 

@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DragonC.Domain.Compilator;
+using DragonC.Domain.Data;
 using DragonC.Domain.Lexer.FormalGrammar;
 using DragonC.GUI.Components.CompilatorSetupComponent.Components.CommandsComponent;
 using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent;
 using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent.Models;
 using DragonC.GUI.Components.CompilatorSetupComponent.Components.TokenSeparatorsComponent;
+using DragonC.GUI.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +74,13 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
                     }
                 }
             }
+
+            DependencyService.Resolve<ICompilatorService>().CompilatorData = new CompilatorData()
+            {
+                BaseFormalRules = formalRules,
+                TokenSeparators = separators,
+                LowLevelCommands = commands
+            };
         }
 
         private void GenerateCustomRule(string start, List<UnformatedRule> formalRules, string terminalPart, string nonTerminalPart)
