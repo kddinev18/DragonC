@@ -44,7 +44,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             new NomenclatureModel()
             {
                 Id = 6,
-                DisplayName = "Command"
+                DisplayName = "DynamicCommand"
             },
             new NomenclatureModel()
             {
@@ -68,10 +68,101 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             },
         ];
 
-        public ObservableCollection<FormalRuleModel> FormalRules { get; set; } = new ObservableCollection<FormalRuleModel>()
+        public ObservableCollection<FormalRuleModel> FormalRules { get; set; } = new ObservableCollection<FormalRuleModel>();
+
+        public FormalGrammarEditorViewModel()
         {
-            new FormalRuleModel()
-        };
+            FormalRuleModel immValue = new FormalRuleModel();
+            immValue.Start = "immValue";
+            immValue.FormalRuleVariants.Add(new FormalRuleVariantModel(immValue)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 9).First(),
+                IsEntryRule = true,
+            });
+
+            FormalRuleModel immValueConst = new FormalRuleModel();
+            immValueConst.Start = "immValueConst";
+            immValueConst.FormalRuleVariants.Add(new FormalRuleVariantModel(immValueConst)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 7).First(),
+                IsEntryRule = true,
+            });
+
+            FormalRuleModel commandExec = new FormalRuleModel();
+            commandExec.Start = "commandExec";
+            commandExec.FormalRuleVariants.Add(new FormalRuleVariantModel(commandExec)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 6).First(),
+                IsEntryRule = true,
+            });
+
+
+
+
+            FormalRuleModel constDecl = new FormalRuleModel();
+            constDecl.Start = "constDecl";
+            constDecl.FormalRuleVariants.Add(new FormalRuleVariantModel(constDecl)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 10).First(),
+                TerminalPart = "const",
+                NonTerminalPart = "space",
+                IsEntryRule = true,
+            });
+
+            FormalRuleModel space = new FormalRuleModel();
+            space.Start = "space";
+            space.FormalRuleVariants.Add(new FormalRuleVariantModel(space)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 10).First(),
+                TerminalPart = " ",
+                NonTerminalPart = "constName",
+                IsEntryRule = false,
+            });
+
+            FormalRuleModel constName = new FormalRuleModel();
+            constName.Start = "constName";
+            constName.FormalRuleVariants.Add(new FormalRuleVariantModel(constName)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 7).First(),
+                NonTerminalPart = "2ndSpace",
+                IsEntryRule = false,
+            });
+
+            FormalRuleModel ndSpace = new FormalRuleModel();
+            ndSpace.Start = "2ndSpace";
+            ndSpace.FormalRuleVariants.Add(new FormalRuleVariantModel(ndSpace)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 10).First(),
+                TerminalPart = " ",
+                NonTerminalPart = "constValue",
+                IsEntryRule = false,
+            });
+
+            FormalRuleModel constValue = new FormalRuleModel();
+            constValue.Start = "constValue";
+            constValue.FormalRuleVariants.Add(new FormalRuleVariantModel(constValue)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 8).First(),
+                IsEntryRule = false,
+            });
+
+            FormalRules.Add(immValue);
+            FormalRules.Add(immValueConst);
+            FormalRules.Add(commandExec);
+            FormalRules.Add(constDecl);
+            FormalRules.Add(space);
+            FormalRules.Add(constName);
+            FormalRules.Add(ndSpace);
+            FormalRules.Add(constValue);
+        }
 
         public NonTerminalsViewModel NonTerminals { get; set; } = new NonTerminalsViewModel();
 

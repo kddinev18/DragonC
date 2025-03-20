@@ -95,7 +95,10 @@
                                     <ColumnDefinition Width="8*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <input:SfMaskedEntry Grid.Column="0" ClearButtonVisibility="WhileEditing" />
+                                <input:SfMaskedEntry
+                                    Grid.Column="0"
+                                    ClearButtonVisibility="WhileEditing"
+                                    Value="{Binding Start, Mode=TwoWay}" />
                                 <Image Grid.Column="1" HeightRequest="20">
                                     <Image.Source>
                                         <FontImageSource
@@ -116,18 +119,32 @@
                                                         <ColumnDefinition Width="0.5*" />
                                                         <ColumnDefinition Width="{Binding GridLength}" />
                                                     </Grid.ColumnDefinitions>
-                                                    <input:SfAutocomplete
+                                                    <!--<input:SfAutocomplete
                                                         Grid.Column="0"
                                                         DisplayMemberPath="DisplayName"
                                                         ItemsSource="{Binding BindingContext.TerminalPartTypes, Source={Reference view}}"
-                                                        SelectedValue="{Binding TerminalPartType}"
-                                                        TextMemberPath="DisplayName" />
+                                                        SelectedValue="{Binding TerminalPartType, Mode=TwoWay}"
+                                                        TextMemberPath="DisplayName" />-->
+                                                    <input:SfMaskedEntry
+                                                        ClearButtonVisibility="WhileEditing"
+                                                        IsEnabled="False"
+                                                        Value="{Binding TerminalPartType.DisplayName}" />
+                                                    <Picker
+                                                        Margin="-2.5,0.2,0,0"
+                                                        TextColor="{StaticResource TextPrimaryLight}"
+                                                        ItemDisplayBinding="{Binding DisplayName}"
+                                                        ItemsSource="{Binding BindingContext.TerminalPartTypes, Source={Reference view}}"
+                                                        SelectedItem="{Binding TerminalPartType, Mode=TwoWay}" />
                                                     <input:SfMaskedEntry
                                                         Grid.Column="1"
                                                         ClearButtonVisibility="WhileEditing"
-                                                        IsVisible="{Binding CustomRuleInputVisible}" />
+                                                        IsVisible="{Binding CustomRuleInputVisible}"
+                                                        Value="{Binding TerminalPart, Mode=TwoWay}" />
                                                 </Grid>
-                                                <input:SfMaskedEntry Grid.Column="1" ClearButtonVisibility="WhileEditing" />
+                                                <input:SfMaskedEntry
+                                                    Grid.Column="1"
+                                                    ClearButtonVisibility="WhileEditing"
+                                                    Value="{Binding NonTerminalPart, Mode=TwoWay}" />
                                                 <Border
                                                     Grid.Column="2"
                                                     BackgroundColor="{StaticResource Primary}"

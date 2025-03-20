@@ -40,8 +40,8 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
 
         partial void OnTerminalPartTypeChanged(NomenclatureModel value)
         {
-            CustomRuleInputVisible = value?.Id == 8;
-            GridLength = value?.Id == 8 ? GridLength.Star : new GridLength(0);
+            CustomRuleInputVisible = value?.Id == 10;
+            GridLength = value?.Id == 10 ? GridLength.Star : new GridLength(0);
         }
 
         [RelayCommand]

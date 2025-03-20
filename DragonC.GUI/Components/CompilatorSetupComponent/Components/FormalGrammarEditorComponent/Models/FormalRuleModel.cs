@@ -15,16 +15,6 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
         [ObservableProperty]
         private string start;
 
-        public ObservableCollection<FormalRuleVariantModel> FormalRuleVariants { get; set; }
-        public FormalRuleModel()
-        {
-            FormalRuleVariants = new ObservableCollection<FormalRuleVariantModel>()
-            {
-                new FormalRuleVariantModel(this)
-                {
-                    IsLast = true
-                }
-            };
-        }
+        public ObservableCollection<FormalRuleVariantModel> FormalRuleVariants { get; set; } = new ObservableCollection<FormalRuleVariantModel>();
     }
 }
