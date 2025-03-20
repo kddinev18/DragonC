@@ -23,7 +23,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
         [RelayCommand]
         private void Save()
         {
-            List<LowLevelCommand> commands = Commands.Commands.Select(x=> new LowLevelCommand()
+            List<LowLevelCommand> commands = Commands.Commands.Select(x => new LowLevelCommand()
             {
                 CommandName = x.Name,
                 MachineCode = x.MachineCode,
@@ -37,13 +37,156 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
             {
                 foreach (FormalRuleVariantModel variant in rule.FormalRuleVariants)
                 {
-                    formalRules.Add(new UnformatedRule()
+                    switch (variant.TerminalPartType.Id)
                     {
-                        IsStart = variant.IsEntryRule,
-                        Rule = 
-                    });
+                        case 1:
+                            GenerateAllPossibleCharactersForRule(rule.Start,formalRules, variant.NonTerminalPart);
+                            break;
+                        case 2:
+                            GnerateAllPossibleNumbersForRule(rule.Start, formalRules, variant.NonTerminalPart);
+                            break;
+                        case 3: 
+                            break;
+                        case 4: 
+                            break;
+                        case 5:
+                            GenerateSpaceRule(rule.Start, formalRules, variant.NonTerminalPart);
+                            break;
+                        case 6: 
+                            GenerateDynamiCommandRule(rule.Start, formalRules, variant.NonTerminalPart);
+                            break;
+                        case 7:
+                            GenerateDynamicNameRule(rule.Start, formalRules, variant.NonTerminalPart);
+                            break;
+                        case 8:
+                            GenerateDynamicValueRule(rule.Start, formalRules, variant.NonTerminalPart);
+                            break;
+                        case 9:
+                            GenerateDynamicLiteralRule(rule.Start, formalRules, variant.NonTerminalPart);
+                            break;
+                        case 10:
+                            GenerateCustomRule(rule.Start, formalRules, variant.TerminalPart, variant.NonTerminalPart);
+                            break;
+                        default: 
+                            continue;
+                    }
                 }
             }
+        }
+
+        private void GenerateCustomRule(string start, List<UnformatedRule> formalRules, string terminalPart, string nonTerminalPart)
+        {
+            formalRules.Add(new UnformatedRule()
+            {
+                Rule = $"{start}->{terminalPart}%{nonTerminalPart}%"
+            });
+        }
+
+        private void GenerateDynamicLiteralRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart)
+        {
+            formalRules.Add(new UnformatedRule()
+            {
+                Rule = $"{start}->&_&%{nonTerminalPart}%"
+            });
+        }
+
+        private void GenerateDynamicValueRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart)
+        {
+            formalRules.Add(new UnformatedRule()
+            {
+                Rule = $"{start}->@_@%{nonTerminalPart}%"
+            });
+        }
+
+        private void GenerateDynamicNameRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart)
+        {
+            formalRules.Add(new UnformatedRule()
+            {
+                Rule = $"{start}->|_|%{nonTerminalPart}%"
+            });
+        }
+
+        private void GenerateDynamiCommandRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart)
+        {
+            formalRules.Add(new UnformatedRule()
+            {
+                Rule = $"{start}->#_#%{nonTerminalPart}%"
+            });
+        }
+
+        private void GenerateAllPossibleCharactersForRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart)
+        {
+            List<string> rules = new List<string>();
+
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                rules.Add($"{start}->{c}%{start}allCharacters%");
+            }
+            for (char c = 'a'; c <= 'z'; c++)
+            {
+                rules.Add($"{start}->{c}%{start}allCharacters%");
+            }
+
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                rules.Add($"%{start}allCharacters%->{c}%{start}allCharacters%");
+            }
+            for (char c = 'a'; c <= 'z'; c++)
+            {
+                rules.Add($"%{start}allCharacters%->{c}%{start}allCharacters%");
+            }
+
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                rules.Add($"%{start}allCharacters%->{c}%{nonTerminalPart}%");
+            }
+            for (char c = 'a'; c <= 'z'; c++)
+            {
+                rules.Add($"%{start}allCharacters%->{c}%{nonTerminalPart}%");
+            }
+
+            formalRules.AddRange(rules.Select(x => new UnformatedRule()
+            {
+                Rule = x,
+            }));
+        }
+
+
+        private void GnerateAllPossibleNumbersForRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart)
+        {
+            List<string> rules = new List<string>();
+
+            for (int i = 0; i <= 9; i++)
+            {
+                rules.Add($"{start}->{i}%{start}allNumbers%");
+            }
+
+            for (int i = 0; i <= 9; i++)
+            {
+                rules.Add($"{start}allNumbers->{i}%{start}allNumbers%");
+            }
+
+            for (int i = 0; i <= 9; i++)
+            {
+                rules.Add($"{start}allNumbers->{i}%{nonTerminalPart}%");
+            }
+
+            formalRules.AddRange(rules.Select(x => new UnformatedRule()
+            {
+                Rule = x,
+            }));
+        }
+
+        private void GenerateSpaceRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart)
+        {
+            formalRules.Add(new UnformatedRule()
+            {
+                Rule = $"{start}-> %{start}space%"
+            });
+            formalRules.Add(new UnformatedRule()
+            {
+                Rule = $"{start}space->%{nonTerminalPart}%"
+            });
         }
     }
 }

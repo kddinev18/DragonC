@@ -54,6 +54,16 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             new NomenclatureModel()
             {
                 Id = 8,
+                DisplayName = "DynamicValue"
+            },
+            new NomenclatureModel()
+            {
+                Id = 9,
+                DisplayName = "DynamicLiteral"
+            },
+            new NomenclatureModel()
+            {
+                Id = 10,
                 DisplayName = "Custom"
             },
         ];
