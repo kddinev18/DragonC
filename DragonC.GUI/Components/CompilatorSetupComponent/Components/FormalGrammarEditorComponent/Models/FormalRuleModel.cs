@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent.Cmponents.NonTerminalsView.Models;
 using DragonC.GUI.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
     public partial class FormalRuleModel : ObservableObject
     {
         [ObservableProperty]
-        private string start;
+        private NonTerminalModel start;
 
         public ObservableCollection<FormalRuleVariantModel> FormalRuleVariants { get; set; } = new ObservableCollection<FormalRuleVariantModel>();
     }

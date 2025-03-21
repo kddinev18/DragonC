@@ -61,20 +61,28 @@
                         Text="Start"
                         TextColor="{StaticResource TextPrimaryLight}"
                         VerticalOptions="Center" />
-                    <Label
-                        Grid.Column="2"
-                        Margin="4"
-                        FontSize="16"
-                        Text="Rule"
-                        TextColor="{StaticResource TextPrimaryLight}"
-                        VerticalOptions="Center" />
-                    <Grid Grid.Column="2" ColumnDefinitions="6*,5*,*,*,1*">
+                    <Grid Grid.Column="2" ColumnDefinitions="6*,5*,*,*,*">
+                        <Label
+                            Grid.Column="0"
+                            Margin="4"
+                            FontSize="16"
+                            Text="Terminal part"
+                            TextColor="{StaticResource TextPrimaryLight}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Column="1"
+                            Margin="4"
+                            FontSize="16"
+                            Text="Nonterminal part"
+                            TextColor="{StaticResource TextPrimaryLight}"
+                            VerticalOptions="Center" />
+
                         <Label
                             Grid.Column="4"
                             Margin="4"
                             FontSize="16"
                             HorizontalOptions="Center"
-                            Text="Start rule"
+                            Text="Start"
                             TextColor="{StaticResource TextPrimaryLight}"
                             VerticalOptions="Center" />
                     </Grid>
@@ -96,9 +104,15 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <input:SfMaskedEntry
-                                    Grid.Column="0"
                                     ClearButtonVisibility="WhileEditing"
-                                    Value="{Binding Start, Mode=TwoWay}" />
+                                    IsEnabled="False"
+                                    Value="{Binding Start.NonTerminalSymbol}" />
+                                <Picker
+                                    Margin="-2.5,0.2,0,0"
+                                    ItemDisplayBinding="{Binding NonTerminalSymbol}"
+                                    ItemsSource="{Binding BindingContext.NonTerminalsSymbols, Source={Reference view}}"
+                                    SelectedItem="{Binding Start, Mode=TwoWay}"
+                                    TextColor="Transparent" />
                                 <Image Grid.Column="1" HeightRequest="20">
                                     <Image.Source>
                                         <FontImageSource
@@ -131,10 +145,10 @@
                                                         Value="{Binding TerminalPartType.DisplayName}" />
                                                     <Picker
                                                         Margin="-2.5,0.2,0,0"
-                                                        TextColor="{StaticResource TextPrimaryLight}"
                                                         ItemDisplayBinding="{Binding DisplayName}"
                                                         ItemsSource="{Binding BindingContext.TerminalPartTypes, Source={Reference view}}"
-                                                        SelectedItem="{Binding TerminalPartType, Mode=TwoWay}" />
+                                                        SelectedItem="{Binding TerminalPartType, Mode=TwoWay}"
+                                                        TextColor="Transparent" />
                                                     <input:SfMaskedEntry
                                                         Grid.Column="1"
                                                         ClearButtonVisibility="WhileEditing"

@@ -106,7 +106,7 @@
                 <buttons:SfButton
                     Grid.Column="0"
                     Background="{StaticResource BackgroundDark}"
-                    Command="{Binding ResetComand}"
+                    Command="{Binding ResetCommand}"
                     HorizontalOptions="Start"
                     ShowIcon="True"
                     Text="Reset"
@@ -121,7 +121,7 @@
                 <buttons:SfButton
                     Grid.Column="1"
                     Background="{StaticResource Primary}"
-                    Command="{Binding SaveComand}"
+                    Command="{Binding SaveCommand}"
                     HorizontalOptions="End"
                     ShowIcon="True"
                     Text="Save"

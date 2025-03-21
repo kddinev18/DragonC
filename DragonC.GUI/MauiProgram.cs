@@ -29,7 +29,6 @@ namespace DragonC.GUI
                     fonts.AddFontAwesomeIconFonts();
                 });
 
-            builder.Services.AddSingleton<ICompilatorService, CompilatorService>();
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif

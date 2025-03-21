@@ -9,8 +9,25 @@ using System.Threading.Tasks;
 
 namespace DragonC.GUI.Services
 {
-    public class CompilatorService : ICompilatorService
+    public class CompilatorService
     {
+        private static object key = new object();
+        private static CompilatorService instance;
+        public static CompilatorService Instance 
+        { 
+            get
+            {
+                lock (key)
+                {
+                    if (instance == null)
+                    {
+                        instance = new CompilatorService();
+                    }
+
+                    return instance;
+                }
+            }
+        }
         public CompilatorData CompilatorData { get; set; }
 
         public CompiledCode Compile(string code)

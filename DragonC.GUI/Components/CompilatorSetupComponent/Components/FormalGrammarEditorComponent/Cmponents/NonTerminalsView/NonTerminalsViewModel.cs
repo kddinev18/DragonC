@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,31 +13,98 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
 {
     public partial class NonTerminalsViewModel : ObservableObject
     {
-        public ObservableCollection<NonTerminalModel> Terminals { get; set; } = [
+        private FormalGrammarEditorViewModel _parent;
+        public ObservableCollection<NonTerminalModel> NonTerminals { get; set; }
 
-            new NonTerminalModel()
-            {
-                TerminalSymbol = "S"
-            },
-            new NonTerminalModel()
-            {
-                TerminalSymbol = "N"
-            }
-        ];
+        public NonTerminalsViewModel(FormalGrammarEditorViewModel parent)
+        {
+            _parent = parent;
+
+            NonTerminals = [
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "immValue"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "immValueConst"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "commandExec"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "constDecl"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "space"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "constName"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "2ndSpace"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "constValue"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "labelDecl"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "spaceLbl"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "labelName"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "condCommandExec"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "spaceCmd"
+                },
+                new NonTerminalModel(this)
+                {
+                    NonTerminalSymbol = "condCommandParam"
+                },
+            ];
+            UpdateCollection();
+        }
 
         [RelayCommand]
         private void Add()
         {
-            Terminals.Add(new NonTerminalModel()
+            NonTerminalModel terminalModel = new NonTerminalModel(this)
             {
-                TerminalSymbol = ""
-            });
+                NonTerminalSymbol = ""
+            };
+            _parent.AddItem(terminalModel);
+            NonTerminals.Add(terminalModel);
         }
 
         [RelayCommand]
         private void Delete(NonTerminalModel terminal)
         {
-            Terminals.Remove(terminal);
+            _parent.RemoveItem(terminal);
+            NonTerminals.Remove(terminal);
+        }
+
+        public void UpdateCollection()
+        {
+            if(NonTerminals != null)
+            {
+                _parent.UpdateCollection(NonTerminals.ToList());
+            }
         }
     }
 }

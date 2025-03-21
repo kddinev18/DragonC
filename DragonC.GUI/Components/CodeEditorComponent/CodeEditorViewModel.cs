@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DragonC.Domain.Compilator;
+using DragonC.GUI.Services;
 using DragonC.GUI.Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -25,15 +26,19 @@ namespace DragonC.GUI.Components.CodeEditorComponent
         [RelayCommand]
         private void RunCode()
         {
-            ICompilatorService compilator = DependencyService.Resolve<ICompilatorService>();
-            if(compilator.CompilatorData != null)
+            CompilatorService compilator = CompilatorService.Instance;
+            if (compilator.CompilatorData != null)
             {
-                CompiledCode compiledCode = compilator.Compile(code);
+                CompiledCode compiledCode = compilator.Compile(code.Trim());
 
                 if(compiledCode.IsBuildSuccessfully)
                 {
                     Intermidiate = string.Join('\r', compiledCode.InterMediateCommands);
                     Output = string.Join('\r', compiledCode.CompiledCommands);
+                }
+                else
+                {
+                    Output = string.Join('\r', compiledCode.ErrorMessages);
                 }
             }
         }

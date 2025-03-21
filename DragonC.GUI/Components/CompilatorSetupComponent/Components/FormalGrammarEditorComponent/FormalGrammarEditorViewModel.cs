@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent.Cmponents.NonTerminalsView;
+using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent.Cmponents.NonTerminalsView.Models;
 using DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGrammarEditorComponent.Models;
 using DragonC.GUI.Models;
 using System;
@@ -14,6 +15,8 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
 {
     public partial class FormalGrammarEditorViewModel : ObservableObject
     {
+        [ObservableProperty]
+        private ObservableCollection<NonTerminalModel> nonTerminalsSymbols = new ObservableCollection<NonTerminalModel>();
         public List<NomenclatureModel> TerminalPartTypes { get; set; } =
         [
             new NomenclatureModel()
@@ -72,8 +75,10 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
 
         public FormalGrammarEditorViewModel()
         {
+            NonTerminals = new NonTerminalsViewModel(this);
+
             FormalRuleModel immValue = new FormalRuleModel();
-            immValue.Start = "immValue";
+            immValue.Start = NonTerminals.NonTerminals.Where(x=>x.NonTerminalSymbol == "immValue").First();
             immValue.FormalRuleVariants.Add(new FormalRuleVariantModel(immValue)
             {
                 IsLast = true,
@@ -82,7 +87,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             });
 
             FormalRuleModel immValueConst = new FormalRuleModel();
-            immValueConst.Start = "immValueConst";
+            immValueConst.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "immValueConst").First();
             immValueConst.FormalRuleVariants.Add(new FormalRuleVariantModel(immValueConst)
             {
                 IsLast = true,
@@ -91,7 +96,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             });
 
             FormalRuleModel commandExec = new FormalRuleModel();
-            commandExec.Start = "commandExec";
+            commandExec.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "commandExec").First();
             commandExec.FormalRuleVariants.Add(new FormalRuleVariantModel(commandExec)
             {
                 IsLast = true,
@@ -103,7 +108,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
 
 
             FormalRuleModel constDecl = new FormalRuleModel();
-            constDecl.Start = "constDecl";
+            constDecl.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "constDecl").First();
             constDecl.FormalRuleVariants.Add(new FormalRuleVariantModel(constDecl)
             {
                 IsLast = true,
@@ -114,18 +119,17 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             });
 
             FormalRuleModel space = new FormalRuleModel();
-            space.Start = "space";
+            space.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "space").First();
             space.FormalRuleVariants.Add(new FormalRuleVariantModel(space)
             {
                 IsLast = true,
-                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 10).First(),
-                TerminalPart = " ",
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 5).First(),
                 NonTerminalPart = "constName",
                 IsEntryRule = false,
             });
 
             FormalRuleModel constName = new FormalRuleModel();
-            constName.Start = "constName";
+            constName.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "constName").First();
             constName.FormalRuleVariants.Add(new FormalRuleVariantModel(constName)
             {
                 IsLast = true,
@@ -135,19 +139,77 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             });
 
             FormalRuleModel ndSpace = new FormalRuleModel();
-            ndSpace.Start = "2ndSpace";
+            ndSpace.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "2ndSpace").First();
             ndSpace.FormalRuleVariants.Add(new FormalRuleVariantModel(ndSpace)
             {
                 IsLast = true,
-                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 10).First(),
-                TerminalPart = " ",
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 5).First(),
                 NonTerminalPart = "constValue",
                 IsEntryRule = false,
             });
 
             FormalRuleModel constValue = new FormalRuleModel();
-            constValue.Start = "constValue";
+            constValue.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "constValue").First();
             constValue.FormalRuleVariants.Add(new FormalRuleVariantModel(constValue)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 8).First(),
+                IsEntryRule = false,
+            });
+
+            FormalRuleModel labelDecl = new FormalRuleModel();
+            labelDecl.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "labelDecl").First();
+            labelDecl.FormalRuleVariants.Add(new FormalRuleVariantModel(labelDecl)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 10).First(),
+                TerminalPart = "label",
+                NonTerminalPart = "spaceLbl",
+                IsEntryRule = true,
+            });
+
+            FormalRuleModel spaceLbl = new FormalRuleModel();
+            spaceLbl.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "spaceLbl").First();
+            spaceLbl.FormalRuleVariants.Add(new FormalRuleVariantModel(spaceLbl)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 5).First(),
+                NonTerminalPart = "labelName",
+                IsEntryRule = false,
+            });
+
+            FormalRuleModel labelName = new FormalRuleModel();
+            labelName.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "labelName").First();
+            labelName.FormalRuleVariants.Add(new FormalRuleVariantModel(labelName)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 7).First(),
+                IsEntryRule = false,
+            });
+
+            FormalRuleModel condCommandExec = new FormalRuleModel();
+            condCommandExec.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "condCommandExec").First();
+            condCommandExec.FormalRuleVariants.Add(new FormalRuleVariantModel(condCommandExec)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 6).First(),
+                NonTerminalPart = "spaceCmd",
+                IsEntryRule = true,
+            });
+
+            FormalRuleModel spaceCmd = new FormalRuleModel();
+            spaceCmd.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "spaceCmd").First();
+            spaceCmd.FormalRuleVariants.Add(new FormalRuleVariantModel(spaceCmd)
+            {
+                IsLast = true,
+                TerminalPartType = TerminalPartTypes.Where(x => x.Id == 5).First(),
+                NonTerminalPart = "condCommandParam",
+                IsEntryRule = false,
+            });
+
+            FormalRuleModel condCommandParam = new FormalRuleModel();
+            condCommandParam.Start = NonTerminals.NonTerminals.Where(x => x.NonTerminalSymbol == "condCommandParam").First();
+            condCommandParam.FormalRuleVariants.Add(new FormalRuleVariantModel(condCommandParam)
             {
                 IsLast = true,
                 TerminalPartType = TerminalPartTypes.Where(x => x.Id == 8).First(),
@@ -162,9 +224,15 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
             FormalRules.Add(constName);
             FormalRules.Add(ndSpace);
             FormalRules.Add(constValue);
+            FormalRules.Add(labelDecl);
+            FormalRules.Add(spaceLbl);
+            FormalRules.Add(labelName);
+            FormalRules.Add(condCommandExec);
+            FormalRules.Add(spaceCmd);
+            FormalRules.Add(condCommandParam);
         }
 
-        public NonTerminalsViewModel NonTerminals { get; set; } = new NonTerminalsViewModel();
+        public NonTerminalsViewModel NonTerminals { get; set; }
 
         [RelayCommand]
         private void Add()
@@ -176,6 +244,21 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
         private void Delete(FormalRuleModel formalRule)
         {
             FormalRules.Remove(formalRule);
+        }
+
+        public void UpdateCollection(List<NonTerminalModel> terminals)
+        {
+            NonTerminalsSymbols = new ObservableCollection<NonTerminalModel>(terminals);
+        }
+
+        public void AddItem(NonTerminalModel item)
+        {
+            NonTerminalsSymbols.Add(item);
+        }
+
+        public void RemoveItem(NonTerminalModel item)
+        {
+            NonTerminalsSymbols.Remove(item);
         }
     }
 }

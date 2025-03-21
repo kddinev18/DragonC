@@ -9,5 +9,6 @@ public partial class CodeEditorView : ContentView
 	public CodeEditorView()
 	{
 		InitializeComponent();
+		BindingContext = new CodeEditorViewModel();
     }
 }
