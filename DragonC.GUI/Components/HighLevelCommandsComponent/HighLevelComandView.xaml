@@ -9,6 +9,7 @@
     xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:l="clr-namespace:DragonC.GUI.Components.HighLevelCommandsComponent"
     xmlns:m="clr-namespace:DragonC.GUI.Components.HighLevelCommandsComponent.Models"
+    x:Name="view"
     x:DataType="l:HighLevelCommandsViewModel">
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="16">
@@ -83,10 +84,10 @@
                                 <Label
                                     Grid.Column="0"
                                     Margin="4"
-                                    VerticalOptions="Center"
                                     FontSize="16"
                                     Text="Name"
-                                    TextColor="{StaticResource TextPrimaryLight}" />
+                                    TextColor="{StaticResource TextPrimaryLight}"
+                                    VerticalOptions="Center" />
                             </Border>
                             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Commands}">
                                 <BindableLayout.ItemTemplate>
@@ -97,29 +98,60 @@
                                             StrokeThickness="0.15">
                                             <Grid ColumnSpacing="12">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="5*" />
-                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="15*" />
+                                                    <ColumnDefinition Width="2*" />
                                                 </Grid.ColumnDefinitions>
                                                 <input:SfMaskedEntry
                                                     Grid.Column="0"
                                                     ClearButtonVisibility="WhileEditing"
                                                     Value="{Binding CommandName, Mode=TwoWay}" />
-                                                <Border
-                                                    Grid.Column="3"
-                                                    BackgroundColor="{StaticResource Primary}"
-                                                    HeightRequest="32"
-                                                    StrokeShape="RoundRectangle 20"
-                                                    WidthRequest="32">
-                                                    <ImageButton Command="{Binding BindingContext.DeleteCommand, Source={Reference view}}" CommandParameter="{Binding}">
-                                                        <ImageButton.Source>
-                                                            <FontImageSource
-                                                                FontFamily="FASolid"
-                                                                Glyph="{x:Static fa:Solid.Trash}"
-                                                                Size="16"
-                                                                Color="{StaticResource EditorBackgroundLight}" />
-                                                        </ImageButton.Source>
-                                                    </ImageButton>
-                                                </Border>
+                                                <HorizontalStackLayout Grid.Column="2" Spacing="12" HorizontalOptions="Center">
+                                                    <Border
+                                                        BackgroundColor="{StaticResource Primary}"
+                                                        HeightRequest="32"
+                                                        StrokeShape="RoundRectangle 20"
+                                                        WidthRequest="32">
+                                                        <ImageButton Command="{Binding BindingContext.CopyCommand, Source={Reference view}}" CommandParameter="{Binding}">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource
+                                                                    FontFamily="FASolid"
+                                                                    Glyph="{x:Static fa:Solid.Copy}"
+                                                                    Size="16"
+                                                                    Color="{StaticResource EditorBackgroundLight}" />
+                                                            </ImageButton.Source>
+                                                        </ImageButton>
+                                                    </Border>
+                                                    <Border
+                                                        BackgroundColor="{StaticResource Primary}"
+                                                        HeightRequest="32"
+                                                        StrokeShape="RoundRectangle 20"
+                                                        WidthRequest="32">
+                                                        <ImageButton Command="{Binding BindingContext.EditCommand, Source={Reference view}}" CommandParameter="{Binding}">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource
+                                                                    FontFamily="FASolid"
+                                                                    Glyph="{x:Static fa:Solid.Pencil}"
+                                                                    Size="16"
+                                                                    Color="{StaticResource EditorBackgroundLight}" />
+                                                            </ImageButton.Source>
+                                                        </ImageButton>
+                                                    </Border>
+                                                    <Border
+                                                        BackgroundColor="{StaticResource Primary}"
+                                                        HeightRequest="32"
+                                                        StrokeShape="RoundRectangle 20"
+                                                        WidthRequest="32">
+                                                        <ImageButton Command="{Binding BindingContext.DeleteCommand, Source={Reference view}}" CommandParameter="{Binding}">
+                                                            <ImageButton.Source>
+                                                                <FontImageSource
+                                                                    FontFamily="FASolid"
+                                                                    Glyph="{x:Static fa:Solid.Trash}"
+                                                                    Size="16"
+                                                                    Color="{StaticResource EditorBackgroundLight}" />
+                                                            </ImageButton.Source>
+                                                        </ImageButton>
+                                                    </Border>
+                                                </HorizontalStackLayout>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

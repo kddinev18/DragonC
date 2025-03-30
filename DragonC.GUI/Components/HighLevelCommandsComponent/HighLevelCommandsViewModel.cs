@@ -24,6 +24,18 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
         }
 
         [RelayCommand]
+        private void Copy(HighLevelCommandModel comamnd)
+        {
+            Commands.Add(new HighLevelCommandModel(comamnd));
+        }
+
+        [RelayCommand]
+        private void Edit(HighLevelCommandModel comamnd)
+        {
+            Commands.Remove(comamnd);
+        }
+
+        [RelayCommand]
         private void Delete(HighLevelCommandModel comamnd)
         {
             Commands.Remove(comamnd);
