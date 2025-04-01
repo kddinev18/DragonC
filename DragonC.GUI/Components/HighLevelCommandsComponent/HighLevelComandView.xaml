@@ -105,7 +105,10 @@
                                                     Grid.Column="0"
                                                     ClearButtonVisibility="WhileEditing"
                                                     Value="{Binding CommandName, Mode=TwoWay}" />
-                                                <HorizontalStackLayout Grid.Column="2" Spacing="12" HorizontalOptions="Center">
+                                                <HorizontalStackLayout
+                                                    Grid.Column="2"
+                                                    HorizontalOptions="Center"
+                                                    Spacing="12">
                                                     <Border
                                                         BackgroundColor="{StaticResource Primary}"
                                                         HeightRequest="32"
@@ -146,6 +149,23 @@
                     </expander:SfExpander.Content>
                 </expander:SfExpander>
             </Border>
+            <Grid ColumnDefinitions="*,*">
+                <buttons:SfButton
+                    Grid.Column="1"
+                    Background="{StaticResource Primary}"
+                    Command="{Binding SubmitCommand}"
+                    HorizontalOptions="End"
+                    ShowIcon="True"
+                    Text="Save"
+                    WidthRequest="180">
+                    <buttons:SfButton.ImageSource>
+                        <FontImageSource
+                            FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.FloppyDisk}"
+                            Color="{StaticResource TextPrimaryDark}" />
+                    </buttons:SfButton.ImageSource>
+                </buttons:SfButton>
+            </Grid>
         </VerticalStackLayout>
     </ScrollView>
 </ContentView>

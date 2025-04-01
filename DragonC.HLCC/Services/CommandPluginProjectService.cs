@@ -2,8 +2,8 @@
 using DragonC.Domain.Compilator;
 using DragonC.Domain.Data;
 using DragonC.Domain.Lexer.Tokeniser;
-using DragonC.GUI.Components.HighLevelCommandsComponent.Models;
-using DragonC.GUI.Services.Contracts;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DragonC.GUI.Services
+namespace DragonC.HLCC.Services
 {
     public class CommandPluginProjectService : ICommandPluginProjectService
     {
@@ -27,7 +27,7 @@ namespace DragonC.GUI.Services
             Directory.CreateDirectory(_projectFolder);
         }
 
-        public List<HighLevelCommand> LoadHighLevelCommands()
+        public List<HighLevelCommand> LoadHighLevelCommands(CompilatorData data)
         {
             // 1. Get all .cs files
             var sourceFiles = Directory.GetFiles(_projectFolder, "*.cs");
@@ -38,19 +38,46 @@ namespace DragonC.GUI.Services
             // 2. Parse all files into syntax trees
             var syntaxTrees = sourceFiles.Select(path => CSharpSyntaxTree.ParseText(File.ReadAllText(path))).ToList();
 
-            // 3. Prepare references
-            var references = new List<MetadataReference>
-        {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(BaseHighLevelCommand).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(TokenUnit).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(CompilatorData).Assembly.Location)
-        };
+            var referencePaths = new List<string>();
 
-            // Add user-provided reference paths
-            references.AddRange(_referencePaths
+            string exePath = AppContext.BaseDirectory;
+            // 3. Add your app-specific DLLs
+            referencePaths.AddRange(new[]
+            {
+                Path.Combine(exePath, "DragonC.Domain.dll"),
+                Path.Combine(exePath, "DragonC.Lexer.dll"),
+                Path.Combine(exePath, "DragonC.Compilator.dll")
+            });
+
+            // 3.1. Add system assemblies dynamically
+            var trustedAssemblies = AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")?.ToString();
+            if (!string.IsNullOrEmpty(trustedAssemblies))
+            {
+                var requiredSystemDlls = new[]
+                {
+                    "System.Runtime.dll",
+                    "System.Private.CoreLib.dll",
+                    "System.Collections.dll",
+                    "System.Linq.dll",
+                    "System.Console.dll",
+                    "System.Text.RegularExpressions.dll",
+                    "System.IO.dll",
+                    "System.Reflection.dll",
+                    "netstandard.dll"
+                };
+
+                var systemPaths = trustedAssemblies
+                    .Split(Path.PathSeparator)
+                    .Where(p => requiredSystemDlls.Any(name => p.EndsWith(name, StringComparison.OrdinalIgnoreCase)))
+                    .Distinct();
+
+                referencePaths.AddRange(systemPaths);
+            }
+
+            var references = referencePaths
                 .Where(File.Exists)
-                .Select(p => MetadataReference.CreateFromFile(p)));
+                .Select(p => MetadataReference.CreateFromFile(p))
+                .ToList();
 
             // 4. Compile into in-memory assembly
             var compilation = CSharpCompilation.Create(
@@ -84,11 +111,8 @@ namespace DragonC.GUI.Services
 
             foreach (var type in derivedTypes)
             {
-                var instance = (BaseHighLevelCommand)Activator.CreateInstance(type, _data);
-                if (instance is HighLevelCommand cmd)
-                {
-                    commands.Add(cmd.CommandDefintion);
-                }
+                var instance = (BaseHighLevelCommand)Activator.CreateInstance(type, data);
+                commands.Add(instance.CommandDefintion);
             }
 
             return commands;
@@ -144,10 +168,15 @@ using DragonC.Domain.Exceptions;
 using DragonC.Domain.Lexer.FormalGrammar;
 using DragonC.Domain.Lexer.Tokeniser;
 using DragonC.Lexer;
+using System.Collections.Generic;
+using System.Linq;
+using System.Private.CoreLib;
+using System.Reflection;
+using System;
 
 namespace DragonC.Compilator.HighLevelCommandsCompiler
 {
-    public class HighLevelCommand : BaseHighLevelCommand, IAllowConsts
+    public class HighLevelCommandImplementation : BaseHighLevelCommand, IAllowConsts
     {
         public HighLevelCommand(CompilatorData data) : base(data)
         {

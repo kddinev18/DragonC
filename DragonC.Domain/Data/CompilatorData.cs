@@ -21,6 +21,7 @@ namespace DragonC.Domain.Data
         public List<string> TokenSeparators { get; set; } = new List<string>();
         public List<LowLevelCommand> LowLevelCommands { get; set; } = new List<LowLevelCommand>();
         public List<UnformatedRule> BaseFormalRules { get; set; } = new List<UnformatedRule>();
+        public List<HighLevelCommand> HighLevelCommands { get; set; } = new List<HighLevelCommand>();
         public LowLevelCommand GetCommand(string commandName)
         {
             return LowLevelCommands.First(x => x.CommandName == commandName);

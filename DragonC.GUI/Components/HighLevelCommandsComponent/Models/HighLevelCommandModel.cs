@@ -1,5 +1,4 @@
-﻿
-using DragonC.Domain.Compilator;
+﻿using DragonC.Domain.Compilator;
 using DragonC.GUI.Services;
 using DragonC.GUI.Services.Contracts;
 using System;
@@ -8,11 +7,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DragonC.HLCC.Services;
 
 namespace DragonC.GUI.Components.HighLevelCommandsComponent.Models
 {
     public class HighLevelCommandModel
     {
+        public HighLevelCommandModel(bool asd)
+        {
+            
+        }
         public HighLevelCommandModel()
         {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;

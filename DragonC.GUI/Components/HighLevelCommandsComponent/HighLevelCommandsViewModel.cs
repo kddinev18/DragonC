@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DragonC.GUI.Components.HighLevelCommandsComponent.Models;
+using DragonC.GUI.Services;
+using DragonC.HLCC.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +16,16 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
     public partial class HighLevelCommandsViewModel : ObservableObject
     {
         public ObservableCollection<HighLevelCommandModel> Commands { get; set; } = [];
+
+        public HighLevelCommandsViewModel()
+        {
+            Commands.Add(new HighLevelCommandModel(true)
+            {
+                FileName = "HighLevelCommand_f65816b6c0ca4494b9fb03a67b534e41.cs",
+                ProjectPath = @"C:\Users\User\AppData\Local\Temp\DragonCPluginTemp",
+                FullFilePath = @"C:\Users\User\AppData\Local\Temp\DragonCPluginTemp\HighLevelCommand_f65816b6c0ca4494b9fb03a67b534e41.cs"
+            });
+        }
 
         [RelayCommand]
         private void Add()
@@ -42,6 +54,13 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
 
                 process.WaitForExit();
             }
+        }
+
+        [RelayCommand]
+        private void Submit()
+        {
+            ICommandPluginProjectService commandPlugin = new CommandPluginProjectService();
+            CompilatorService.Instance.CompilatorData.HighLevelCommands = commandPlugin.LoadHighLevelCommands(CompilatorService.Instance.CompilatorData);
         }
 
         [RelayCommand]

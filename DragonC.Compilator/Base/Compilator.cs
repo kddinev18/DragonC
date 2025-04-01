@@ -13,7 +13,6 @@ namespace DragonC.Compilator
         private FormalGrammar _formalGrammar;
         private Tokeniser _tokeniser;
         private CompilatorData _data;
-        private List<HighLevelCommand> _highLevelCommands = new List<HighLevelCommand>();
         public Compilator(CompilatorData compilatorData)
         {
             _data = compilatorData;
@@ -87,8 +86,8 @@ namespace DragonC.Compilator
 
         private void AddDependancies(List<TokenUnit> tokens)
         {
-            _highLevelCommands.AddRange(LoadHighLevelCommands());
-            _highLevelCommands
+            //_highLevelCommands.AddRange(LoadHighLevelCommands());
+            _data.HighLevelCommands
                 .Where(x => x.SetConsts != null)
                 .ToList()
                 .ForEach(x => x.SetConsts.Invoke(tokens));
@@ -131,7 +130,7 @@ namespace DragonC.Compilator
             List<HighLevelCommandToken> result = new List<HighLevelCommandToken>();
             foreach (TokenUnit tokenUnit in tokenUnits)
             {
-                foreach (HighLevelCommand highLevelCommand in _highLevelCommands)
+                foreach (HighLevelCommand highLevelCommand in _data.HighLevelCommands)
                 {
                     if (highLevelCommand.ValidateCommand.Invoke(tokenUnit).IsValid == true)
                     {
