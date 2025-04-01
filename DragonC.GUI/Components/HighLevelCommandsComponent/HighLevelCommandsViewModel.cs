@@ -4,6 +4,7 @@ using DragonC.GUI.Components.HighLevelCommandsComponent.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,22 +18,30 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
         [RelayCommand]
         private void Add()
         {
-            Commands.Add(new HighLevelCommandModel()
+            Commands.Add(new HighLevelCommandModel());
+        }
+
+        [RelayCommand]
+        private void Edit(HighLevelCommandModel command)
+        {
+            var processInfo = new ProcessStartInfo("cmd.exe", $"/c \"code {command.ProjectPath}\"")
             {
-                CommandName = ""
-            });
-        }
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = false
+            };
 
-        [RelayCommand]
-        private void Copy(HighLevelCommandModel comamnd)
-        {
-            Commands.Add(new HighLevelCommandModel(comamnd));
-        }
+            using (var process = new Process())
+            {
+                process.StartInfo = processInfo;
+                process.Start();
 
-        [RelayCommand]
-        private void Edit(HighLevelCommandModel comamnd)
-        {
-            Commands.Remove(comamnd);
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
+
+                process.WaitForExit();
+            }
         }
 
         [RelayCommand]

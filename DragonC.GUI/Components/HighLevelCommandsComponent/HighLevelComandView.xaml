@@ -98,7 +98,7 @@
                                             StrokeThickness="0.15">
                                             <Grid ColumnSpacing="12">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="15*" />
+                                                    <ColumnDefinition Width="16*" />
                                                     <ColumnDefinition Width="2*" />
                                                 </Grid.ColumnDefinitions>
                                                 <input:SfMaskedEntry
@@ -106,21 +106,6 @@
                                                     ClearButtonVisibility="WhileEditing"
                                                     Value="{Binding CommandName, Mode=TwoWay}" />
                                                 <HorizontalStackLayout Grid.Column="2" Spacing="12" HorizontalOptions="Center">
-                                                    <Border
-                                                        BackgroundColor="{StaticResource Primary}"
-                                                        HeightRequest="32"
-                                                        StrokeShape="RoundRectangle 20"
-                                                        WidthRequest="32">
-                                                        <ImageButton Command="{Binding BindingContext.CopyCommand, Source={Reference view}}" CommandParameter="{Binding}">
-                                                            <ImageButton.Source>
-                                                                <FontImageSource
-                                                                    FontFamily="FASolid"
-                                                                    Glyph="{x:Static fa:Solid.Copy}"
-                                                                    Size="16"
-                                                                    Color="{StaticResource EditorBackgroundLight}" />
-                                                            </ImageButton.Source>
-                                                        </ImageButton>
-                                                    </Border>
                                                     <Border
                                                         BackgroundColor="{StaticResource Primary}"
                                                         HeightRequest="32"

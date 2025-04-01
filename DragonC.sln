@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{1FE72FB5-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonC.GUI", "DragonC.GUI\DragonC.GUI.csproj", "{97D1A83F-77DF-4618-8B6E-7963FFB08EE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragonC.HLCC", "DragonC.HLCC\DragonC.HLCC.csproj", "{521DCFCC-5589-9581-860F-5ADE154873E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{97D1A83F-77DF-4618-8B6E-7963FFB08EE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97D1A83F-77DF-4618-8B6E-7963FFB08EE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{97D1A83F-77DF-4618-8B6E-7963FFB08EE5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{521DCFCC-5589-9581-860F-5ADE154873E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{521DCFCC-5589-9581-860F-5ADE154873E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{521DCFCC-5589-9581-860F-5ADE154873E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{521DCFCC-5589-9581-860F-5ADE154873E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
