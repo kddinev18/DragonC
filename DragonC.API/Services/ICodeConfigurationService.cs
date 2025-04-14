@@ -7,8 +7,8 @@ namespace DragonC.API.Services
 
 		public CodeConfigurationDTO Get(int Id);
 
-		public void Create(CodeConfigurationDTO codeConfigurationDTO);
+		public bool Create(CodeConfigurationDTO codeConfigurationDTO);
 
-		public void Update(CodeConfigurationDTO codeConfigurationDTO);
+		public bool Update(CodeConfigurationDTO codeConfigurationDTO);
 	}
 }

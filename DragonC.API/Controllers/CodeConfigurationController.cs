@@ -2,6 +2,7 @@
 using DragonC.Domain.API;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragonC.API.Controllers
@@ -19,24 +20,25 @@ namespace DragonC.API.Controllers
 		// get, GET, param: int projectId
 		[HttpGet]
 		[Authorize]
-		public CodeConfigurationDTO Get([FromQuery] int projectId)
+		public IActionResult Get([FromQuery] int projectId)
         {
-            return this._codeConfigurationService.Get(projectId);
+            return Ok(this._codeConfigurationService.Get(projectId));
         }
         // create, POST, param: CodeConfigurationDTO
         [HttpPost("create")]
 		[Authorize]
-		public void Create([FromBody] CodeConfigurationDTO codeConfigurationDTO) {
-            this._codeConfigurationService.Create(codeConfigurationDTO);    
-        }
+		public IActionResult Create([FromBody] CodeConfigurationDTO codeConfigurationDTO) {
+			return Ok(this._codeConfigurationService.Create(codeConfigurationDTO));
+		}
 
 
         // update, POST, param: CodeConfigurationDTO
         // do not update, just drop and insert again, it will be easier
-        [HttpPost("update")]
+        [HttpPut("update")]
 		[Authorize]
-		public void Update([FromBody] CodeConfigurationDTO codeConfigurationDTO) {
-            this._codeConfigurationService.Update(codeConfigurationDTO);
-        }
+		public IActionResult Update([FromBody] CodeConfigurationDTO codeConfigurationDTO) {
+            return Ok(this._codeConfigurationService.Update(codeConfigurationDTO));
+			
+		}
     }
 }

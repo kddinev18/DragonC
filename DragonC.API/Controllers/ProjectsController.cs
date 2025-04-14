@@ -4,6 +4,7 @@ using DragonC.Domain.API.Common;
 using DragonC.Domain.API.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -20,13 +21,14 @@ namespace DragonC.API.Controllers
             this._projectService = projectService;
         }
 
-        // create, POST, param: [fromform] ProjectDTO
-        [Authorize]
-        [HttpPost("create")]
-        public void Create([FromBody] ProjectDTO dto)
+		// create, POST, param: [fromform] ProjectDTO
+		[Authorize]
+		[HttpPost("create")]
+        public IActionResult Create([FromBody] ProjectDTO dto)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            this._projectService.Create(dto, userId);
+			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			this._projectService.Create(dto, userId);
+            return Ok();
         }
 
         // getAllPaged, POST, param: PagedCollection<ProjectFilters>
@@ -37,13 +39,14 @@ namespace DragonC.API.Controllers
             return this._projectService.GetPagedProjects(filters);
         }
 
-        // delete, DELETE
-        // delete all code cofigurations linked to this projects
-        [Authorize]
-        [HttpDelete]
-        public void Delete([FromQuery] int id)
+		// delete, DELETE
+		// delete all code cofigurations linked to this projects
+		[Authorize]
+		[HttpDelete]
+        public IActionResult Delete([FromQuery] int id)
         {
             this._projectService.Delete(id);
+            return Ok();
         }
 
     }
