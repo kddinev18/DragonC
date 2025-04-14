@@ -21,6 +21,7 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
         {
             Commands.Add(new HighLevelCommandModel(true)
             {
+                CommandName = "AddCommand",
                 FileName = "HighLevelCommand_f65816b6c0ca4494b9fb03a67b534e41.cs",
                 ProjectPath = @"C:\Users\User\AppData\Local\Temp\DragonCPluginTemp",
                 FullFilePath = @"C:\Users\User\AppData\Local\Temp\DragonCPluginTemp\HighLevelCommand_f65816b6c0ca4494b9fb03a67b534e41.cs"
