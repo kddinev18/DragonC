@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace DragonC.Domain.API
 {
-    public class ProjectDTO
-    {
-        public int? Id { get; set; }
-        public string? Name { get; set; }
-		public string? FileName { get; set; }
+	public class FileDTO
+	{
+		public string? Name { get; set; }
 		public byte[]? FileData { get; set; }
 	}
 }
