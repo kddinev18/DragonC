@@ -19,7 +19,7 @@ namespace DragonC.Lexer
         public List<TokenUnit> GetTokens(string text)
         {
             string formatedText = FormatText(text);
-            List<string> tokens = ParseStatements(formatedText)
+            List<string> tokens = Tokenize(formatedText)
                 .Select(x => formatToken(x).Trim())
                 .Where(x => !x.StartsWith("//"))
                 .ToList();
@@ -46,63 +46,102 @@ namespace DragonC.Lexer
             return result;
         }
 
-        private List<string> ParseStatements(string input)
+        private List<string> Tokenize(string input)
         {
-            var result = new List<string>();
-            var current = new StringBuilder();
+            List<string> tokens = new List<string>();
+            int i = 0;
+            int length = input.Length;
+            StringBuilder currentToken = new StringBuilder();
+            bool insideBlock = false;
             int braceDepth = 0;
 
-            for (int i = 0; i < input.Length; i++)
+            while (i < length)
             {
                 char c = input[i];
-                current.Append(c);
 
-                if (c == '{')
+                // Detect block start
+                if (!insideBlock && c == '{')
                 {
-                    braceDepth++;
+                    insideBlock = true;
+                    braceDepth = 1;
+                    currentToken.Append(c);
+                    i++;
+                    continue;
                 }
-                else if (c == '}')
+
+                // Inside a block
+                if (insideBlock)
                 {
-                    braceDepth--;
+                    currentToken.Append(c);
+
+                    if (c == '{') braceDepth++;
+                    else if (c == '}') braceDepth--;
 
                     if (braceDepth == 0)
                     {
-                        // Completed a block
-                        result.Add(current.ToString().Trim());
-                        current.Clear();
-                        continue; // Continue without appending next char to this block
+                        insideBlock = false;
+                        tokens.Add(currentToken.ToString());
+                        currentToken.Clear();
                     }
+
+                    i++;
+                    continue;
                 }
 
-                // If we're outside a block and hit a separator
-                if (braceDepth == 0 && _tokenSeparators.Contains($"{c}"))
+                // Outside a block: handle custom separators
+                if (Array.Exists(_tokenSeparators.ToArray(), sep => sep == $"{c}"))
                 {
-                    string statement = current.ToString().TrimEnd();
+                    // Add trimmed token if there's content
+                    string token = currentToken.ToString().TrimEnd();
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        tokens.Add(token);
+                    }
+                    currentToken.Clear();
+                    i++; // Skip separator
+                    continue;
+                }
 
-                    // Remove the separator at the end
-                    if (statement.Length > 0 && _tokenSeparators.Contains($"{statement[^1]}"))
-                        statement = statement[..^1].TrimEnd();
+                // Default: accumulate character
+                currentToken.Append(c);
+                i++;
+            }
 
-                    if (!string.IsNullOrWhiteSpace(statement))
-                        result.Add(statement);
+            // Append any trailing content
+            string finalToken = currentToken.ToString().TrimEnd();
+            if (!string.IsNullOrWhiteSpace(finalToken))
+            {
+                tokens.Add(finalToken);
+            }
 
-                    current.Clear();
+            return MergeBlockHeaders(tokens);
+        }
+
+        private List<string> MergeBlockHeaders(List<string> tokens)
+        {
+            var mergedTokens = new List<string>();
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                if (tokens[i].TrimEnd().EndsWith("{"))
+                {
+                    // This shouldn't happen due to block capturing logic
+                    mergedTokens.Add(tokens[i]);
+                }
+                else if (tokens[i].Contains("{") && !tokens[i].TrimStart().StartsWith("{"))
+                {
+                    // This is a header line + block combined
+                    mergedTokens.Add(tokens[i]);
+                }
+                else
+                {
+                    mergedTokens.Add(tokens[i]);
                 }
             }
 
-            // Add any leftover content
-            if (current.Length > 0)
-            {
-                string remaining = current.ToString().TrimEnd();
-                if (remaining.Length > 0 && _tokenSeparators.Contains($"{remaining[^1]}"))
-                    remaining = remaining[..^1].TrimEnd();
-
-                if (!string.IsNullOrWhiteSpace(remaining))
-                    result.Add(remaining);
-            }
-
-            return result;
+            return mergedTokens;
         }
+
+
 
         private void CompileForHighLevelCommands(List<string> tokens)
         {

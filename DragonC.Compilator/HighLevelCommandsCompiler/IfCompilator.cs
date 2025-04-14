@@ -7,6 +7,7 @@ using DragonC.Lexer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,8 +16,6 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
     class IfCompilator : BaseHighLevelCommand
     {
         private List<string> _condCommands = new List<string>() { "GO_TO" };
-        private string _ifHeader;
-        private string _ifBody;
         public IfCompilator(CompilatorData data) : base(data)
         {
             CommandDefintion = new HighLevelCommand()
@@ -79,28 +78,78 @@ code
             formalGrammar.NumberOfArguments = CommandDefintion.Arguments.Count;
 
             string ifStatementOriginal = command.Token;
-            (string Header, string Body) ifStatement = ExtractHeaderAndBody(ifStatementOriginal);
-            _ifBody = ifStatement.Body;
-            _ifHeader = ifStatement.Header;
+            try
+            {
+                (string Header, string Body) ifStatement = ExtractHeaderAndBody(ifStatementOriginal);
 
-            command.Token = _ifHeader;
-            TokenUnit token = formalGrammar
-                .EvaluateTokens(new List<TokenUnit>() { command }, true)
-                .First();
 
-            token.Token = ifStatementOriginal;
+                command.Token = ifStatement.Header;
+                TokenUnit token = formalGrammar
+                    .EvaluateTokens(new List<TokenUnit>() { command }, true)
+                    .First();
 
-            return token;
+                token.Token = ifStatementOriginal;
+
+                return token;
+            }
+            catch
+            {
+                return new TokenUnit()
+                {
+                    IsValid = false
+                };
+            }
         }
 
         public override List<string> CompileCommand(TokenUnit command, List<TokenUnit> tokens)
         {
+            (string Header, string Body) ifStatement = ExtractHeaderAndBody(command.Token);
+            string ifLabelName = $"ifStatementBlock{Guid.NewGuid()}";
+            string endIfLabelName = $"endIfStatementBlock{Guid.NewGuid()}";
 
+            string ifLabelDefinition = $"label {ifLabelName}";
+            string endIfLabelDefinition = $"label {endIfLabelName}";
+
+            string condCommand = ExtractCondition(ifStatement.Header);
+
+            List<string> result = new List<string>();
+
+            result.Add(string.Concat(condCommand, " ", ifLabelName));
+            result.Add(string.Concat("GO_TO", " ", endIfLabelName));
+            result.Add(ifLabelDefinition);
+
+            List<string> ifBody = ifStatement.Body.Split(_data.TokenSeparators.ToArray(), StringSplitOptions.None)
+                .Select(x => x.Trim())
+                .SkipLast(1)
+                .ToList();
+
+            foreach (var commandInIf in ifBody)
+            {
+                result.Add(commandInIf);
+            }
+            result.Add(endIfLabelDefinition);
+
+
+            return result;
         }
 
         public override string GetClearCommand(string command)
         {
-            return command.Replace(CommandDefintion.AllowLiteralsForArguments ? _data.DynamicValuesIndicator : _data.DynamicNamesIndicator, "");
+            string clearCommand = command.Replace(CommandDefintion.AllowLiteralsForArguments ? _data.DynamicValuesIndicator : _data.DynamicNamesIndicator, "");
+            return clearCommand;
+        }
+
+        private string ExtractCondition(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            int openParenIndex = input.IndexOf('(');
+            int closeParenIndex = input.LastIndexOf(')');
+
+            string condition = input.Substring(openParenIndex + 1, closeParenIndex - openParenIndex - 1).Trim();
+
+            return condition;
         }
 
         private (string Header, string Body) ExtractHeaderAndBody(string block)
@@ -110,9 +159,6 @@ code
 
             int openBraceIndex = block.IndexOf('{');
             int closeBraceIndex = block.LastIndexOf('}');
-
-            if (openBraceIndex == -1 || closeBraceIndex == -1 || closeBraceIndex <= openBraceIndex)
-                throw new ArgumentException("Invalid block structure. Missing or misaligned braces.");
 
             string header = block.Substring(0, openBraceIndex).Trim();
 
