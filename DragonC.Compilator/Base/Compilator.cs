@@ -47,7 +47,7 @@ namespace DragonC.Compilator
         {
             List<TokenUnit> highLevelTokens = _tokeniser.GetTokens(text);
             AddDependancies(highLevelTokens);
-            text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text), highLevelTokens);
+            text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text, highLevelTokens), highLevelTokens);
             List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(ReorderTokens(highLevelTokens, _tokeniser.GetTokens(text)));
             if (tokenUnits.Any(x => !x.IsValid))
             {
@@ -86,7 +86,7 @@ namespace DragonC.Compilator
 
         private void AddDependancies(List<TokenUnit> tokens)
         {
-            //_highLevelCommands.AddRange(LoadHighLevelCommands());
+            _data.HighLevelCommands.AddRange(LoadHighLevelCommands());
             _data.HighLevelCommands
                 .Where(x => x.SetConsts != null)
                 .ToList()
@@ -124,7 +124,7 @@ namespace DragonC.Compilator
             return text;
         }
 
-        private List<HighLevelCommandToken> CheckForHighLevelCommands(string text)
+        private List<HighLevelCommandToken> CheckForHighLevelCommands(string text, List<TokenUnit> tokens)
         {
             List<TokenUnit> tokenUnits = _tokeniser.GetTokens(text);
             List<HighLevelCommandToken> result = new List<HighLevelCommandToken>();
@@ -132,7 +132,7 @@ namespace DragonC.Compilator
             {
                 foreach (HighLevelCommand highLevelCommand in _data.HighLevelCommands)
                 {
-                    if (highLevelCommand.ValidateCommand.Invoke(tokenUnit).IsValid == true)
+                    if (highLevelCommand.ValidateCommand.Invoke(tokenUnit, tokens).IsValid == true)
                     {
                         result.Add(new HighLevelCommandToken()
                         {
