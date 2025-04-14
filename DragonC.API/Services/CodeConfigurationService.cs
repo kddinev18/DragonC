@@ -15,9 +15,24 @@ namespace DragonC.API.Services
 			_context = context;
 		}
 
-		public void Create(CodeConfigurationDTO codeConfigurationDTO)
+		public bool Create(CodeConfigurationDTO codeConfigurationDTO)
 		{
-			foreach (string token in codeConfigurationDTO.TokenSeparators) {
+
+			foreach (string codes in codeConfigurationDTO.HighLevelCommandsCode)
+			{
+				if (IsMalicious(codes))
+				{
+					return false;
+				}
+				this._context.Add(new Models.Entities.HighLevelCommand
+				{
+					Code = codes,
+					ProjectId = codeConfigurationDTO.ProjectId,
+				});
+			}
+
+			foreach (string token in codeConfigurationDTO.TokenSeparators)
+			{
 				this._context.Add(new TokenSeparator
 				{
 					Separator = token,
@@ -25,7 +40,7 @@ namespace DragonC.API.Services
 				});
 			}
 
-			foreach(DragonC.Domain.Compilator.LowLevelCommand lowLevelCommand in codeConfigurationDTO.LowLevelCommands)
+			foreach (DragonC.Domain.Compilator.LowLevelCommand lowLevelCommand in codeConfigurationDTO.LowLevelCommands)
 			{
 				this._context.Add(new DragonC.API.Models.Entities.LowLevelCommand
 				{
@@ -36,7 +51,7 @@ namespace DragonC.API.Services
 				});
 			}
 
-			foreach(UnformatedRule unformatedRule in codeConfigurationDTO.BaseFormalRules)
+			foreach (UnformatedRule unformatedRule in codeConfigurationDTO.BaseFormalRules)
 			{
 				this._context.Add(new FormalRule
 				{
@@ -46,16 +61,8 @@ namespace DragonC.API.Services
 				});
 			}
 
-			foreach(string codes in codeConfigurationDTO.HighLevelCommandsCode)
-			{
-				this._context.Add(new Models.Entities.HighLevelCommand
-				{
-					Code = codes,
-					ProjectId = codeConfigurationDTO.ProjectId,
-				});
-			}
-
 			this._context.SaveChanges();
+			return true;
 		}
 
 		public CodeConfigurationDTO Get(int Id)
@@ -65,16 +72,16 @@ namespace DragonC.API.Services
 								   select tok.Separator).ToList();
 
 			List<DragonC.Domain.Compilator.LowLevelCommand> lowLevelCommands = (from llc in this._context.LowLevelCommands
-													  where llc.ProjectId == Id
-													  select new DragonC.Domain.Compilator.LowLevelCommand
-													  {
-														  CommandName = llc.Name,
-														  IsConditionalCommand = llc.IsConditional,
-														  MachineCode = llc.MachineCode,
-													  }).ToList();
+																				where llc.ProjectId == Id
+																				select new DragonC.Domain.Compilator.LowLevelCommand
+																				{
+																					CommandName = llc.Name,
+																					IsConditionalCommand = llc.IsConditional,
+																					MachineCode = llc.MachineCode,
+																				}).ToList();
 			List<String> highLevelCommands = (from hlc in this._context.HighLevelCommands
-														where hlc.ProjectId == Id
-														select hlc.Code).ToList();
+											  where hlc.ProjectId == Id
+											  select hlc.Code).ToList();
 			List<UnformatedRule> baseFormalRules = (from fru in this._context.FormalRules
 													where fru.ProjectId == Id
 													select new UnformatedRule
@@ -91,7 +98,7 @@ namespace DragonC.API.Services
 			};
 		}
 
-		public void Update(CodeConfigurationDTO codeConfigurationDTO)
+		public bool Update(CodeConfigurationDTO codeConfigurationDTO)
 		{
 			List<TokenSeparator> tokens = (from tok in this._context.TokenSeparators
 										   where tok.ProjectId == codeConfigurationDTO.ProjectId
@@ -101,7 +108,7 @@ namespace DragonC.API.Services
 												where pro.Id == codeConfigurationDTO.ProjectId
 												select fil).ToList();
 			List<Models.Entities.HighLevelCommand> highLevelCommands = (from hig in this._context.HighLevelCommands
-														where hig.ProjectId == codeConfigurationDTO.ProjectId
+																		where hig.ProjectId == codeConfigurationDTO.ProjectId
 																		select hig).ToList();
 
 			List<FormalRule> formalRules = (from fru in this._context.FormalRules
@@ -109,7 +116,7 @@ namespace DragonC.API.Services
 											select fru).ToList();
 
 			List<Models.Entities.LowLevelCommand> lowLevelCommands = (from llc in this._context.LowLevelCommands
-													  where llc.ProjectId == codeConfigurationDTO.ProjectId
+																	  where llc.ProjectId == codeConfigurationDTO.ProjectId
 																	  select llc).ToList();
 
 			this._context.TokenSeparators.RemoveRange(tokens);
@@ -118,7 +125,46 @@ namespace DragonC.API.Services
 			this._context.FormalRules.RemoveRange(formalRules);
 			this._context.LowLevelCommands.RemoveRange(lowLevelCommands);
 
-			this.Create(codeConfigurationDTO);
+			return this.Create(codeConfigurationDTO);
+		}
+
+		private static readonly string[] ForbiddenKeywords = new[]
+		{
+			"System.IO",
+			"System.Reflection",
+			"System.Diagnostics",
+			"System.Environment",
+			"System.Threading",
+			"System.Runtime",
+			"DllImport",
+			"unsafe",
+			"File",
+			"Directory",
+			"Process",
+			"AppDomain",
+			"Assembly",
+			"HttpClient",
+			"Socket",
+			"WebRequest",
+			"Marshal",
+			"Activator.CreateInstance",
+			"Type.GetType",
+			"typeof(",
+			"dynamic",
+			"Span<",
+			"stackalloc",
+			"goto"
+		};
+
+		public bool IsMalicious(string code)
+		{
+			foreach (var keyword in ForbiddenKeywords)
+			{
+				if (code.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+					return true;
+			}
+
+			return false;
 		}
 	}
 }
