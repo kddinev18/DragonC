@@ -68,7 +68,7 @@ namespace DragonC.Compilator
                 .ToList();
 
             CompiledCode compiledCode = new CompiledCode();
-            compiledCode.InterMediateCommands = commandTokens
+            compiledCode.InterMediateCommands = tokenUnits
                 .Select(x => x.Token)
                 .ToList();
 

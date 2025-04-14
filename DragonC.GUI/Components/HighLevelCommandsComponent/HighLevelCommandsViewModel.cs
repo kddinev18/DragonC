@@ -31,6 +31,14 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
                 ProjectPath = @"C:\Users\kdinev\AppData\Local\Temp\DragonCPluginTemp",
                 FullFilePath = @"C:\Users\kdinev\AppData\Local\Temp\DragonCPluginTemp\HighLevelCommand_a0ffc30316b143fa97000a113209b60a.cs"
             });
+
+            Commands.Add(new HighLevelCommandModel(true)
+            {
+                CommandName = "IfCommand",
+                FileName = "HighLevelCommand_d1a480b3c9ca464abdffedd0fffe743b.cs",
+                ProjectPath = @"C:\Users\kdinev\AppData\Local\Temp\DragonCPluginTemp",
+                FullFilePath = @"C:\Users\kdinev\AppData\Local\Temp\DragonCPluginTemp\HighLevelCommand_d1a480b3c9ca464abdffedd0fffe743b.cs"
+            });
         }
 
         [RelayCommand]

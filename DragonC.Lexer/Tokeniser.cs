@@ -25,7 +25,7 @@ namespace DragonC.Lexer
                 .ToList();
 
             List<TokenUnit> result = new List<TokenUnit>();
-            foreach (string token in tokens.SkipLast(1))
+            foreach (string token in tokens)
             {
                 Tuple<int, int, int> tokenPosition = FindSubstringLocation(text, token);
                 result.Add(new TokenUnit()
