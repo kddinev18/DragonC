@@ -1,49 +1,44 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView
-    x:Class="DragonC.GUI.Components.HighLevelCommandsComponent.HighLevelComandView"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
-    xmlns:expander="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
-    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-    xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
-    xmlns:l="clr-namespace:DragonC.GUI.Components.HighLevelCommandsComponent"
-    xmlns:m="clr-namespace:DragonC.GUI.Components.HighLevelCommandsComponent.Models"
-    x:Name="view"
-    x:DataType="l:HighLevelCommandsViewModel">
+<ContentView x:Class="DragonC.GUI.Components.HighLevelCommandsComponent.HighLevelComandView"
+        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+        xmlns:expander="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
+        xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+        xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+        xmlns:l="clr-namespace:DragonC.GUI.Components.HighLevelCommandsComponent"
+        xmlns:m="clr-namespace:DragonC.GUI.Components.HighLevelCommandsComponent.Models"
+        x:Name="view"
+        x:DataType="l:HighLevelCommandsViewModel">
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="16">
-            <Border
-                Padding="8"
-                BackgroundColor="{StaticResource EditorBackgroundLight}"
-                Stroke="{StaticResource EditorBackgroundLight}"
-                StrokeShape="RoundRectangle 8,8,8,8">
-                <expander:SfExpander AnimationDuration="100" HeaderIconColor="{StaticResource TextPrimaryLight}">
+            <Border Padding="8"
+                    BackgroundColor="{StaticResource EditorBackgroundLight}"
+                    Stroke="{StaticResource EditorBackgroundLight}"
+                    StrokeShape="RoundRectangle 8,8,8,8">
+                <expander:SfExpander AnimationDuration="100" HeaderIconColor="{StaticResource TextPrimaryLight}" IsExpanded="True">
                     <expander:SfExpander.Header>
                         <Grid Margin="4" ColumnSpacing="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Image
-                                HeightRequest="21"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center">
+                            <Image HeightRequest="21"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
                                 <Image.Source>
-                                    <FontImageSource
-                                        FontFamily="FASolid"
-                                        Glyph="{x:Static fa:Solid.Table}"
-                                        Color="{StaticResource TextPrimaryLight}" />
+                                    <FontImageSource FontFamily="FASolid"
+                                            Glyph="{x:Static fa:Solid.Table}"
+                                            Color="{StaticResource TextPrimaryLight}" />
                                 </Image.Source>
                             </Image>
-                            <Label
-                                Grid.Column="1"
-                                CharacterSpacing="0.25"
-                                FontFamily="Roboto-Regular"
-                                FontSize="16"
-                                Text="High Level Commands"
-                                TextColor="{StaticResource TextPrimaryLight}"
-                                VerticalOptions="Center" />
+                            <Label Grid.Column="1"
+                                    CharacterSpacing="0.25"
+                                    FontFamily="Roboto-Regular"
+                                    FontSize="16"
+                                    Text="High Level Commands"
+                                    TextColor="{StaticResource TextPrimaryLight}"
+                                    VerticalOptions="Center" />
                         </Grid>
                     </expander:SfExpander.Header>
                     <expander:SfExpander.Content>
@@ -53,89 +48,77 @@
                                     <ColumnDefinition Width="9.5*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Label
-                                    Grid.Column="0"
-                                    FontSize="24"
-                                    Text="Commands"
-                                    TextColor="{StaticResource TextPrimaryLight}"
-                                    VerticalOptions="Center" />
-                                <buttons:SfButton
-                                    Grid.Column="1"
-                                    Background="{StaticResource Primary}"
-                                    Command="{Binding AddCommand}"
-                                    ShowIcon="True"
-                                    Text="Add">
+                                <Label Grid.Column="0"
+                                        FontSize="24"
+                                        Text="Commands"
+                                        TextColor="{StaticResource TextPrimaryLight}"
+                                        VerticalOptions="Center" />
+                                <buttons:SfButton Grid.Column="1"
+                                        Background="{StaticResource Primary}"
+                                        Command="{Binding AddCommand}"
+                                        ShowIcon="True"
+                                        Text="Add">
                                     <buttons:SfButton.ImageSource>
-                                        <FontImageSource
-                                            FontFamily="FASolid"
-                                            Glyph="{x:Static fa:Solid.Plus}"
-                                            Color="{StaticResource TextPrimaryDark}" />
+                                        <FontImageSource FontFamily="FASolid"
+                                                Glyph="{x:Static fa:Solid.Plus}"
+                                                Color="{StaticResource TextPrimaryDark}" />
                                     </buttons:SfButton.ImageSource>
                                 </buttons:SfButton>
                             </Grid>
-                            <Border
-                                Padding="8"
-                                HeightRequest="50"
-                                Stroke="#000000"
-                                StrokeThickness="0.15">
+                            <Border Padding="8"
+                                    HeightRequest="50"
+                                    Stroke="#000000"
+                                    StrokeThickness="0.15">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="4,4,0,0" />
                                 </Border.StrokeShape>
-                                <Label
-                                    Grid.Column="0"
-                                    Margin="4"
-                                    FontSize="16"
-                                    Text="Name"
-                                    TextColor="{StaticResource TextPrimaryLight}"
-                                    VerticalOptions="Center" />
+                                <Label Grid.Column="0"
+                                        Margin="4"
+                                        FontSize="16"
+                                        Text="Name"
+                                        TextColor="{StaticResource TextPrimaryLight}"
+                                        VerticalOptions="Center" />
                             </Border>
                             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Commands}">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate x:DataType="m:HighLevelCommandModel">
-                                        <Border
-                                            Padding="8"
-                                            Stroke="#000000"
-                                            StrokeThickness="0.15">
+                                        <Border Padding="8"
+                                                Stroke="#000000"
+                                                StrokeThickness="0.15">
                                             <Grid ColumnSpacing="12">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="16*" />
                                                     <ColumnDefinition Width="2*" />
                                                 </Grid.ColumnDefinitions>
-                                                <input:SfMaskedEntry
-                                                    Grid.Column="0"
-                                                    ClearButtonVisibility="WhileEditing"
-                                                    Value="{Binding CommandName, Mode=TwoWay}" />
-                                                <HorizontalStackLayout
-                                                    Grid.Column="2"
-                                                    HorizontalOptions="Center"
-                                                    Spacing="12">
-                                                    <Border
-                                                        BackgroundColor="{StaticResource Primary}"
-                                                        HeightRequest="32"
-                                                        StrokeShape="RoundRectangle 20"
-                                                        WidthRequest="32">
+                                                <input:SfMaskedEntry Grid.Column="0"
+                                                        ClearButtonVisibility="WhileEditing"
+                                                        Value="{Binding CommandName, Mode=TwoWay}" />
+                                                <HorizontalStackLayout Grid.Column="2"
+                                                        HorizontalOptions="Center"
+                                                        Spacing="12">
+                                                    <Border BackgroundColor="{StaticResource Primary}"
+                                                            HeightRequest="32"
+                                                            StrokeShape="RoundRectangle 20"
+                                                            WidthRequest="32">
                                                         <ImageButton Command="{Binding BindingContext.EditCommand, Source={Reference view}}" CommandParameter="{Binding}">
                                                             <ImageButton.Source>
-                                                                <FontImageSource
-                                                                    FontFamily="FASolid"
-                                                                    Glyph="{x:Static fa:Solid.Pencil}"
-                                                                    Size="16"
-                                                                    Color="{StaticResource EditorBackgroundLight}" />
+                                                                <FontImageSource FontFamily="FASolid"
+                                                                        Glyph="{x:Static fa:Solid.Pencil}"
+                                                                        Size="16"
+                                                                        Color="{StaticResource EditorBackgroundLight}" />
                                                             </ImageButton.Source>
                                                         </ImageButton>
                                                     </Border>
-                                                    <Border
-                                                        BackgroundColor="{StaticResource Primary}"
-                                                        HeightRequest="32"
-                                                        StrokeShape="RoundRectangle 20"
-                                                        WidthRequest="32">
+                                                    <Border BackgroundColor="{StaticResource Primary}"
+                                                            HeightRequest="32"
+                                                            StrokeShape="RoundRectangle 20"
+                                                            WidthRequest="32">
                                                         <ImageButton Command="{Binding BindingContext.DeleteCommand, Source={Reference view}}" CommandParameter="{Binding}">
                                                             <ImageButton.Source>
-                                                                <FontImageSource
-                                                                    FontFamily="FASolid"
-                                                                    Glyph="{x:Static fa:Solid.Trash}"
-                                                                    Size="16"
-                                                                    Color="{StaticResource EditorBackgroundLight}" />
+                                                                <FontImageSource FontFamily="FASolid"
+                                                                        Glyph="{x:Static fa:Solid.Trash}"
+                                                                        Size="16"
+                                                                        Color="{StaticResource EditorBackgroundLight}" />
                                                             </ImageButton.Source>
                                                         </ImageButton>
                                                     </Border>
@@ -150,21 +133,34 @@
                 </expander:SfExpander>
             </Border>
             <Grid ColumnDefinitions="*,*">
-                <buttons:SfButton
-                    Grid.Column="1"
-                    Background="{StaticResource Primary}"
-                    Command="{Binding SubmitCommand}"
-                    HorizontalOptions="End"
-                    ShowIcon="True"
-                    Text="Save"
-                    WidthRequest="180">
+                <buttons:SfButton Grid.Column="1"
+                        Background="{StaticResource Primary}"
+                        Command="{Binding SubmitCommand}"
+                        HorizontalOptions="End"
+                        ShowIcon="True"
+                        Text="Save"
+                        WidthRequest="180">
                     <buttons:SfButton.ImageSource>
-                        <FontImageSource
-                            FontFamily="FASolid"
-                            Glyph="{x:Static fa:Solid.FloppyDisk}"
-                            Color="{StaticResource TextPrimaryDark}" />
+                        <FontImageSource FontFamily="FASolid"
+                                Glyph="{x:Static fa:Solid.FloppyDisk}"
+                                Color="{StaticResource TextPrimaryDark}" />
                     </buttons:SfButton.ImageSource>
                 </buttons:SfButton>
+            </Grid>
+
+            <Grid RowDefinitions="*,16*" IsVisible="{Binding HasCompilationError}">
+                <Label Grid.Column="0"
+                        Margin="3"
+                        FontSize="24"
+                        Text="Compilation errors: "
+                        TextColor="{StaticResource TextPrimaryLight}"
+                        VerticalOptions="Center" />
+                <Editor BackgroundColor="{StaticResource EditorBackgroundLight}"
+                        Grid.Row="1"
+                        IsSpellCheckEnabled="false"
+                        IsEnabled="False"
+                        Text="{Binding CompilationErrors, Mode=TwoWay}"
+                        TextColor="{StaticResource TextPrimaryLight}" />
             </Grid>
         </VerticalStackLayout>
     </ScrollView>

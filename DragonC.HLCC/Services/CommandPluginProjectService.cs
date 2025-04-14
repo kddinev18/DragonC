@@ -150,7 +150,7 @@ namespace DragonC.HLCC.Services
 
             return $@"<Project Sdk=""Microsoft.NET.Sdk"">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -178,7 +178,7 @@ namespace DragonC.Compilator.HighLevelCommandsCompiler
 {
     public class HighLevelCommandImplementation : BaseHighLevelCommand, IAllowConsts
     {
-        public HighLevelCommand(CompilatorData data) : base(data)
+        public HighLevelCommandImplementation(CompilatorData data) : base(data)
         {
         }
 

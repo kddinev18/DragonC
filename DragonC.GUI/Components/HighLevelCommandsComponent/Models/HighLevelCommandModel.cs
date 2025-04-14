@@ -15,17 +15,18 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent.Models
     {
         public HighLevelCommandModel(bool asd)
         {
-            
+
         }
         public HighLevelCommandModel()
         {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string[] references =
             {
-                Path.Combine(baseDir, "DragonC.GUI.exe"),
+                Path.Combine(baseDir, "DragonC.GUI.dll"),
                 Path.Combine(baseDir, "DragonC.Domain.dll"),
                 Path.Combine(baseDir, "DragonC.Lexer.dll"),
-                Path.Combine(baseDir, "DragonC.Domain.Compilator.dll")
+                Path.Combine(baseDir, "DragonC.Domain.Compilator.dll"),
+                Path.Combine(baseDir, "DragonC.Compilator.dll")
             };
 
             ICommandPluginProjectService service = new CommandPluginProjectService();

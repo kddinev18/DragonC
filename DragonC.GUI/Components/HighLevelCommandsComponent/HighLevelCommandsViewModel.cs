@@ -17,14 +17,19 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
     {
         public ObservableCollection<HighLevelCommandModel> Commands { get; set; } = [];
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasCompilationError))]
+        private string compilationErrors = "";
+        public bool HasCompilationError => CompilationErrors != "";
+
         public HighLevelCommandsViewModel()
         {
             Commands.Add(new HighLevelCommandModel(true)
             {
                 CommandName = "AddCommand",
-                FileName = "HighLevelCommand_f65816b6c0ca4494b9fb03a67b534e41.cs",
-                ProjectPath = @"C:\Users\User\AppData\Local\Temp\DragonCPluginTemp",
-                FullFilePath = @"C:\Users\User\AppData\Local\Temp\DragonCPluginTemp\HighLevelCommand_f65816b6c0ca4494b9fb03a67b534e41.cs"
+                FileName = "HighLevelCommand_a0ffc30316b143fa97000a113209b60a.cs",
+                ProjectPath = @"C:\Users\kdinev\AppData\Local\Temp\DragonCPluginTemp",
+                FullFilePath = @"C:\Users\kdinev\AppData\Local\Temp\DragonCPluginTemp\HighLevelCommand_a0ffc30316b143fa97000a113209b60a.cs"
             });
         }
 
@@ -60,8 +65,20 @@ namespace DragonC.GUI.Components.HighLevelCommandsComponent
         [RelayCommand]
         private void Submit()
         {
-            ICommandPluginProjectService commandPlugin = new CommandPluginProjectService();
-            CompilatorService.Instance.CompilatorData.HighLevelCommands = commandPlugin.LoadHighLevelCommands(CompilatorService.Instance.CompilatorData);
+            try
+            {
+                ICommandPluginProjectService commandPlugin = new CommandPluginProjectService();
+                CompilatorService.Instance.CompilatorData.HighLevelCommands = commandPlugin.LoadHighLevelCommands(CompilatorService.Instance.CompilatorData);
+                CompilationErrors = "";
+            }
+            catch (NullReferenceException ex)
+            {
+                CompilationErrors = "No commands or formal grammar saved";
+            }
+            catch (Exception ex)
+            {
+                CompilationErrors = ex.Message;
+            }
         }
 
         [RelayCommand]

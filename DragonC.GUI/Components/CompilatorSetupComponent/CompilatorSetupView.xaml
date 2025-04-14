@@ -20,7 +20,7 @@
                 BackgroundColor="{StaticResource EditorBackgroundLight}"
                 Stroke="{StaticResource EditorBackgroundLight}"
                 StrokeShape="RoundRectangle 8,8,8,8">
-                <expander:SfExpander AnimationDuration="100" HeaderIconColor="{StaticResource TextPrimaryLight}">
+                <expander:SfExpander AnimationDuration="100" HeaderIconColor="{StaticResource TextPrimaryLight}" IsExpanded="True">
                     <expander:SfExpander.Header>
                         <Grid Margin="4" ColumnSpacing="8">
                             <Grid.ColumnDefinitions>
