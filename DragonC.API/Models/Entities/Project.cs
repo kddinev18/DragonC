@@ -11,5 +11,10 @@
 
 		public int ProcessorFileId { get; set; }
 		public File File { get; set; }
+
+		public ICollection<FormalRule> FormalRules { get; set; }
+		public ICollection<HighLevelCommand> HighLevelCommands { get; set; }
+		public ICollection<TokenSeparator> TokenSeparators { get; set; }
+		public ICollection<LowLevelCommand> LowLevelCommands { get; set; }
 	}
 }
