@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 
 namespace DragonC.API.Services
 {
-	public interface IProjectService
-	{
-		public void Create(ProjectDTO project, string userId);
+    public interface IProjectService
+    {
+        public void Create(ProjectDTO project, string userId);
 
-		public IQueryable<ProjectDTO> GetPagedProjects(PagedCollection<ProjectFilters> pagedFilters, string userId);
+        public IQueryable<ProjectDTO> GetPagedProjects(PagedCollection<ProjectFilters> pagedFilters);
 
-		public void Delete(int Id);
-	}
+        public void Delete(int Id);
+    }
 }

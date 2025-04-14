@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DragonC.Domain.API.Common;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace DragonC.GUI.Components.LogInPageComponent
 {
@@ -26,20 +29,17 @@ namespace DragonC.GUI.Components.LogInPageComponent
             {
                 string json = System.Text.Json.JsonSerializer.Serialize(new LogInDTO()
                 {
-                    UserName = userName,
+                    Email = userName,
                     Password = password
                 });
 
                 HttpContent content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync("testasdasdasdasd", content);
+                HttpResponseMessage response = await client.PostAsync(Path.Combine(Consts.APIUrl, "Auth", "login"), content);
                 if (response.IsSuccessStatusCode)
                 {
-
-                }
-                else
-                {
-
+                    CurrentUserData.Token = (string)JsonNode.Parse(await response.Content.ReadAsStringAsync())["token"];
+                    await Shell.Current.GoToAsync("projects");
                 }
             }
         }
@@ -48,23 +48,12 @@ namespace DragonC.GUI.Components.LogInPageComponent
         {
             using (HttpClient client = new HttpClient())
             {
-                string json = System.Text.Json.JsonSerializer.Serialize(new LogInDTO()
-                {
-                    UserName = userName,
-                    Password = password
-                });
-
-                HttpContent content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PostAsync("testasdasdasdasd", content);
-                if (response.IsSuccessStatusCode)
-                {
-
-                }
-                else
-                {
-
-                }
+                HttpResponseMessage response = await client
+                    .PostAsJsonAsync(Path.Combine(Consts.APIUrl, "Auth", "register"), new LogInDTO()
+                    {
+                        Email = userName,
+                        Password = password
+                    });
             }
         }
     }

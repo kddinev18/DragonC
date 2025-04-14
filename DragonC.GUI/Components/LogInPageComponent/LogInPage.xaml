@@ -1,92 +1,79 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="DragonC.GUI.Components.LogInPageComponent.LogInPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
-    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-    xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
-    xmlns:l="clr-namespace:DragonC.GUI.Components.LogInPageComponent"
-    xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
-    x:DataType="l:LogInPageModel"
-    BackgroundColor="{StaticResource BackgroundLight}">
+<ContentPage x:Class="DragonC.GUI.Components.LogInPageComponent.LogInPage"
+        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+        xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+        xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+        xmlns:l="clr-namespace:DragonC.GUI.Components.LogInPageComponent"
+        xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+        x:DataType="l:LogInPageModel"
+        BackgroundColor="{StaticResource BackgroundLight}">
     <tabView:SfTabView>
         <tabView:SfTabView.Items>
-            <tabView:SfTabItem
-                BackgroundColor="{StaticResource EditorBackgroundLight}"
-                Header="Sign In"
-                ImagePosition="Left"
-                TextColor="{StaticResource TextPrimaryLight}">
+            <tabView:SfTabItem BackgroundColor="{StaticResource EditorBackgroundLight}"
+                    Header="Sign In"
+                    ImagePosition="Left"
+                    TextColor="{StaticResource TextPrimaryLight}">
                 <tabView:SfTabItem.ImageSource>
-                    <FontImageSource
-                        FontFamily="FASolid"
-                        Glyph="{x:Static fa:Solid.User}"
-                        Color="{StaticResource TextPrimaryLight}" />
+                    <FontImageSource FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.User}"
+                            Color="{StaticResource TextPrimaryLight}" />
                 </tabView:SfTabItem.ImageSource>
-                <VerticalStackLayout
-                    HeightRequest="250"
-                    HorizontalOptions="Center"
-                    Spacing="12"
-                    VerticalOptions="Center"
-                    WidthRequest="340">
+                <VerticalStackLayout HeightRequest="250"
+                        HorizontalOptions="Center"
+                        Spacing="12"
+                        VerticalOptions="Center"
+                        WidthRequest="340">
                     <Label Text="Username: " TextColor="{StaticResource TextPrimaryLight}" />
                     <input:SfMaskedEntry ClearButtonVisibility="WhileEditing" Value="{Binding UserName, Mode=TwoWay}" />
-                    <Label
-                        Margin="0,10,0,0"
-                        Text="Password: "
-                        TextColor="{StaticResource TextPrimaryLight}" />
+                    <Label Margin="0,10,0,0"
+                            Text="Password: "
+                            TextColor="{StaticResource TextPrimaryLight}" />
                     <input:SfMaskedEntry ClearButtonVisibility="WhileEditing" Value="{Binding Password, Mode=TwoWay}" />
                     <Grid Margin="0,30,0,0">
-                        <buttons:SfButton
-                            Background="{StaticResource Primary}"
-                            Command="{Binding LogInCommand}"
-                            ShowIcon="True"
-                            Text="Sign In">
+                        <buttons:SfButton Background="{StaticResource Primary}"
+                                Command="{Binding LogInCommand}"
+                                ShowIcon="True"
+                                Text="Sign In">
                             <buttons:SfButton.ImageSource>
-                                <FontImageSource
-                                    FontFamily="FASolid"
-                                    Glyph="{x:Static fa:Solid.User}"
-                                    Color="{StaticResource TextPrimaryDark}" />
+                                <FontImageSource FontFamily="FASolid"
+                                        Glyph="{x:Static fa:Solid.User}"
+                                        Color="{StaticResource TextPrimaryDark}" />
                             </buttons:SfButton.ImageSource>
                         </buttons:SfButton>
                     </Grid>
                 </VerticalStackLayout>
             </tabView:SfTabItem>
-            <tabView:SfTabItem
-                BackgroundColor="{StaticResource EditorBackgroundLight}"
-                Header="Sign Up"
-                ImagePosition="Left"
-                TextColor="{StaticResource TextPrimaryLight}">
+            <tabView:SfTabItem BackgroundColor="{StaticResource EditorBackgroundLight}"
+                    Header="Sign Up"
+                    ImagePosition="Left"
+                    TextColor="{StaticResource TextPrimaryLight}">
                 <tabView:SfTabItem.ImageSource>
-                    <FontImageSource
-                        FontFamily="FASolid"
-                        Glyph="{x:Static fa:Solid.UserGroup}"
-                        Color="{StaticResource TextPrimaryLight}" />
+                    <FontImageSource FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.UserGroup}"
+                            Color="{StaticResource TextPrimaryLight}" />
                 </tabView:SfTabItem.ImageSource>
-                <VerticalStackLayout
-                    HeightRequest="250"
-                    HorizontalOptions="Center"
-                    Spacing="12"
-                    VerticalOptions="Center"
-                    WidthRequest="340">
+                <VerticalStackLayout HeightRequest="250"
+                        HorizontalOptions="Center"
+                        Spacing="12"
+                        VerticalOptions="Center"
+                        WidthRequest="340">
                     <Label Text="Username: " TextColor="{StaticResource TextPrimaryLight}" />
                     <input:SfMaskedEntry ClearButtonVisibility="WhileEditing" Value="{Binding UserName, Mode=TwoWay}" />
-                    <Label
-                        Margin="0,10,0,0"
-                        Text="Password: "
-                        TextColor="{StaticResource TextPrimaryLight}" />
+                    <Label Margin="0,10,0,0"
+                            Text="Password: "
+                            TextColor="{StaticResource TextPrimaryLight}" />
                     <input:SfMaskedEntry ClearButtonVisibility="WhileEditing" Value="{Binding Password, Mode=TwoWay}" />
                     <Grid Margin="0,30,0,0">
-                        <buttons:SfButton
-                            Background="{StaticResource Primary}"
-                            Command="{Binding RegisterCommand}"
-                            ShowIcon="True"
-                            Text="Sign Un">
+                        <buttons:SfButton Background="{StaticResource Primary}"
+                                Command="{Binding RegisterCommand}"
+                                ShowIcon="True"
+                                Text="Sign Up">
                             <buttons:SfButton.ImageSource>
-                                <FontImageSource
-                                    FontFamily="FASolid"
-                                    Glyph="{x:Static fa:Solid.User}"
-                                    Color="{StaticResource TextPrimaryDark}" />
+                                <FontImageSource FontFamily="FASolid"
+                                        Glyph="{x:Static fa:Solid.User}"
+                                        Color="{StaticResource TextPrimaryDark}" />
                             </buttons:SfButton.ImageSource>
                         </buttons:SfButton>
                     </Grid>

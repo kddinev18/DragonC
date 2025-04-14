@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="DragonC.GUI.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:DragonC.GUI.Components.HomePageComponent"
-    Shell.FlyoutBehavior="Disabled"
-    Title="DragonC.GUI">
+<Shell x:Class="DragonC.GUI.AppShell"
+        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:local="clr-namespace:DragonC.GUI.Components.LogInPageComponent"
+        Shell.FlyoutBehavior="Disabled"
+        Title="DragonC.GUI">
 
-    <ShellContent
-        ContentTemplate="{DataTemplate local:HomePage}"
-        Route="/" />
+    <ShellContent ContentTemplate="{DataTemplate local:LogInPage}" Route="/" />
 
 </Shell>

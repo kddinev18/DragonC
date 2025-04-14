@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="DragonC.GUI.Components.ProjectsPageComponent.ProjectsPage"
+        xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+        xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+        xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+        xmlns:l="clr-namespace:DragonC.GUI.Components.ProjectsPageComponent"
+        xmlns:m="clr-namespace:DragonC.GUI.Components.ProjectsPageComponent.Models"
+        xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+        x:DataType="l:ProjectsPage"
+        BackgroundColor="{StaticResource BackgroundLight}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="12">
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <VerticalStackLayout Spacing="4">
+                    <Label Grid.Column="1"
+                            CharacterSpacing="0.25"
+                            FontFamily="Roboto-Regular"
+                            FontSize="16"
+                            Text="ProjectName"
+                            TextColor="{StaticResource TextPrimaryLight}"
+                            VerticalOptions="Center" />
+                    <input:SfMaskedEntry Value="{Binding ProjectName, Mode=TwoWay}" Grid.Column="0" />
+                </VerticalStackLayout>
+                <HorizontalStackLayout>
+                    <buttons:SfButton Background="{StaticResource Primary}"
+                            Command="{Binding CreateCommand}"
+                            ShowIcon="True"
+                            Grid.Column="1"
+                            Text="Sign In">
+                        <buttons:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FASolid"
+                                    Glyph="{x:Static fa:Solid.Plus}"
+                                    Color="{StaticResource TextPrimaryDark}" />
+                        </buttons:SfButton.ImageSource>
+                    </buttons:SfButton>
+                    <buttons:SfButton Background="{StaticResource Primary}"
+                            Command="{Binding SearchCommand}"
+                            ShowIcon="True"
+                            Grid.Column="1"
+                            Text="Sign In">
+                        <buttons:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FASolid"
+                                    Glyph="{x:Static fa:Solid.Plus}"
+                                    Color="{StaticResource TextPrimaryDark}" />
+                        </buttons:SfButton.ImageSource>
+                    </buttons:SfButton>
+                </HorizontalStackLayout>
+            </Grid>
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Projects}" Spacing="8">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="m:ProjectModel">
+                        <Border BackgroundColor="{StaticResource EditorBackgroundLight}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+                            <Label Grid.Column="1"
+                                    CharacterSpacing="0.25"
+                                    FontFamily="Roboto-Regular"
+                                    FontSize="16"
+                                    Text="{Binding Name}"
+                                    TextColor="{StaticResource TextPrimaryLight}"
+                                    VerticalOptions="Center" />
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <buttons:SfButton Background="{StaticResource Primary}"
+                        Command="{Binding PrevCommand}"
+                        ShowIcon="True"
+                        WidthRequest="25">
+                    <buttons:SfButton.ImageSource>
+                        <FontImageSource FontFamily="FASolid"
+                                Glyph="{x:Static fa:Solid.ArrowLeft}"
+                                Color="{StaticResource TextPrimaryDark}" />
+                    </buttons:SfButton.ImageSource>
+                </buttons:SfButton>
+                <buttons:SfButton Background="{StaticResource Primary}"
+                        Command="{Binding NextCommand}"
+                        ShowIcon="True"
+                        HorizontalOptions="End"
+                        WidthRequest="25"
+                        Grid.Column="1">
+                    <buttons:SfButton.ImageSource>
+                        <FontImageSource FontFamily="FASolid"
+                                Glyph="{x:Static fa:Solid.ArrowRight}"
+                                Color="{StaticResource TextPrimaryDark}" />
+                    </buttons:SfButton.ImageSource>
+                </buttons:SfButton>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
