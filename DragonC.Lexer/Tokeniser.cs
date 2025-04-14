@@ -19,18 +19,13 @@ namespace DragonC.Lexer
         public List<TokenUnit> GetTokens(string text)
         {
             string formatedText = FormatText(text);
-            List<string> tokens = formatedText.Split(_tokenSeparators.ToArray(), StringSplitOptions.None)
+            List<string> tokens = Tokenize(formatedText)
                 .Select(x => formatToken(x).Trim())
                 .Where(x => !x.StartsWith("//"))
                 .ToList();
 
-            if (tokens.Last() != "")
-            {
-                throw new SyntaxException($"Missing ; or :");
-            }
-
             List<TokenUnit> result = new List<TokenUnit>();
-            foreach (string token in tokens.SkipLast(1))
+            foreach (string token in tokens)
             {
                 Tuple<int, int, int> tokenPosition = FindSubstringLocation(text, token);
                 result.Add(new TokenUnit()
@@ -50,6 +45,103 @@ namespace DragonC.Lexer
 
             return result;
         }
+
+        private List<string> Tokenize(string input)
+        {
+            List<string> tokens = new List<string>();
+            int i = 0;
+            int length = input.Length;
+            StringBuilder currentToken = new StringBuilder();
+            bool insideBlock = false;
+            int braceDepth = 0;
+
+            while (i < length)
+            {
+                char c = input[i];
+
+                // Detect block start
+                if (!insideBlock && c == '{')
+                {
+                    insideBlock = true;
+                    braceDepth = 1;
+                    currentToken.Append(c);
+                    i++;
+                    continue;
+                }
+
+                // Inside a block
+                if (insideBlock)
+                {
+                    currentToken.Append(c);
+
+                    if (c == '{') braceDepth++;
+                    else if (c == '}') braceDepth--;
+
+                    if (braceDepth == 0)
+                    {
+                        insideBlock = false;
+                        tokens.Add(currentToken.ToString());
+                        currentToken.Clear();
+                    }
+
+                    i++;
+                    continue;
+                }
+
+                // Outside a block: handle custom separators
+                if (Array.Exists(_tokenSeparators.ToArray(), sep => sep == $"{c}"))
+                {
+                    // Add trimmed token if there's content
+                    string token = currentToken.ToString().TrimEnd();
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        tokens.Add(token);
+                    }
+                    currentToken.Clear();
+                    i++; // Skip separator
+                    continue;
+                }
+
+                // Default: accumulate character
+                currentToken.Append(c);
+                i++;
+            }
+
+            // Append any trailing content
+            string finalToken = currentToken.ToString().TrimEnd();
+            if (!string.IsNullOrWhiteSpace(finalToken))
+            {
+                tokens.Add(finalToken);
+            }
+
+            return MergeBlockHeaders(tokens);
+        }
+
+        private List<string> MergeBlockHeaders(List<string> tokens)
+        {
+            var mergedTokens = new List<string>();
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                if (tokens[i].TrimEnd().EndsWith("{"))
+                {
+                    // This shouldn't happen due to block capturing logic
+                    mergedTokens.Add(tokens[i]);
+                }
+                else if (tokens[i].Contains("{") && !tokens[i].TrimStart().StartsWith("{"))
+                {
+                    // This is a header line + block combined
+                    mergedTokens.Add(tokens[i]);
+                }
+                else
+                {
+                    mergedTokens.Add(tokens[i]);
+                }
+            }
+
+            return mergedTokens;
+        }
+
+
 
         private void CompileForHighLevelCommands(List<string> tokens)
         {

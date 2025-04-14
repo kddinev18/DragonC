@@ -1,102 +1,90 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView
-    x:Class="DragonC.GUI.Components.CodeEditorComponent.CodeEditorView"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
-    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
-    xmlns:l="clr-namespace:DragonC.GUI.Components.CodeEditorComponent"
-    x:DataType="l:CodeEditorViewModel">
+<ContentView x:Class="DragonC.GUI.Components.CodeEditorComponent.CodeEditorView"
+        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+        xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+        xmlns:l="clr-namespace:DragonC.GUI.Components.CodeEditorComponent"
+        x:DataType="l:CodeEditorViewModel">
     <Grid RowDefinitions="19*,*" RowSpacing="16">
         <Grid ColumnSpacing="16">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1.5*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid RowDefinitions="*,16*">
-                <Label
-                    Grid.Column="0"
-                    Margin="3"
-                    FontSize="24"
-                    Text="Code: "
-                    TextColor="{StaticResource TextPrimaryLight}"
-                    VerticalOptions="Center" />
-                <Editor
-                    Grid.Row="1"
-                    BackgroundColor="{StaticResource EditorBackgroundLight}"
-                    IsSpellCheckEnabled="false"
-                    Text="{Binding Code, Mode=TwoWay}"
-                    TextColor="{StaticResource TextPrimaryLight}" />
+                <Label Grid.Column="0"
+                        Margin="3"
+                        FontSize="24"
+                        Text="Code: "
+                        TextColor="{StaticResource TextPrimaryLight}"
+                        VerticalOptions="Center" />
+                <Editor Grid.Row="1"
+                        BackgroundColor="{StaticResource EditorBackgroundLight}"
+                        IsSpellCheckEnabled="false"
+                        Text="{Binding Code, Mode=TwoWay}"
+                        TextColor="{StaticResource TextPrimaryLight}" />
             </Grid>
 
-            <Grid
-                Grid.Column="1"
-                RowDefinitions="*,*"
-                RowSpacing="16">
+            <Grid Grid.Column="1"
+                    RowDefinitions="*,*"
+                    RowSpacing="16">
                 <Grid RowDefinitions="*,7.3*">
-                    <Label
-                        Grid.Column="0"
-                        Margin="3"
-                        FontSize="24"
-                        Text="Intermidiate: "
-                        TextColor="{StaticResource TextPrimaryLight}"
-                        VerticalOptions="Center" />
-                    <Editor
-                        Grid.Row="1"
-                        BackgroundColor="{StaticResource EditorBackgroundLight}"
-                        IsReadOnly="True"
-                        IsSpellCheckEnabled="false"
-                        Text="{Binding Intermidiate}"
-                        TextColor="{StaticResource TextPrimaryLight}" />
+                    <Label Grid.Column="0"
+                            Margin="3"
+                            FontSize="24"
+                            Text="Intermidiate: "
+                            TextColor="{StaticResource TextPrimaryLight}"
+                            VerticalOptions="Center" />
+                    <Editor Grid.Row="1"
+                            BackgroundColor="{StaticResource EditorBackgroundLight}"
+                            IsReadOnly="True"
+                            IsSpellCheckEnabled="false"
+                            Text="{Binding Intermidiate}"
+                            TextColor="{StaticResource TextPrimaryLight}" />
                 </Grid>
                 <Grid Grid.Row="1" RowDefinitions="*,7.3*">
-                    <Label
-                        Grid.Column="0"
-                        Margin="3"
-                        FontSize="24"
-                        Text="Output: "
-                        TextColor="{StaticResource TextPrimaryLight}"
-                        VerticalOptions="Center" />
-                    <Editor
-                        Grid.Row="1"
-                        BackgroundColor="{StaticResource EditorBackgroundLight}"
-                        IsReadOnly="True"
-                        IsSpellCheckEnabled="false"
-                        Text="{Binding Output}"
-                        TextColor="{StaticResource TextPrimaryLight}" />
+                    <Label Grid.Column="0"
+                            Margin="3"
+                            FontSize="24"
+                            Text="Output: "
+                            TextColor="{StaticResource TextPrimaryLight}"
+                            VerticalOptions="Center" />
+                    <Editor Grid.Row="1"
+                            BackgroundColor="{StaticResource EditorBackgroundLight}"
+                            IsReadOnly="True"
+                            IsSpellCheckEnabled="false"
+                            Text="{Binding Output}"
+                            TextColor="{StaticResource TextPrimaryLight}" />
                 </Grid>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" ColumnDefinitions="*,*">
-            <buttons:SfButton
-                Grid.Column="0"
-                Background="{StaticResource BackgroundDark}"
-                Command="{Binding ResetComand}"
-                HorizontalOptions="Start"
-                ShowIcon="True"
-                Text="Reset"
-                WidthRequest="180">
+            <buttons:SfButton Grid.Column="0"
+                    Background="{StaticResource BackgroundDark}"
+                    Command="{Binding ResetComand}"
+                    HorizontalOptions="Start"
+                    ShowIcon="True"
+                    Text="Reset"
+                    WidthRequest="180">
                 <buttons:SfButton.ImageSource>
-                    <FontImageSource
-                        FontFamily="FASolid"
-                        Glyph="{x:Static fa:Solid.Rotate}"
-                        Color="{StaticResource TextPrimaryDark}" />
+                    <FontImageSource FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.Rotate}"
+                            Color="{StaticResource TextPrimaryDark}" />
                 </buttons:SfButton.ImageSource>
             </buttons:SfButton>
-            <buttons:SfButton
-                Grid.Column="1"
-                Background="{StaticResource Primary}"
-                Command="{Binding RunCodeCommand}"
-                HorizontalOptions="End"
-                ShowIcon="True"
-                Text="Run"
-                WidthRequest="180">
+            <buttons:SfButton Grid.Column="1"
+                    Background="{StaticResource Primary}"
+                    Command="{Binding RunCodeCommand}"
+                    HorizontalOptions="End"
+                    ShowIcon="True"
+                    Text="Run"
+                    WidthRequest="180">
                 <buttons:SfButton.ImageSource>
-                    <FontImageSource
-                        FontFamily="FASolid"
-                        Glyph="{x:Static fa:Solid.FloppyDisk}"
-                        Color="{StaticResource TextPrimaryDark}" />
+                    <FontImageSource FontFamily="FASolid"
+                            Glyph="{x:Static fa:Solid.FloppyDisk}"
+                            Color="{StaticResource TextPrimaryDark}" />
                 </buttons:SfButton.ImageSource>
             </buttons:SfButton>
         </Grid>

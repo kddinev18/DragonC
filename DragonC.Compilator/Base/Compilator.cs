@@ -5,6 +5,7 @@ using DragonC.Domain.Lexer.Tokeniser;
 using DragonC.Lexer;
 using System.Data;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace DragonC.Compilator
 {
@@ -47,7 +48,7 @@ namespace DragonC.Compilator
         {
             List<TokenUnit> highLevelTokens = _tokeniser.GetTokens(text);
             AddDependancies(highLevelTokens);
-            text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text), highLevelTokens);
+            text = TranspileHighLevelCommands(text, CheckForHighLevelCommands(text, highLevelTokens), highLevelTokens);
             List<TokenUnit> tokenUnits = _formalGrammar.EvaluateTokens(ReorderTokens(highLevelTokens, _tokeniser.GetTokens(text)));
             if (tokenUnits.Any(x => !x.IsValid))
             {
@@ -67,7 +68,7 @@ namespace DragonC.Compilator
                 .ToList();
 
             CompiledCode compiledCode = new CompiledCode();
-            compiledCode.InterMediateCommands = commandTokens
+            compiledCode.InterMediateCommands = tokenUnits
                 .Select(x => x.Token)
                 .ToList();
 
@@ -86,7 +87,7 @@ namespace DragonC.Compilator
 
         private void AddDependancies(List<TokenUnit> tokens)
         {
-            //_highLevelCommands.AddRange(LoadHighLevelCommands());
+            //_data.HighLevelCommands.AddRange(LoadHighLevelCommands());
             _data.HighLevelCommands
                 .Where(x => x.SetConsts != null)
                 .ToList()
@@ -117,14 +118,88 @@ namespace DragonC.Compilator
             foreach (HighLevelCommandToken highLevelCommandToken in HighLevelCommandTokens)
             {
                 List<string> lowLevelCommands = highLevelCommandToken.HighLevelCommand.CompileCommand.Invoke(highLevelCommandToken.Token, tokenUnits);
-                string lowLevelCommandsText = string.Join(";\n", lowLevelCommands);
-                text = text.Replace(highLevelCommandToken.HighLevelCommand.GetClearCommand.Invoke(highLevelCommandToken.Token.Token), lowLevelCommandsText);
+                string lowLevelCommandsText = string.Join($"{_data.TokenSeparators.First()}\n", lowLevelCommands) + $"{_data.TokenSeparators.First()}\n";
+                text = ReplaceBlockIgnoringWhitespace(text, highLevelCommandToken.HighLevelCommand.GetClearCommand.Invoke(highLevelCommandToken.Token.Token), lowLevelCommandsText);
             }
 
             return text;
         }
 
-        private List<HighLevelCommandToken> CheckForHighLevelCommands(string text)
+        public string ReplaceBlockIgnoringWhitespace(string originalText, string blockToReplace, string blockToReplaceWith)
+        {
+            // Tokenize both the original text and the if block candidate.
+            List<Token> originalTokens = Tokenize(originalText);
+            List<Token> searchTokens = Tokenize(blockToReplace);
+
+            // If the if block candidate yields no tokens, return the original text.
+            if (searchTokens.Count == 0)
+                return originalText;
+
+            int matchStart = -1;
+            int matchEnd = -1;
+
+            // Loop through the original tokens looking for a contiguous sequence that
+            // matches all tokens from the blockToReplace.
+            for (int i = 0; i <= originalTokens.Count - searchTokens.Count; i++)
+            {
+                bool matched = true;
+                for (int j = 0; j < searchTokens.Count; j++)
+                {
+                    // Compare tokens exactly. Because we’re ignoring whitespace,
+                    // the tokens themselves should match.
+                    if (originalTokens[i + j].Text != searchTokens[j].Text)
+                    {
+                        matched = false;
+                        break;
+                    }
+                }
+                if (matched)
+                {
+                    // Use the start index of the first token of the match.
+                    matchStart = originalTokens[i].StartIndex;
+                    // And the end index as the (start index + length) of the last matched token.
+                    var lastToken = originalTokens[i + searchTokens.Count - 1];
+                    matchEnd = lastToken.StartIndex + lastToken.Length;
+                    break;
+                }
+            }
+
+            // If no matching block was found, return the original text unchanged.
+            if (matchStart < 0)
+                return originalText;
+
+            // Rebuild the string: take the part before the match, add "if block", then add the part after the match.
+            string updatedText = originalText.Substring(0, matchStart)
+                                   + blockToReplaceWith
+                                   + originalText.Substring(matchEnd);
+            return updatedText;
+        }
+
+        private List<Token> Tokenize(string text)
+        {
+            var tokens = new List<Token>();
+            // \S+ matches sequences of non-whitespace characters
+            var matches = Regex.Matches(text, @"\S+");
+            foreach (Match m in matches)
+            {
+                tokens.Add(new Token
+                {
+                    Text = m.Value,
+                    StartIndex = m.Index,
+                    Length = m.Length
+                });
+            }
+            return tokens;
+        }
+
+        private class Token
+        {
+            public string Text { get; set; }
+            public int StartIndex { get; set; }
+            public int Length { get; set; }
+        }
+
+        private List<HighLevelCommandToken> CheckForHighLevelCommands(string text, List<TokenUnit> tokens)
         {
             List<TokenUnit> tokenUnits = _tokeniser.GetTokens(text);
             List<HighLevelCommandToken> result = new List<HighLevelCommandToken>();
@@ -132,7 +207,7 @@ namespace DragonC.Compilator
             {
                 foreach (HighLevelCommand highLevelCommand in _data.HighLevelCommands)
                 {
-                    if (highLevelCommand.ValidateCommand.Invoke(tokenUnit).IsValid == true)
+                    if (highLevelCommand.ValidateCommand.Invoke(tokenUnit, tokens).IsValid == true)
                     {
                         result.Add(new HighLevelCommandToken()
                         {

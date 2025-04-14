@@ -168,14 +168,20 @@ namespace DragonC.CLI
                 IMM_TO_REGT;
                 REGT_TO_REG1;
 
+                if( GO_TO )
+                {
+                    ADD;
+                    REG3_TO_OUT;
+                    REG3_TO_REGT;
+                    REGT_TO_REG2;
+                }
+
                 label main;
                     ADD;
                     REG3_TO_OUT;
                     REG3_TO_REGT;
                     REGT_TO_REG2;
                 GO_TO main;
-                // 1 + 4;
-                // REG3 + REG2;
             "
             .Trim());
 
