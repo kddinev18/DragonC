@@ -8,13 +8,13 @@
         xmlns:l="clr-namespace:DragonC.GUI.Components.ProjectsPageComponent"
         xmlns:m="clr-namespace:DragonC.GUI.Components.ProjectsPageComponent.Models"
         xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
-        x:DataType="l:ProjectsPage"
+        x:DataType="l:ProjectsViewModel"
         BackgroundColor="{StaticResource BackgroundLight}">
-    <ScrollView>
+    <ScrollView Padding="8">
         <VerticalStackLayout Spacing="12">
             <Grid ColumnSpacing="12">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <VerticalStackLayout Spacing="4">
@@ -27,12 +27,13 @@
                             VerticalOptions="Center" />
                     <input:SfMaskedEntry Value="{Binding ProjectName, Mode=TwoWay}" Grid.Column="0" />
                 </VerticalStackLayout>
-                <HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1"
+                        Spacing="8"
+                        HorizontalOptions="End">
                     <buttons:SfButton Background="{StaticResource Primary}"
                             Command="{Binding CreateCommand}"
                             ShowIcon="True"
-                            Grid.Column="1"
-                            Text="Sign In">
+                            Text="Create">
                         <buttons:SfButton.ImageSource>
                             <FontImageSource FontFamily="FASolid"
                                     Glyph="{x:Static fa:Solid.Plus}"
@@ -43,10 +44,10 @@
                             Command="{Binding SearchCommand}"
                             ShowIcon="True"
                             Grid.Column="1"
-                            Text="Sign In">
+                            Text="Search">
                         <buttons:SfButton.ImageSource>
                             <FontImageSource FontFamily="FASolid"
-                                    Glyph="{x:Static fa:Solid.Plus}"
+                                    Glyph="{x:Static fa:Solid.Filter}"
                                     Color="{StaticResource TextPrimaryDark}" />
                         </buttons:SfButton.ImageSource>
                     </buttons:SfButton>
@@ -55,14 +56,17 @@
             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Projects}" Spacing="8">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate x:DataType="m:ProjectModel">
-                        <Border BackgroundColor="{StaticResource EditorBackgroundLight}">
+                        <Border BackgroundColor="{StaticResource EditorBackgroundLight}" Padding="12">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="8" />
                             </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenProjectCommand}"/>
+                            </Border.GestureRecognizers>
                             <Label Grid.Column="1"
                                     CharacterSpacing="0.25"
                                     FontFamily="Roboto-Regular"
-                                    FontSize="16"
+                                    FontSize="20"
                                     Text="{Binding Name}"
                                     TextColor="{StaticResource TextPrimaryLight}"
                                     VerticalOptions="Center" />
@@ -77,8 +81,9 @@
                 </Grid.ColumnDefinitions>
                 <buttons:SfButton Background="{StaticResource Primary}"
                         Command="{Binding PrevCommand}"
+                        HorizontalOptions="Start"
                         ShowIcon="True"
-                        WidthRequest="25">
+                        WidthRequest="50">
                     <buttons:SfButton.ImageSource>
                         <FontImageSource FontFamily="FASolid"
                                 Glyph="{x:Static fa:Solid.ArrowLeft}"
@@ -89,7 +94,7 @@
                         Command="{Binding NextCommand}"
                         ShowIcon="True"
                         HorizontalOptions="End"
-                        WidthRequest="25"
+                        WidthRequest="50"
                         Grid.Column="1">
                     <buttons:SfButton.ImageSource>
                         <FontImageSource FontFamily="FASolid"

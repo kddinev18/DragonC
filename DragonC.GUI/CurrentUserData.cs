@@ -9,5 +9,6 @@ namespace DragonC.GUI
     public static class CurrentUserData
     {
         public static string Token { get; set; }
+        public static int SelectedProjectId { get; set; }
     }
 }

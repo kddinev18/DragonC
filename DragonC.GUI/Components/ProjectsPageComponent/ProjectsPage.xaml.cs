@@ -8,4 +8,10 @@ public partial class ProjectsPage : ContentPage
 
         BindingContext = new ProjectsViewModel();
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ((ProjectsViewModel)BindingContext).Load();
+    }
 }

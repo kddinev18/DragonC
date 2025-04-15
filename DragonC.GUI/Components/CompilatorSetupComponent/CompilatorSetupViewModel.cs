@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DragonC.Domain.API.Common;
+using DragonC.Domain.API.Filters;
+using DragonC.Domain.API;
 using DragonC.Domain.Compilator;
 using DragonC.Domain.Data;
 using DragonC.Domain.Lexer.FormalGrammar;
@@ -12,8 +15,12 @@ using DragonC.GUI.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using DragonC.GUI.Components.CompilatorSetupComponent.Components.TokenSeparatorsComponent.Models;
+using DragonC.GUI.Components.CompilatorSetupComponent.Components.CommandsComponent.Models;
 
 namespace DragonC.GUI.Components.CompilatorSetupComponent
 {
@@ -43,19 +50,19 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
                     switch (variant.TerminalPartType.Id)
                     {
                         case 1:
-                            GenerateAllPossibleCharactersForRule(rule.Start.NonTerminalSymbol,formalRules, variant.NonTerminalPart, variant.IsEntryRule);
+                            GenerateAllPossibleCharactersForRule(rule.Start.NonTerminalSymbol, formalRules, variant.NonTerminalPart, variant.IsEntryRule);
                             break;
                         case 2:
                             GnerateAllPossibleNumbersForRule(rule.Start.NonTerminalSymbol, formalRules, variant.NonTerminalPart, variant.IsEntryRule);
                             break;
-                        case 3: 
+                        case 3:
                             break;
-                        case 4: 
+                        case 4:
                             break;
                         case 5:
                             GenerateSpaceRule(rule.Start.NonTerminalSymbol, formalRules, variant.NonTerminalPart, variant.IsEntryRule);
                             break;
-                        case 6: 
+                        case 6:
                             GenerateDynamiCommandRule(rule.Start.NonTerminalSymbol, formalRules, variant.NonTerminalPart, variant.IsEntryRule);
                             break;
                         case 7:
@@ -70,7 +77,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
                         case 10:
                             GenerateCustomRule(rule.Start.NonTerminalSymbol, formalRules, variant.TerminalPart, variant.NonTerminalPart, variant.IsEntryRule);
                             break;
-                        default: 
+                        default:
                             continue;
                     }
                 }
@@ -82,6 +89,8 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
                 TokenSeparators = separators,
                 LowLevelCommands = commands
             };
+
+
         }
 
         private void GenerateCustomRule(string start, List<UnformatedRule> formalRules, string terminalPart, string nonTerminalPart, bool isStart)
@@ -144,7 +153,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
             }
         }
 
-        private void GenerateDynamicNameRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart , bool isStart)
+        private void GenerateDynamicNameRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart, bool isStart)
         {
             if (!string.IsNullOrWhiteSpace(nonTerminalPart))
             {
@@ -209,7 +218,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
             }
             for (char c = 'a'; c <= 'z'; c++)
             {
-                formalRules.Add(new UnformatedRule() {  Rule = $"%{start}allCharacters%->{c}%{start}allCharacters%" });
+                formalRules.Add(new UnformatedRule() { Rule = $"%{start}allCharacters%->{c}%{start}allCharacters%" });
             }
 
             if (!string.IsNullOrWhiteSpace(nonTerminalPart))
@@ -233,7 +242,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
                 {
                     formalRules.Add(new UnformatedRule() { Rule = $"%{start}allCharacters%->{c}" });
                 }
-            }    
+            }
         }
 
 
@@ -267,7 +276,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent
 
         private void GenerateSpaceRule(string start, List<UnformatedRule> formalRules, string nonTerminalPart, bool isStart)
         {
-            if(!string.IsNullOrWhiteSpace(nonTerminalPart))
+            if (!string.IsNullOrWhiteSpace(nonTerminalPart))
             {
                 formalRules.Add(new UnformatedRule()
                 {

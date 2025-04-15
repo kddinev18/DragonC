@@ -5,9 +5,9 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent;
 
 public partial class CompilatorSetupView : ContentView
 {
-	public CompilatorSetupView()
-	{
-		InitializeComponent();
-		BindingContext = new CompilatorSetupViewModel();
+    public CompilatorSetupView()
+    {
+        InitializeComponent();
+        BindingContext = new CompilatorSetupViewModel();
     }
 }

@@ -21,28 +21,27 @@ namespace DragonC.API.Controllers
             this._projectService = projectService;
         }
 
-		// create, POST, param: [fromform] ProjectDTO
-		[Authorize]
-		[HttpPost("create")]
+        // create, POST, param: [fromform] ProjectDTO
+        [Authorize]
+        [HttpPost("create")]
         public IActionResult Create([FromBody] ProjectDTO dto)
         {
-			string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			this._projectService.Create(dto, userId);
-            return Ok();
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Ok(this._projectService.Create(dto, userId));
         }
 
         // getAllPaged, POST, param: PagedCollection<ProjectFilters>
         [Authorize]
         [HttpPost("getAllPaged")]
-        public IQueryable<ProjectDTO> getAllPaged([FromBody] PagedCollection<ProjectFilters> filters)
+        public IActionResult getAllPaged([FromBody] PagedCollection<ProjectFilters> filters)
         {
-            return this._projectService.GetPagedProjects(filters);
+            return Ok(this._projectService.GetPagedProjects(filters));
         }
 
-		// delete, DELETE
-		// delete all code cofigurations linked to this projects
-		[Authorize]
-		[HttpDelete]
+        // delete, DELETE
+        // delete all code cofigurations linked to this projects
+        [Authorize]
+        [HttpDelete]
         public IActionResult Delete([FromQuery] int id)
         {
             this._projectService.Delete(id);

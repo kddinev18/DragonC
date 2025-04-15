@@ -7,7 +7,7 @@ namespace DragonC.API.Services
 {
     public interface IProjectService
     {
-        public void Create(ProjectDTO project, string userId);
+        public int Create(ProjectDTO project, string userId);
 
         public IQueryable<ProjectDTO> GetPagedProjects(PagedCollection<ProjectFilters> pagedFilters);
 

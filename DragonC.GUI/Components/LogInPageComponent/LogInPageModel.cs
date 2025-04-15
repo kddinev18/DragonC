@@ -18,9 +18,9 @@ namespace DragonC.GUI.Components.LogInPageComponent
     public partial class LogInPageModel : ObservableObject
     {
         [ObservableProperty]
-        private string userName;
+        private string userName = "test@abv.bg";
         [ObservableProperty]
-        private string password;
+        private string password = "123Asd@1";
 
         [RelayCommand]
         public async Task LogIn()

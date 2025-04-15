@@ -84,9 +84,14 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
         [RelayCommand]
         private void Add()
         {
+            AddNonTerminal("");
+        }
+
+        public void AddNonTerminal(string nonTerminal)
+        {
             NonTerminalModel terminalModel = new NonTerminalModel(this)
             {
-                NonTerminalSymbol = ""
+                NonTerminalSymbol = nonTerminal
             };
             _parent.AddItem(terminalModel);
             NonTerminals.Add(terminalModel);
@@ -101,7 +106,7 @@ namespace DragonC.GUI.Components.CompilatorSetupComponent.Components.FormalGramm
 
         public void UpdateCollection()
         {
-            if(NonTerminals != null)
+            if (NonTerminals != null)
             {
                 _parent.UpdateCollection(NonTerminals.ToList());
             }

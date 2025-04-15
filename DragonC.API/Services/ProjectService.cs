@@ -18,10 +18,8 @@ namespace DragonC.API.Services
         {
             _context = context;
         }
-        public void Create(ProjectDTO project, string userId)
+        public int Create(ProjectDTO project, string userId)
         {
-
-
             Models.Entities.File fileEntity = new Models.Entities.File()
             {
                 FileName = project.FileName,
@@ -38,6 +36,8 @@ namespace DragonC.API.Services
             this._context.Projects.Add(entity);
             this._context.Files.Add(fileEntity);
             this._context.SaveChanges();
+
+            return entity.Id;
         }
 
         public void Delete(int Id)
@@ -80,12 +80,10 @@ namespace DragonC.API.Services
         {
             var query = (from pro in this._context.Projects
                          join use in this._context.Users on pro.UserId equals use.Id
-                         join fil in this._context.Files on pro.ProcessorFileId equals fil.Id
                          select new
                          {
                              pro,
-                             use,
-                             fil
+                             use
                          });
 
             // Apply filters
@@ -108,9 +106,7 @@ namespace DragonC.API.Services
                 .Select(p => new ProjectDTO
                 {
                     Id = p.pro.Id,
-                    Name = p.pro.Name,
-                    FileName = p.fil.FileName,
-                    FileData = p.fil.FileData
+                    Name = p.pro.Name
                 });
 
             return result;
